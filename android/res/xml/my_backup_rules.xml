@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <include domain="sharedpref" path="."/>
+    <include domain="file" path="machine.dat"/>
+    <include domain="file" path="preferences.dat"/>
+    <include domain="file" path="alertcounter.dat"/>
+</full-backup-content>

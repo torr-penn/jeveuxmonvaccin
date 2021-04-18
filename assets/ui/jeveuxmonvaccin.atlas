@@ -1,0 +1,194 @@
+
+jeveuxmonvaccin.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Gorilla Black
+  rotate: false
+  xy: 515, 1436
+  size: 506, 90
+  orig: 506, 90
+  offset: 0, 0
+  index: -1
+MONOFONT
+  rotate: false
+  xy: 1537, 1913
+  size: 505, 127
+  orig: 505, 127
+  offset: 0, 0
+  index: -1
+gisele
+  rotate: false
+  xy: 1029, 1939
+  size: 506, 101
+  orig: 506, 101
+  offset: 0, 0
+  index: -1
+Montserrat-Bold
+  rotate: false
+  xy: 515, 1249
+  size: 506, 185
+  orig: 506, 185
+  offset: 0, 0
+  index: -1
+Montserrat-Regular
+  rotate: false
+  xy: 1029, 1823
+  size: 506, 114
+  orig: 506, 114
+  offset: 0, 0
+  index: -1
+Prisma_0
+  rotate: false
+  xy: 1, 1528
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+Prisma_1
+  rotate: false
+  xy: 1, 1014
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+TypewriterScribbled
+  rotate: false
+  xy: 1, 408
+  size: 506, 90
+  orig: 506, 90
+  offset: 0, 0
+  index: -1
+babel-sans
+  rotate: false
+  xy: 515, 1528
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+retron2000
+  rotate: false
+  xy: 1, 500
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+checkbox_checked
+  rotate: false
+  xy: 1, 260
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+checkbox_unchecked
+  rotate: false
+  xy: 173, 358
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+cursor
+  rotate: false
+  xy: 1, 253
+  size: 5, 5
+  split: 0, 2, 0, 2
+  pad: 0, 0, 0, 0
+  orig: 5, 5
+  offset: 0, 0
+  index: -1
+default-round
+  rotate: false
+  xy: 1029, 1700
+  size: 14, 22
+  split: 4, 4, 6, 7
+  pad: 0, 0, 0, 0
+  orig: 14, 22
+  offset: 0, 0
+  index: -1
+default-round-down
+  rotate: false
+  xy: 1127, 1799
+  size: 14, 22
+  split: 6, 6, 7, 6
+  pad: 0, 0, 0, 0
+  orig: 14, 22
+  offset: 0, 0
+  index: -1
+link_external
+  rotate: false
+  xy: 1, 310
+  size: 170, 96
+  split: 20, 68, 43, 42
+  pad: 0, 0, 0, 0
+  orig: 170, 96
+  offset: 0, 0
+  index: -1
+my-window
+  rotate: false
+  xy: 1537, 1847
+  size: 60, 64
+  split: 12, 10, 45, 11
+  pad: 0, 0, 0, 0
+  orig: 60, 64
+  offset: 0, 0
+  index: -1
+redlink_external
+  rotate: false
+  xy: 515, 1151
+  size: 170, 96
+  split: 19, 69, 44, 42
+  pad: 0, 0, 0, 0
+  orig: 170, 96
+  offset: 0, 0
+  index: -1
+selector
+  rotate: false
+  xy: 515, 1127
+  size: 29, 22
+  split: 6, 13, 9, 9
+  pad: 0, 0, 0, 0
+  orig: 29, 22
+  offset: 0, 0
+  index: -1
+textfield
+  rotate: false
+  xy: 687, 1231
+  size: 16, 16
+  split: 6, 5, 4, 5
+  pad: 0, 0, 0, 0
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+tfield-round
+  rotate: false
+  xy: 1537, 1823
+  size: 14, 22
+  split: 5, 5, 4, 6
+  pad: 0, 0, 0, 0
+  orig: 14, 22
+  offset: 0, 0
+  index: -1
+tfield-round-down
+  rotate: false
+  xy: 1599, 1889
+  size: 14, 22
+  split: 6, 6, 6, 5
+  pad: 0, 0, 0, 0
+  orig: 14, 22
+  offset: 0, 0
+  index: -1
+transparent_bg
+  rotate: false
+  xy: 1023, 1525
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+bg_greysand
+  rotate: false
+  xy: 1029, 1724
+  size: 96, 97
+  orig: 96, 97
+  offset: 0, 0
+  index: -1

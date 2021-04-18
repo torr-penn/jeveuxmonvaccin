@@ -1,0 +1,8 @@
+<lint>
+    <issue id="InvalidPackage">
+        <ignore path="**/log4j*.jar"/>
+        <ignore path="**/postgresql*.jar"/>
+        <ignore path="**/scala-compiler*.jar"/>
+        <ignore path="**/scala-reflect*.jar"/>
+    </issue>
+</lint>
