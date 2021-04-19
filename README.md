@@ -2,6 +2,13 @@
 
 Un projet [libGDX](https://libgdx.com/) généré par [gdx-liftoff](https://github.com/tommyettinger/gdx-liftoff).
 
+# sur PC Linux :
+
+git clone https://github.com/torr-penn/jeveuxmonvaccin.git
+cd jeveuxmonvaccin/lwjgl3 ; gradle run
+
+Ces commandes auront besoin de java, gradle et git.
+
 # Origine
 
 Début février 2021, il était compliqué en Bretagne d'obtenir un rendez-vous pour se faire vacciner. Il fallait regarder régulièrement sur 3 sites différents en espérant qu'un créneau se libère.
