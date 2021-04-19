@@ -83,10 +83,6 @@ public class AndroidPlatform implements NativePlatform {
         return null;
     }
 
-    @Override
-    public void resumeSession() {
-
-    }
 
     public boolean getRessources() {
         if (context == null) {
@@ -102,11 +98,6 @@ public class AndroidPlatform implements NativePlatform {
         MINUTE = mymin;
         return false;
 
-    }
-
-    @Override
-    public String getPlatform() {
-        return "ANDROID";
     }
 
     @Override

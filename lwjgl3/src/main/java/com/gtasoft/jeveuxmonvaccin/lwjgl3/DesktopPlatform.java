@@ -59,10 +59,6 @@ public class DesktopPlatform implements NativePlatform {
         return null;
     }
 
-    @Override
-    public void resumeSession() {
-
-    }
 
     public boolean getRessources() {
 
