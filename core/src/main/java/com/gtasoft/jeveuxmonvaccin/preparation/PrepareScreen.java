@@ -19,7 +19,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.gtasoft.jeveuxmonvaccin.JeVeuxMonVaccin;
+import com.gtasoft.jeveuxmonvaccin.center.CenterTools;
 import com.gtasoft.jeveuxmonvaccin.center.VaccinationCenter;
+import com.gtasoft.jeveuxmonvaccin.setup.Options;
+
+import java.text.NumberFormat;
 
 public class PrepareScreen implements Screen, ApplicationListener {
 
@@ -28,7 +32,6 @@ public class PrepareScreen implements Screen, ApplicationListener {
     Skin skin;
     Label lblTitle;
 
-    Label lblIntroExplanations1;
 
     Label lblCenterName;
 
@@ -36,23 +39,25 @@ public class PrepareScreen implements Screen, ApplicationListener {
     String URL_SUBSCRIBE_DOCTOLIB = "https://www.doctolib.fr/sessions/new";
     String URL_SUBSCRIBE_KElDOC = "https://www.keldoc.com";
 
+    Texture imgbg;
+    Label lblInfoCenter1;
+    Label lblInfoCenter2;
+    Label lblInfoCenter3;
+
+    Label lblIntroExplanations1;
     Label lblIntroExplanations2;
     Label lblSubscribeHelp;
     Label lblIntroExplanations4;
 
     Label lbl_continue;
 
-    Label lblcenterAddress1;
-    Label lblcenterAddress2;
-    Label lblpostCodeCity;
-    Label lblclosingDate;
-
     Label lblManagedBy;
 
-    TextButton tbPlatformLink;
+    //   TextButton tbPlatformLink;
     TextButton tbSubscribeLink;
 
     float w;
+    boolean cname = false;
     float h;
     float stateTime;
     JeVeuxMonVaccin app;
@@ -103,7 +108,8 @@ public class PrepareScreen implements Screen, ApplicationListener {
 
         int wmiddle = (int) w / 2;
         int hmiddle = (int) h / 2;
-        tbPlatformLink = new TextButton("Prendre\nrendez-vous", skin, "link");
+        imgbg = new Texture(Gdx.files.internal("img/preparation/infos_bg.png"));
+
         tbSubscribeLink = new TextButton("S'inscrire", skin, "link");
 
         lblTitle = new Label("Préparation", skin);
@@ -120,13 +126,14 @@ public class PrepareScreen implements Screen, ApplicationListener {
                 , skin);
 
 
-        lblSubscribeHelp = new Label(
-                "" +
-                        "", skin);
+        lblSubscribeHelp = new Label("" + "", skin);
 
         lblIntroExplanations4 = new Label(
                 " Préparation de la surveillance : En attente", skin);
 
+        lblInfoCenter1 = new Label(" Il y a un rendez vous possible pour  ... % des recherches.", skin);
+        lblInfoCenter2 = new Label("Dernière opportunité : ...", skin);
+        lblInfoCenter3 = new Label("Fermeture du centre : ...", skin);
 
         Label.LabelStyle lblStyleTitle = new Label.LabelStyle();
         lblStyleTitle.fontColor = Color.WHITE;
@@ -142,9 +149,13 @@ public class PrepareScreen implements Screen, ApplicationListener {
         lblStyleDetail.fontColor = Color.WHITE;
         lblStyleDetail.font = this.skin.getFont("explications");
 
-        Label.LabelStyle lblStyleContinue = new Label.LabelStyle();
-        lblStyleContinue.fontColor = Color.BLACK;
-        lblStyleContinue.font = this.skin.getFont("smallfont");
+        Label.LabelStyle lblStyleInfos = new Label.LabelStyle();
+        lblStyleInfos.fontColor = Color.WHITE;
+        lblStyleInfos.font = this.skin.getFont("babel");
+
+        lblInfoCenter1.setStyle(lblStyleInfos);
+        lblInfoCenter2.setStyle(lblStyleInfos);
+        lblInfoCenter3.setStyle(lblStyleInfos);
 
         lblIntroExplanations1.setStyle(lblStyleDetail);
         lblIntroExplanations2.setStyle(lblStyleDetail);
@@ -159,21 +170,6 @@ public class PrepareScreen implements Screen, ApplicationListener {
         lblManagedBy.setColor(Color.WHITE);
         lblManagedBy.setStyle(lblStyleDetail);
 
-        lblcenterAddress1 = new Label("", skin);
-        lblcenterAddress2 = new Label("", skin);
-        lblpostCodeCity = new Label("", skin);
-        lblclosingDate = new Label("", skin);
-
-
-        lblcenterAddress1.setStyle(lblStyleDetail);
-        lblcenterAddress2.setStyle(lblStyleDetail);
-        lblpostCodeCity.setStyle(lblStyleDetail);
-        lblclosingDate.setStyle(lblStyleDetail);
-        lblclosingDate.setColor(Color.ORANGE);
-
-
-        lblcenterAddress1.setAlignment(Align.left);
-        lblcenterAddress2.setAlignment(Align.left);
 
         Label.LabelStyle lblStyleInfo = new Label.LabelStyle();
         lblStyleInfo.fontColor = Color.WHITE;
@@ -217,22 +213,6 @@ public class PrepareScreen implements Screen, ApplicationListener {
         btnWebsiteD.setSize(250, 80);
         btnWebsiteK.setSize(250, 80);
         btnWebsiteM.setSize(250, 80);
-
-        tbPlatformLink.addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent e, float x, float y, int point, int button) {
-
-
-                return;
-            }
-
-            @Override
-            public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
-                goCenterLink();
-                return true;
-
-            }
-        });
 
 
         tbSubscribeLink.addListener(new ClickListener() {
@@ -349,34 +329,29 @@ public class PrepareScreen implements Screen, ApplicationListener {
             }
         });
 
+        tbSubscribeLink.setSize(280, 80);
+
 
         lblTitle.setPosition(w / 2 - lblTitle.getWidth() / 2, h - 150, Align.center);
 
         lblIntroExplanations1.setPosition(20, h / 2 + 360);
         lblCenterName.setPosition(w / 2, h / 2 + 260);
+        lblInfoCenter1.setPosition(50, h / 2 + 180, Align.left);
+        lblInfoCenter2.setPosition(50, h / 2 + 145, Align.left);
+        lblInfoCenter3.setPosition(50, h / 2 + 110, Align.left);
 
-        lblIntroExplanations2.setPosition(20, h / 2 + 100);
-        lblSubscribeHelp.setPosition(40, h / 2 - 100);
-        tbPlatformLink.setSize(330, 96);
-        tbPlatformLink.setPosition(w / 4 - tbPlatformLink.getWidth() / 2, hmiddle + 250);
+        lblIntroExplanations2.setPosition(20, h / 2 - 30);
+        lblSubscribeHelp.setPosition(40, h / 2 - 210);
 
-        tbSubscribeLink.setSize(280, 80);
-        tbSubscribeLink.setPosition(w / 4 - tbSubscribeLink.getWidth() / 2, hmiddle - 50);
+        tbSubscribeLink.setPosition(w / 4 - tbSubscribeLink.getWidth() / 2, hmiddle - 160);
+        btnWebsiteD.setPosition(3 * w / 4 - btnWebsiteD.getWidth() / 2, h / 2 - 150);
+        btnWebsiteK.setPosition(3 * w / 4 - btnWebsiteK.getWidth() / 2, h / 2 - 150);
+        btnWebsiteM.setPosition(3 * w / 4 - btnWebsiteM.getWidth() / 2, h / 2 - 150);
+        lblManagedBy.setPosition(w / 7, h / 2 - 130);
 
         btnNext.setPosition(w / 2 - btnNext.getWidth() / 2, hmiddle - 440);
         lbl_continue.setPosition(w / 2 - lbl_continue.getWidth() / 2, hmiddle - 480);
 
-
-        lblcenterAddress1.setPosition(w / 6, h / 2 + 50);
-        lblcenterAddress2.setPosition(w / 6, h / 2 + 20);
-        lblpostCodeCity.setPosition(w / 6, h / 2 - 10);
-        lblclosingDate.setPosition(w / 5, h / 2 - 50);
-        lblManagedBy.setPosition(w / 7, h / 2 - 100);
-
-
-        btnWebsiteD.setPosition(3 * w / 4 - btnWebsiteD.getWidth() / 2, h / 2 - 40);
-        btnWebsiteK.setPosition(3 * w / 4 - btnWebsiteK.getWidth() / 2, h / 2 - 40);
-        btnWebsiteM.setPosition(3 * w / 4 - btnWebsiteM.getWidth() / 2, h / 2 - 40);
 
         stage.setViewport(viewport);
         stage.addActor(btnBackMenu);
@@ -386,6 +361,8 @@ public class PrepareScreen implements Screen, ApplicationListener {
         stage.addActor(lblIntroExplanations1);
         stage.addActor(tbSubscribeLink);
         stage.addActor(lblCenterName);
+
+
         stage.addActor(lblIntroExplanations2);
 
         stage.addActor(lblSubscribeHelp);
@@ -414,6 +391,7 @@ public class PrepareScreen implements Screen, ApplicationListener {
 
         sb.begin();
         sb.draw(app.getGraphicTools().getImgBackground(), 0, 0, w, h, 0, 20, 12, 0);
+        sb.draw(imgbg, 15, h / 2 + 80);
         sb.end();
 
         displayElements();
@@ -422,11 +400,59 @@ public class PrepareScreen implements Screen, ApplicationListener {
     }
 
     public void displayElements() {
-        if (app.getCenterTools().getRegisterStatus() < 0) {
-            lblIntroExplanations4.setText(app.getCenterTools().getRegisterMsg());
 
+        if ("".equals(lblCenterName.getText()) && app.getOptions().getCenterSelected() != null) {
+            lblCenterName.setText(app.getOptions().getCenterSelected().getName() + " name");
+        }
+
+
+        CenterTools ct = app.getCenterTools();
+        if (ct.getRegisterStatus() < 0) {
+            lblIntroExplanations4.setText(ct.getRegisterMsg());
+        }
+        if (ct.getInfoStatus() == CenterTools.LOADED) {
+            if (ct.getInfoPct() == -1) {
+
+                lblInfoCenter1.setText(ct.getInfoMsg());
+                showit(lblInfoCenter1);
+                hideit(lblInfoCenter2);
+                hideit(lblInfoCenter3);
+            } else {
+                lblInfoCenter1.setText("Informations du centre : " + ct.getInfoMsg());
+                lblInfoCenter2.setText("" + getDisplayablePct(ct.getInfoPct()) + "% chances de rdv observés");
+                showit(lblInfoCenter1);
+                showit(lblInfoCenter2);
+
+                if (!"null".equals(ct.getInfoClosing())) {
+                    showit(lblInfoCenter3);
+                    lblInfoCenter3.setText("Plus récente disponibilité :" + ct.getInfoLastok() + "");
+                } else {
+                    hideit(lblInfoCenter3);
+                }
+            }
+            ct.setInfoStatus(CenterTools.NO_LOAD);
         }
     }
+
+    private String getDisplayablePct(float pct) {
+        float p = pct * 100f;
+        if (p > 5.0f) {
+            return ((int) p) + "";
+        }
+        if (p > 1.0f) {
+            NumberFormat nf = NumberFormat.getInstance();
+            nf.setMaximumFractionDigits(1);
+
+
+            return nf.format(p);
+        }
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMinimumIntegerDigits(1);
+        nf.setMaximumFractionDigits(3);
+        return nf.format(p);
+
+    }
+
 
     private boolean availableLink() {
         if (app.getOptions() != null) {
@@ -480,10 +506,7 @@ public class PrepareScreen implements Screen, ApplicationListener {
 
         Gdx.input.setInputProcessor(stage);
         if (app.getOptions().getCenterSelected() != null) {
-            if (availableLink()) {
-                lblCenterName.setText(app.getOptions().getCenterSelected().getName());
 
-            }
             if (app.getOptions().getCenterSelected().getProviderId() == VaccinationCenter.MAIIA_ID) {
                 lblIntroExplanations2.setText("En premier conseil inscrivez vous déjà sur Maiia, \nvous serez ainsi plus rapide quand une place va se libérer.");
                 showit(btnWebsiteM);
@@ -514,6 +537,17 @@ public class PrepareScreen implements Screen, ApplicationListener {
 
             }
         }
+        if (app.getOptions() != null) {
+            if (!"".equals(app.getOptions().getCenterName())) {
+                lblCenterName.setText(app.getOptions().getCenterName());
+            }
+        }
+        if (app.getOptions().getCenterId() != Options.UNDEFINED) {
+            app.getCenterTools().selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
+        }
+        infoCenter();
+
+
         registerCenter();
     }
 
@@ -537,9 +571,18 @@ public class PrepareScreen implements Screen, ApplicationListener {
     private void registerCenter() {
         if (!app.getOptions().isCenterRegistered()) {
             app.getCenterTools().registerCenter();
-            lblIntroExplanations4.setText(" Préparation de la surveillance : En cours");
+            lblIntroExplanations4.setText(" Demande en cours ");
         }
     }
+
+    private void infoCenter() {
+        if (app.getOptions() != null) {
+            app.getCenterTools().infoCenter();
+
+
+        }
+    }
+
 
     private void showit(Actor actor) {
         if (actor != null) {

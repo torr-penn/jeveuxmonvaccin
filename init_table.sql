@@ -64,45 +64,21 @@ WITH DELIMITER ';'
 FROM '/tmp/load_center_sql.csv'
 WITH DELIMITER ';';
 
-update vaccine_center
-set result_topology=2,
-    status=1,
-    params='2678861:449685:175124'
-where center_id = 1009;
-update vaccine_center
-set result_topology=2,
-    status=1,
-    vaccine_id=2,
-    params='2575758:429756-417446-416771-433205-436456-436455:167193'
-where center_id = 1277;
+update vaccine_center set result_topology=2, status=1, params='2678861:449685:175124' where center_id = 1009;
+update vaccine_center set result_topology=2, status=1, vaccine_id=2, params='2575758:429756-417446-416771-433205-436456-436455:167193' where center_id = 1277;
 
 \COPY  center_temp(center_id,provider,vaccine_id,result_topology,params) FROM '/tmp/extra_29.txt' WITH DELIMITER ';' ;
 \COPY  center_temp(center_id,provider,vaccine_id,result_topology,params) FROM '/tmp/extra_22.txt' WITH DELIMITER ';' ;
 
-delete
-from vaccine_center
-where center_id = 925
-  and vaccine_id = 1;
-update vaccine_center
-set vaccine_id=2
-where center_id = 1438
-  and vaccine_id = 5;
-update vaccine_center
-set vaccine_id=2
-where center_id = 2001
-  and vaccine_id = 5;
-update vaccine_center
-set vaccine_id=2
-where center_id = 422
-  and vaccine_id = 5;
-update vaccine_center
-set vaccine_id=2
-where center_id = 56
-  and vaccine_id = 5;
-update vaccine_center
-set result_topology=b.result_topology,
-    params=b.params,
-    status=2
-from center_temp b
-where vaccine_center.vaccine_id = b.vaccine_id
-  and vaccine_center.center_id = b.center_id;
+delete from vaccine_center where center_id = 925 and vaccine_id = 1;
+update vaccine_center set vaccine_id=2 where center_id = 1438 and vaccine_id = 5;
+update vaccine_center set vaccine_id=2 where center_id = 2001 and vaccine_id = 5;
+update vaccine_center set vaccine_id=2 where center_id = 422 and vaccine_id = 5;
+update vaccine_center set vaccine_id=2 where center_id = 56 and vaccine_id = 5;
+update vaccine_center set result_topology=b.result_topology, params=b.params, status=2
+from center_temp b where vaccine_center.vaccine_id = b.vaccine_id and vaccine_center.center_id = b.center_id;
+
+
+
+
+

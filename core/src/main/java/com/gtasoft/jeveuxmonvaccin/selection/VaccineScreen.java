@@ -75,7 +75,7 @@ public class VaccineScreen implements Screen, ApplicationListener {
         int hmiddle = (int) h / 2;
 
 
-        lblTitle = new Label("Choix du Vaccin", skin);
+        lblTitle = new Label("La vaccination", skin);
         lblNeedInformation = new Label(" En cas de doute : ", skin);
         lbl_continue = new Label("Poursuivre", skin);
 
@@ -109,7 +109,7 @@ public class VaccineScreen implements Screen, ApplicationListener {
         this.btnNext = new ImageButton(btnStyleNext);
 
 
-        cbVaccineAstra = new CheckBox(" - Astrazeneca", skin, "vaccine");
+        cbVaccineAstra = new CheckBox(" - AstraZeneca", skin, "vaccine");
         cbVaccineAstra.setChecked(false);
         cbVaccinePfizer = new CheckBox(" - ARN-Messager\n  (Pfizer/BioNTech ou Moderna)", skin, "vaccine");
         cbVaccinePfizer.setChecked(false);
@@ -256,7 +256,7 @@ public class VaccineScreen implements Screen, ApplicationListener {
         stage.addActor(btnBackMenu);
         stage.addActor(btnWebsite);
         stage.addActor(lblNeedInformation);
-        stage.addActor(cbVaccineAstra);
+        //  stage.addActor(cbVaccineAstra);
         stage.addActor(cbVaccinePfizer);
         //stage.addActor(cbVaccineJanssen);
         stage.addActor(lblTitle);

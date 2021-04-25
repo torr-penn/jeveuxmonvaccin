@@ -157,7 +157,7 @@ public class CenterScreen implements Screen, ApplicationListener {
         boxStyle.listStyle = ls;
         departmentBox.setStyle(boxStyle);
 
-        lblTitle = new Label("Lieu  de  Vaccination", skin);
+        lblTitle = new Label("Centre de Vaccination", skin);
         lbl_continue = new Label("Poursuivre", skin);
         lblIndisponibilite = new Label("Poursuivez si vous n'obtenez pas de RDV.\n Cette application va vous accompagner.", skin);
         lblInfo = new Label("Remarque : \nJe vérifie que je suis bien autorisé à recevoir ce vaccin\n" +
@@ -795,6 +795,7 @@ public class CenterScreen implements Screen, ApplicationListener {
             centerValueChanged(VaccinationCenter.getFirstInstance());
             return;
         }
+
         ct.loadCenter(selectedDep);
         app.getOptions().setDepartment(selectedDep.getId());
 

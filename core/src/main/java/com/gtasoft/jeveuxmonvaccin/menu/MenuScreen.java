@@ -165,7 +165,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         });
 
 
-        lbl_vaccine = new Label("1 Quel Vaccin ?", skin);
+        lbl_vaccine = new Label("1 La vaccination", skin);
         lbl_vaccine.setAlignment(Align.left);
         lbl_vaccine.setPosition((w / 3 - lbl_vaccine.getWidth() / 2 + btnVaccine.getWidth() + 10), hmiddle + 300 + btnVaccine.getHeight() / 2);
         lbl_vaccineInfo.setPosition((w / 3 - lbl_vaccine.getWidth() / 2 + btnVaccine.getWidth() + 10), hmiddle + 300 + btnVaccine.getHeight() / 2 - 20);
@@ -206,7 +206,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         });
 
 
-        lbl_center = new Label("2 Quel centre de vaccination ?", skin);
+        lbl_center = new Label("2 Centre de vaccination", skin);
         lbl_center.setAlignment(Align.left);
         lbl_center.setPosition((w / 4 + btnCenter.getWidth() + 10), hmiddle + 100 + btnCenter.getHeight() / 2);
         lbl_centerInfo.setPosition((w / 4 + btnCenter.getWidth() + 10), hmiddle + 100 + btnCenter.getHeight() / 2 - 20);
@@ -248,7 +248,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         });
 
 
-        lbl_preparation = new Label("3 Je me prépare", skin);
+        lbl_preparation = new Label("3 Préparation", skin);
         lbl_preparation.setAlignment(Align.left);
         lbl_preparation.setPosition((w / 4 + btnPreparation.getWidth() + 10), hmiddle - 100 + btnPreparation.getHeight() / 2);
         lbl_preparation.setStyle(lblStyleMenu);
@@ -288,7 +288,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         });
 
 
-        lbl_availability = new Label("4 Je cherche un rendez-vous", skin);
+        lbl_availability = new Label("4 Disponibilités", skin);
         lbl_availability.setAlignment(Align.left);
         lbl_availability.setPosition((w / 4 + btnAvailability.getWidth() + 10), hmiddle - 300 + btnAvailability.getHeight() / 2);
         lbl_availability.setStyle(lblStyleMenu);
@@ -329,7 +329,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         });
 
 
-        lbl_alert = new Label("5 Mes alertes", skin);
+        lbl_alert = new Label("5 Alertes", skin);
         lbl_alert.setAlignment(Align.left);
         lbl_alert.setPosition((w / 4 + btnAlert.getWidth() + 10), hmiddle - 500 + btnAlert.getHeight() / 2);
         lbl_alertInfo.setPosition((w / 4 + btnAlert.getWidth() + 10), hmiddle - 500 + btnAlert.getHeight() / 2 - 20);
@@ -462,7 +462,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         sb.begin();
         sb.draw(app.getGraphicTools().getImgBackground(), 0, 0, w, h, 0, 20, 12, 0);
 
-        sb.draw(imgBretagne, (int) (w - imgBretagne.getWidth()), h - app.getGraphicTools().getImgTitle().getHeight() - 200);
+        sb.draw(imgBretagne, (int) (w - imgBretagne.getWidth()), h - app.getGraphicTools().getImgTitle().getHeight() - 185);
 
         sb.end();
         stage.act(delta);

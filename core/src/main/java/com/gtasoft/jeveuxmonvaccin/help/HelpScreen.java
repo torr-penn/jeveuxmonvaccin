@@ -74,8 +74,7 @@ public class HelpScreen implements Screen, ApplicationListener {
         lblMesgBottom = new Label("Cette application n'est pas officielle.\n" +
                 "Elle est réalisée en soutien et complément gratuit \n" +
                 "aux sites professionnels : Doctolib, KelDoc et Maiia.\n" +
-                "Un grand merci aux responsables de ces plateformes \n" +
-                "de ne pas interdire cette application.\n" +
+                "Merci à ces plateformes !\n" +
                 "Votre rendez-vous sera pris sur ces sites.", skin);
 
         Label.LabelStyle lblStylePlay = new Label.LabelStyle();
@@ -240,7 +239,7 @@ public class HelpScreen implements Screen, ApplicationListener {
                                     "rendez-vous au bon moment.\n" +
                                     "L'espoir est que vite vous puissiez désinstaller \n" +
                                     "cette application une fois vacciné!\n\n" +
-                                    "Cette application est totalement bénévole.");
+                                    "Cette application est totalement gratuite.");
 
                 } else if (page == 1) {
                     page = 2;
@@ -322,8 +321,7 @@ public class HelpScreen implements Screen, ApplicationListener {
                     "Cette application n'est pas officielle.\n" +
                             "Elle est réalisée en soutien et complément gratuit \n" +
                             "aux sites professionnels : Doctolib, KelDoc et Maiia.\n" +
-                            "Merci aux responsables de ces plateformes de ne pas\n" +
-                            "interdire cette application.\n" +
+                            "Merci à ces plateformes !\n" +
                             "Votre rendez-vous sera pris sur ces sites.");
 
         }

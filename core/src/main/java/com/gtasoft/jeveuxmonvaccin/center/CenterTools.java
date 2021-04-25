@@ -18,6 +18,7 @@ public class CenterTools {
     private static String CENTER_LIST = "http://www.torr-penn.bzh/jeveuxmonvaccin/";
     private static String CHECK_CENTER = "http://www.torr-penn.com/jeveuxmonvaccin/centerCheck";
     private static String REGISTER_CENTER = "http://www.torr-penn.com/jeveuxmonvaccin/changeCenter";
+    private static String INFO_CENTER = "http://www.torr-penn.com/jeveuxmonvaccin/infoCenter";
     ArrayList<Department> listDepartment;
     ArrayList<VaccinationCenter> listCenter;
     Machine machine;
@@ -32,9 +33,20 @@ public class CenterTools {
     private int registerStatus;
     private String registerMsg;
 
+    private int infoStatus;
+    private int infoReturnCode;
+    private String infoMsg;
+    private String infoLastok;
+    private String infoClosing;
+    private float infoPct;
+
+
     // private boolean loadingCenter = false;
     private JeVeuxMonVaccin app;
 
+    public CenterTools() {
+        System.out.println("Dummy constructor do not use");
+    }
 
     public CenterTools(Machine machine, JeVeuxMonVaccin app) {
         this.app = app;
@@ -45,6 +57,16 @@ public class CenterTools {
         listCenter = null;
         this.machine = machine;
         loadDepartment();
+    }
+
+    public static void main(String[] args) {
+        CenterTools ct = new CenterTools();
+        String s = "{-2;aaa;134;23;--:--:00;877}";
+        for (int i = 0; i < 8; i++) {
+
+            System.out.println(" " + ct.extractStrAtIndex(s, i));
+            System.out.println("--------------");
+        }
     }
 
     public void process_dept(String s) {
@@ -93,7 +115,8 @@ public class CenterTools {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] values = line.split(";");
-            if (values != null && values.length == 10) {
+
+            if (values != null && (values.length == 12 || values.length == 10)) {
                 String cname = values[0];
                 int gid = Integer.parseInt(values[7]);
                 VaccinationCenter vc = new VaccinationCenter(gid, cname);
@@ -104,8 +127,9 @@ public class CenterTools {
                 vc.setLink(values[6]);
                 vc.setProviderId(getIdFromProvider(values[8]));
                 vc.setVaccineId(Integer.parseInt(values[9]));
-                int vtype = app.getOptions().getVaccineId();
 
+                int vtype = app.getOptions().getVaccineId();
+                //  System.out.println(" center ids: " + vc.getCenterId() + " -- " + vc.getVaccineId() + " -- " + gid);
                 if (vtype == Options.ASTRAZENECA && vc.getVaccineId() == VaccinationCenter.astrazenecaID) {
                     listCenter.add(vc);
                 } else if (vtype == Options.PFIZER && vc.getVaccineId() == VaccinationCenter.pfizerID) {
@@ -119,7 +143,6 @@ public class CenterTools {
         Collections.sort(listCenter, VaccinationCenter.CenterComparator);
 
     }
-
 
     public Department getDepartment(String sid) {
         if (sid != null) {
@@ -167,7 +190,6 @@ public class CenterTools {
         }, 5);
 
     }
-
 
     public void controlCenter() {
         if (app.getMachine() == null) {
@@ -239,7 +261,7 @@ public class CenterTools {
                         }
 
                     }
-                }, 5);
+                }, 100);
             } else {
                 System.out.println("register phone and center in progress");
                 processRegister(null);
@@ -253,7 +275,6 @@ public class CenterTools {
 
 
     }
-
 
     public void processRegister(String res) {
 
@@ -272,7 +293,6 @@ public class CenterTools {
         }
 
     }
-
 
     private String partTwo(String str) {
         String strx = null;
@@ -329,7 +349,6 @@ public class CenterTools {
 
     }
 
-
     public void processCheck(String res) {
 
         if (res != null) {
@@ -368,7 +387,6 @@ public class CenterTools {
 
     }
 
-
     public void loadCenter(Department d) {
         if (d != null && d.getId() != Options.UNDEFINED) {
             loadCenter(d.getId());
@@ -392,8 +410,8 @@ public class CenterTools {
         }
     }
 
-
     public void loadCenter(int depId) {
+        //System.out.println(" load center from :" + depId);
         if (getCenterStatus() != LOADING && getCenterStatus() != LOADED) {
             setCenterStatus(LOADING);
 
@@ -405,9 +423,10 @@ public class CenterTools {
                     try {
                         String urlParameters;
                         urlParameters = "" + URLEncoder.encode(machine.getSalt(), "UTF-8");
-                        String res = executePost(CENTER_LIST + depId + ".csv", urlParameters);
-                        //System.out.println(" calling  center : " + CENTER_LIST + d.getId() + ".csv?" + urlParameters);
+                        String res = executePost(CENTER_LIST + "c" + depId + ".csv", urlParameters);
+                        //System.out.println(" calling  center : " + CENTER_LIST + "c" + depId + ".csv?" + urlParameters);
                         process_center(res);
+                        //System.out.println(" result is " + res);
                         setCenterStatus(LOADED);
 
                     } catch (UnsupportedEncodingException e) {
@@ -460,6 +479,199 @@ public class CenterTools {
         }
 
     }
+
+    public void infoCenter() {
+        if (app.getMachine() == null) {
+            System.out.println("houston pb no salt");
+            return;
+        }
+        if (app.getOptions().getCenterId() == Options.UNDEFINED || app.getOptions().getVaccineId() == Options.UNDEFINED) {
+            System.out.println("houston pb no center");
+            return;
+        }
+
+        if (getInfoStatus() != LOADING) {
+            setInfoStatus(LOADING);
+            Timer validTimer = new Timer();
+            validTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        String urlParameters;
+                        urlParameters = "phonesalt=" + URLEncoder.encode(app.getMachine().getSalt(), "UTF-8") +
+                                "&cid=" + app.getOptions().getCenterId() + "&vid=" + app.getOptions().getVaccineId();
+
+                        //                      System.out.println(" calling  center : " + INFO_CENTER + "?" + urlParameters);
+                        String res = executePost(INFO_CENTER, urlParameters);
+//                        System.out.println("*** info center  Result : " + res);
+                        processInfo(res);
+                        setInfoStatus(LOADED);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }, 5);
+        } else {
+            System.out.println(" gathering info");
+            processInfo(null);
+
+        }
+
+
+    }
+
+    private int extractCodeAtIndex(String s, int fieldx) {
+        String strx = s;
+        int iw = 0;
+        if (s == null || "".equals(s)) {
+            return -1;
+        }
+        int idx = s.indexOf(";");
+        String found = "";
+        if (fieldx == 0 && idx > 0) {
+            found = strx.substring(1, idx);
+        }
+        while (iw != fieldx) {
+            iw = iw + 1;
+            idx = strx.indexOf(";");
+            if (idx > 0) {
+                strx = strx.substring(idx + 1, strx.length());
+                if (strx == null || strx.length() == 0) {
+                    return -1;
+                }
+            } else {
+                return -1;
+            }
+        }
+        idx = strx.indexOf(";");
+        if (idx > 0) {
+            found = strx.substring(0, idx);
+        } else {
+            found = strx.substring(0, strx.length() - 1);
+
+
+        }
+        if (found == null || found.length() == 0) {
+            return -1;
+        }
+        if (found.indexOf("{") == 0) {
+            found = found.substring(1);
+        }
+        if (found.indexOf("}") == found.length()) {
+
+            found = found.substring(0, found.length() - 1);
+        }
+        int res = -1;
+        try {
+            res = Integer.parseInt(found);
+        } catch (NumberFormatException nfe) {
+            res = -3;
+        }
+        return res;
+    }
+
+    private String extractStrAtIndex(String s, int fieldx) {
+        String strx = s;
+        int iw = 0;
+        if (s == null || "".equals(s)) {
+            return "";
+        }
+        int idx = s.indexOf(";");
+        String found = "";
+        if (fieldx == 0 && idx > 0) {
+            found = strx.substring(1, idx);
+        }
+        while (iw != fieldx) {
+            iw = iw + 1;
+            idx = strx.indexOf(";");
+            if (idx > 0) {
+                strx = strx.substring(idx + 1, strx.length());
+                if (strx == null || strx.length() == 0) {
+                    return "";
+                }
+            } else {
+                return "";
+            }
+        }
+        idx = strx.indexOf(";");
+        if (idx > 0) {
+            found = strx.substring(0, idx);
+        } else {
+            found = strx.substring(0, strx.length() - 1);
+
+
+        }
+        if (found == null || found.length() == 0) {
+            return "";
+        }
+        if (found.indexOf("{") == 0) {
+            found = found.substring(1);
+        }
+        if (found.indexOf("}") == found.length()) {
+
+            found = found.substring(0, found.length() - 1);
+        }
+        return found;
+    }
+
+//    private String partTwo(String str) {
+//        String strx = null;
+//        int idxSemicolon = str.indexOf(";");
+//        if (idxSemicolon != -1) {
+//            strx = str.substring(idxSemicolon + 1, str.length() - 2);
+//            idxSemicolon = strx.indexOf(";");
+//            if (idxSemicolon != -1) {
+//                strx = strx.substring(0, idxSemicolon);
+//                return strx;
+//            } else {
+//                return strx;
+//            }
+//        } else {
+//            return null;
+//        }
+//
+//    }
+
+
+    // resp.getWriter().print(
+// "{-1;nouveau centre;" + vc.getTotal() + ";" + vc.getNbsuccess() + ";[--:--:--];" + vc.getClose_date() + "}");
+    public void processInfo(String res) {
+
+        if (res != null) {
+            if (res.startsWith("{-")) {
+
+
+                setInfoMsg(extractStrAtIndex(res, 1));
+                setInfoClosing("");
+                setInfoLastok("--");
+                setInfoPct(-1);
+                setInfoReturnCode(codeOne(res));
+                if (getInfoMsg() == null) {
+                    setInfoMsg("Erreur");
+                }
+            } else {
+                setInfoMsg(extractStrAtIndex(res, 1));
+                setInfoReturnCode(extractCodeAtIndex(res, 0));
+                int div = extractCodeAtIndex(res, 2);
+                if (div > 0) {
+                    setInfoPct((float) (extractCodeAtIndex(res, 3) * 1.0f / div));
+                } else {
+                    setInfoPct(0);
+                }
+                setInfoLastok(extractStrAtIndex(res, 4));
+                setInfoClosing(extractStrAtIndex(res, 5));
+            }
+        } else {
+            setInfoMsg("Erreur");
+            setInfoClosing("");
+            setInfoLastok("--");
+            setInfoPct(-1);
+            setInfoReturnCode(codeOne(res));
+        }
+
+    }
+
 
     public ArrayList<Department> getListDepartment() {
         return listDepartment;
@@ -526,5 +738,53 @@ public class CenterTools {
 
     public void setLastCheckCode(int lastCheckCode) {
         this.lastCheckCode = lastCheckCode;
+    }
+
+    public int getInfoStatus() {
+        return infoStatus;
+    }
+
+    public void setInfoStatus(int infoStatus) {
+        this.infoStatus = infoStatus;
+    }
+
+    public int getInfoReturnCode() {
+        return infoReturnCode;
+    }
+
+    public void setInfoReturnCode(int infoReturnCode) {
+        this.infoReturnCode = infoReturnCode;
+    }
+
+    public String getInfoMsg() {
+        return infoMsg;
+    }
+
+    public void setInfoMsg(String infoMsg) {
+        this.infoMsg = infoMsg;
+    }
+
+    public String getInfoLastok() {
+        return infoLastok;
+    }
+
+    public void setInfoLastok(String infoLastok) {
+        this.infoLastok = infoLastok;
+    }
+
+    public String getInfoClosing() {
+        return infoClosing;
+    }
+
+    public void setInfoClosing(String infoClosing) {
+        this.infoClosing = infoClosing;
+    }
+
+    public float getInfoPct() {
+        return infoPct;
+    }
+
+    public void setInfoPct(float infoPct) {
+        this.infoPct = infoPct;
     }
 }

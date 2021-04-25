@@ -100,7 +100,7 @@ public class AlertScreen implements Screen, ApplicationListener {
         int wmiddle = (int) w / 2;
         int hmiddle = (int) h / 2;
 
-        lblTitle = new Label("Les Alertes", skin);
+        lblTitle = new Label("Alertes", skin);
         lblCenterName = new Label(
                 "---", skin);
 
@@ -113,10 +113,11 @@ public class AlertScreen implements Screen, ApplicationListener {
                 , skin);
 
         lblIntroExplanations3 = new Label(
-                "Vous serez notifiés d'un rendez-vous disponible\n (nécessite un appareil connecté en wifi.)", skin);
+                "Vous serez notifiés d'un rendez-vous disponible.", skin);
         lblIntroExplanations4 = new Label(
-                "Les alertes dépendent du modèle de téléphone utilisé.\n vérifiez les statistiques", skin);
-        lblStats = new Label(" Statistiques : -", skin);
+                "Les alertes peuvent dépendre du modèle de téléphone utilisé.\n", skin);
+
+        lblStats = new Label(" --- ", skin);
 
         cbAlertActivation = new CheckBox("Alertes actives", skin, "vaccine");
         cbAlertActivation.setChecked(false);
@@ -253,7 +254,7 @@ public class AlertScreen implements Screen, ApplicationListener {
                 app.initAlert(app.getOptions().getCenterId(), app.getOptions().getVaccineId(), app.getMachine().getSalt(), app.getOptions().getCenterName());
 
             } else {
-                lblStats.setText("alertes impossible\n recommencez toutes les étapes éventuellement...");
+                lblStats.setText("Alertes impossibles\n Recommencez toutes les étapes éventuellement?");
             }
         } else {
             app.stopAlert();
@@ -343,24 +344,24 @@ public class AlertScreen implements Screen, ApplicationListener {
             String val[] = str.split(";");
             if (val.length == 4) {
                 if ("true".equals(val[3]) && "true".equals(val[0])) {
-                    return " " + nb + " vérifications en arrière plan pour vous alerter.";
+                    return " " + nb + " vérifications en arrière plan effectuées.";
                 } else {
-                    return " " + nb + " vérifications en arrière plan pour vous alerter.\n" +
+                    return " " + nb + " vérifications en arrière plan effectuées.\n" +
                             "Un problème est cependant détecté\n" +
-                            "Essayez de désactiver puis réactiver les alertes...";
+                            "Essayez de désactiver puis réactiver les alertes.";
 
                 }
 
             } else {
 
-                return "Téléphone peut-être incompatible." +
+                return "Téléphone peut-être incompatible.\n" +
                         "Un problème est détecté\n" +
-                        "Essayez de désactiver puis réactiver les alertes...";
+                        "Essayez de recommencer les étapes 1 à 5?";
             }
         }
-        return "Téléphone peut-être incompatible." +
+        return "Téléphone peut-être incompatible.\n" +
                 "Un problème est détecté\n" +
-                "Essayez de désactiver puis réactiver les alertes...";
+                "Essayez de recommencer les étapes 1 à 5?";
     }
 
     public int getStats() {
