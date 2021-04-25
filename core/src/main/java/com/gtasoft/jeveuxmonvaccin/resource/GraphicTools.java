@@ -35,8 +35,6 @@ public class GraphicTools {
     private Texture imgSettings;
     private Texture imgStart;
 
-    private Texture imgTitle;
-
 
     public GraphicTools() {
         lblStyle = new Label.LabelStyle();
@@ -87,9 +85,6 @@ public class GraphicTools {
 
         imgStart = new Texture(Gdx.files.internal("img/menu/start-icon.png"));
         skin.add("imgStart", imgStart);
-
-        imgTitle = new Texture(Gdx.files.internal("img/menu/title-menu.png"));
-        skin.add("imgTitle", imgTitle);
 
 
         msgLoading = "Chargement";
@@ -247,8 +242,5 @@ public class GraphicTools {
         return imgSettings;
     }
 
-    public Texture getImgTitle() {
-        return imgTitle;
-    }
 
 }

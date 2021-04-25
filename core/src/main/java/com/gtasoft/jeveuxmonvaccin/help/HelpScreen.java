@@ -207,15 +207,15 @@ public class HelpScreen implements Screen, ApplicationListener {
             }
         }
 
-        if (page == 3) {
-            if (!stage.getActors().contains(btnWebsite, true)) {
-                stage.addActor(btnWebsite);
-            }
-        } else {
-            if (stage.getActors().contains(btnWebsite, true)) {
-                btnWebsite.remove();
-            }
-        }
+//        if (page == 3) {
+        //          if (!stage.getActors().contains(btnWebsite, true)) {
+        //            stage.addActor(btnWebsite);
+        //       }
+//        } else {
+        //          if (stage.getActors().contains(btnWebsite, true)) {
+        //            btnWebsite.remove();
+        //      }
+        //}
 
         camera.update();
         sb.setProjectionMatrix(camera.combined);
@@ -270,7 +270,8 @@ public class HelpScreen implements Screen, ApplicationListener {
                             "Pour une réaction, une remarque, \npour exprimer la joie d'avoir obtenu un rendez-vous :\n" +
                             "Twitter : https://twitter.com/TorrpennBzh \n\n" +
                             "Merci!\n\n" +
-                            " Pour découvrir mes autres applications :\n");
+                            " Pour découvrir mes autres applications :\n " +
+                            "              http://www.torr-penn.bzh");
 
                 } else if (page == 3) {
                     page = 0;

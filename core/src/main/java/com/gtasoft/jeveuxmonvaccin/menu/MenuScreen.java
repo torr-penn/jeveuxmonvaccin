@@ -462,7 +462,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         sb.begin();
         sb.draw(app.getGraphicTools().getImgBackground(), 0, 0, w, h, 0, 20, 12, 0);
 
-        sb.draw(imgBretagne, (int) (w - imgBretagne.getWidth()), h - app.getGraphicTools().getImgTitle().getHeight() - 185);
+        sb.draw(imgBretagne, (int) (w - imgBretagne.getWidth()), h - imgBretagne.getHeight() - 185);
 
         sb.end();
         stage.act(delta);

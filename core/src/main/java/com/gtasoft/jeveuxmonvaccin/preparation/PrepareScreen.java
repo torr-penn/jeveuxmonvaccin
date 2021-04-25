@@ -419,7 +419,7 @@ public class PrepareScreen implements Screen, ApplicationListener {
                 hideit(lblInfoCenter3);
             } else {
                 lblInfoCenter1.setText("Informations du centre : " + ct.getInfoMsg());
-                lblInfoCenter2.setText("" + getDisplayablePct(ct.getInfoPct()) + "% chances de rdv observés");
+                lblInfoCenter2.setText("Chances de rendez-vous constatées : " + getDisplayablePct(ct.getInfoPct()) + "% ");
                 showit(lblInfoCenter1);
                 showit(lblInfoCenter2);
 
