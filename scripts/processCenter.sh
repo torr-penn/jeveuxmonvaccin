@@ -168,5 +168,11 @@ process_department 35
 process_department 56
 
 
+cd $WDIR
+cat c22.csv c29.csv c35.csv c56.csv > tmp.csv
+cat tmp.csv |awk -F\; '{print $1";"$2";"$3";"$4";"$5";"$6";"$8";"$10";"$11;}' >bretagne.csv
+rm tmp.csv
+cp bretagne.csv /tmp
+
 
 
