@@ -47,11 +47,6 @@ android {
         multiDexEnabled true
         setProperty("archivesBaseName", "jeveuxmonvaccin-v" + versionName + "." + versionCode + "")
     }
-    // compileOptions {
-    //   sourceCompatibility "8.0"
-    // targetCompatibility "8.0"
-    // coreLibraryDesugaringEnabled true
-    //}
     lintOptions {
         lintConfig file("lint.xml")
         //#showAll true
