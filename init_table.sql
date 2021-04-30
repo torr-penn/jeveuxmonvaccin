@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS vaccine_center
     id              BIGSERIAL PRIMARY KEY,
     center_id       int,
     vaccine_id      int,
-    primary_link    character varying(200),
+    primary_link    character varying(250),
     result_topology int,
     provider        character varying(20),
     lastok          timestamp without time zone default now(),
@@ -51,6 +51,10 @@ CREATE TABLE IF NOT EXISTS vaccine_phone
 
 alter table vaccine_center
     add constraint uniquecenter_vaccine_center UNIQUE (center_id, vaccine_id);
+
+
+alter table vaccine_center alter column primary_link  type character varying(250);
+-- alter table TABLE_NAME alter column COLUMN_NAME type character varying(120);
 
 drop table vaccine_phone;
 drop table vaccine_center;

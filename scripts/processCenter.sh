@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-WDIR=/home/gtanguy/covid/center
+WDIR=/work/jeveuxmonvaccin/scripts
 
 FILE="centres-vaccination.csv"
 
@@ -97,6 +97,20 @@ function output_to_file(){
 
 }
 
+MODALEXCEPTION="2426"
+function checkModSpecial() {
+	rdv_mod=$2
+	PASS_MOD=""
+	if [ "$rdv_mod" = "" ]; then
+		PASS_MOD="Y"
+	else
+	if [[ "$1" =~ $MODALEXCEPTION ]];then
+			PASS_MOD="Y"
+	else
+		PASS_MOD=""
+	fi
+	fi
+}
 
 function process_line() {
 while IFS=\; read gid nom arrete_pref_numero xy_precis id_adr adr_num adr_voie com_cp com_insee com_nom lat_coor1 long_coor1 structure_siren structure_type structure_rais structure_num structure_voie structure_cp structure_insee structure_com _userid_creation _userid_modification _edit_datemaj lieu_accessibilite rdv_lundi rdv_mardi rdv_mercredi rdv_jeudi rdv_vendredi rdv_samedi rdv_dimanche rdv date_fermeture date_ouverture rdv_site_web rdv_tel rdv_tel2 rdv_modalites rdv_consultation_prevaccination centre_svi_repondeur centre_fermeture reserve_professionels_sante
@@ -110,7 +124,10 @@ do
 
 		RESBUFFER="$com_cp;$com_nom;$nom;"
 		if [ "$date_ouverture" != "" ]; then
-			if [ "$rdv_modalites" = "" ]; then
+				
+			checkModSpecial $gid $rdv_modalites
+			
+			if [ "$PASS_MOD" = "Y" ]; then
 	 			if [ "$rdv_site_web" != "" ]; then
 					if [ "$date_fermeture" = "" ]; then
 						extra_info $gid	
@@ -141,14 +158,14 @@ do
 
 						fi
 				 	fi  
-	      		else
-				     RESBUFFER="$RESBUFFER;FILTERED;noweb"
+	      			else
+				     RESBUFFER="$gid;$RESBUFFER;FILTERED;noweb"
 				fi
 			else
-				RESBUFFER="$RESBUFFER;FILTERED;special"
+				RESBUFFER="$gid;$RESBUFFER;FILTERED;special : $rdv_modalites"
 			fi
 		else
-				RESBUFFER="$RESBUFFER;FILTERED;noopendate"
+				RESBUFFER="$gid;$RESBUFFER;FILTERED;noopendate"
 		fi
 
 		echo  "$RESBUFFER"
