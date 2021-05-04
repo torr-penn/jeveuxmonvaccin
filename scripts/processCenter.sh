@@ -9,6 +9,7 @@ DEPARTEMENT=29
 
 
 FILEO="$WDIR/center/filtered_center${IDX}.csv"
+cp load_center_sql.csv  prev_sql.csv
 echo -n ""> load_center_sql.csv
 
 MYDATE=`date`
@@ -97,18 +98,33 @@ function output_to_file(){
 
 }
 
-MODALEXCEPTION="2426"
+MODALEXCEPTION="2426 2217 2223"
 function checkModSpecial() {
 	rdv_mod=$2
 	PASS_MOD=""
 	if [ "$rdv_mod" = "" ]; then
 		PASS_MOD="Y"
 	else
-	if [[ "$1" =~ $MODALEXCEPTION ]];then
+	if [[ $MODALEXCEPTION =~ "$1" ]];then
 			PASS_MOD="Y"
 	else
 		PASS_MOD=""
 	fi
+	fi
+}
+OPENDATEEXCEPTION="411"
+function checkOpenDateSpecial() {
+	date_mod=$2
+	PASS_DATE=""
+	if [ "$date_mod" = "" ]; then
+		if [[ "$1" =~ $OPENDATEEXCEPTION ]];then
+			PASS_DATE="Y"
+			date_ouverture="2021-04-15"
+		else
+			PASS_DATE=""
+		fi
+	else
+		PASS_DATE="Y"
 	fi
 }
 
@@ -123,10 +139,10 @@ do
        let nbcenterdeptseen++
 
 		RESBUFFER="$com_cp;$com_nom;$nom;"
-		if [ "$date_ouverture" != "" ]; then
-				
+		checkOpenDateSpecial $gid $date_ouverture
+
+		if [ "$PASS_DATE" = "Y" ]; then
 			checkModSpecial $gid $rdv_modalites
-			
 			if [ "$PASS_MOD" = "Y" ]; then
 	 			if [ "$rdv_site_web" != "" ]; then
 					if [ "$date_fermeture" = "" ]; then
@@ -192,4 +208,4 @@ rm tmp.csv
 cp bretagne.csv /tmp
 
 
-
+diff load_center_sql.csv  prev_sql.csv

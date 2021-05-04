@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS vaccine_center
     msinterval      int                         default 120000,
     nbsuccess       int                         default 0,
     total           int                         default 0,
-    params          character varying(500)
+    params          character varying(1000)
 );
 
 
@@ -52,6 +52,9 @@ CREATE TABLE IF NOT EXISTS vaccine_phone
 alter table vaccine_center
     add constraint uniquecenter_vaccine_center UNIQUE (center_id, vaccine_id);
 
+alter table vaccine_center alter column params  type character varying(1000);
+
+
 
 alter table vaccine_center alter column primary_link  type character varying(250);
 -- alter table TABLE_NAME alter column COLUMN_NAME type character varying(120);
@@ -69,6 +72,12 @@ COPY vaccine_center (center_id, provider, vaccine_id, primary_link)
 
 
 \COPY  vaccine_center_infos (name,address,city,zipcode,open_date,close_date,center_id,vaccine_id,platform_id) FROM '/tmp/bretagne.csv' WITH (DELIMITER ';', NULL '');
+
+select a.name, a.zipcode, a.center_id from vaccine_center_info order by zipcode, center_id;
+select a.name, a.zipcode, a.center_id,b.status from vaccine_center_infos a,vaccine_center b where a.center_id=b.center_id order by zipcode,
+select substr(a.name,0,15), a.center_id, b.status,b.params from vaccine_center_infos a,vaccine_center b where a.center_id=b.center_id and a.vaccine_id=b.vaccine_id order by zipcode, center_id ;
+select substr(a.name,0,15), a.center_id, b.status,b.params from vaccine_center_infos a,vaccine_center b where a.center_id=b.center_id and a.vaccine_id=b.vaccine_id and zipcode>21000 and zipcode<23000 order by zipcode, center_id ;
+select substr(a.name,0,15), a.center_id, b.status,b.params from vaccine_center_infos a,vaccine_center b where a.center_id=b.center_id and a.vaccine_id=b.vaccine_id and zipcode>34000 and zipcode<36000 order by zipcode, center_id ;
 
 
 torr-penn::DATABASE=>
