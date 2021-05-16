@@ -1,0 +1,38 @@
+### Cotes d armor 
+887;gh-rance-emeraude-vaccination-covid
+####FINISTERE Manual 920 crozon - 2393 chateaulin
+#920;centre-de-vaccination-covid-19-chateaulin-crozon
+930;centre-de-vaccination-covid-19-de-quimperle
+1009;centre-de-vaccination-covid-19-brest-arena
+1154;centre-de-vaccination-covid-19-de-concarneau
+1277;centre-de-vaccination-covid-19-bigouden
+1649;ch-morlaix-centre-de-vaccination-covid-19
+1997;centre-de-vaccination-covid-19-carhaix-espace-glenmor
+#2393;centre-de-vaccination-covid-19-chateaulin-crozon
+2426;centre-de-vaccination-hia-brest
+####ILLE ET VILAINE - sauf 901 saint MALO
+411;ch-de-vitre-centre-de-vaccination-covid-19
+412;vaccination-covid-19-ch-redon
+422;centre-de-vaccination-de-fougeres
+888;centre-de-vaccination-covid-19-sos-medecins-rennes
+892;centre-de-vaccination-covid-19-rennes-liberte
+896;centre-de-vaccination-de-saint-gregoire
+901;centre-de-vaccination-covid-centre-de-vaccination-du-naye
+1438;centre-de-vaccination-dol-de-bretagne
+#1440;centre-de-vaccination-covid-19-de-broceliande
+1450;centre-de-vaccination-covid-19-de-liffre
+1968;centre-de-vaccination-parc-expo-bruz
+2001;centre-de-vaccination-covid-19-de-la-cpts-de-bretagne-romantique
+2217;centre-de-vaccination-covid-19-vaccimobile-35-ars-communes-ile-et-vilaine
+2338;centre-de-vaccination-covid19-ch-de-dinard
+2397;centre-de-vaccination-covid-19-chantepie
+2449;centre-de-vaccination-covid-19-cpts-de-marches-de-bretagne
+2457;centre-de-vaccination-covid-19-ville-de-cancale
+####MORBIHAN
+428;ghba-centre-de-vaccination-covid-ploermel
+894;chba-centre-de-vaccination-covid-d-auray
+897;ghba-centre-de-vaccination-covid-grandchamp
+899;ch-bretagne-atlantique-chba-centre-de-vaccination-covid
+2119;gh-broceliande-atlantique-ghba-centre-de-vaccination-covid-sarzeau-sarzeau
+2120;gh-broceliande-atlantique-ghba-centre-de-vaccination-covid-quiberon
+2223;centre-de-vaccination-covid-19-vannes-kercado

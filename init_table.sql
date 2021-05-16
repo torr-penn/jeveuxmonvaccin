@@ -16,7 +16,16 @@ CREATE TABLE IF NOT EXISTS vaccine_center
     msinterval      int                         default 120000,
     nbsuccess       int                         default 0,
     total           int                         default 0,
-    params          character varying(1000)
+    params          character varying(1000),
+    nextrdv         timestamp without time zone default NULL,
+
+    lastok18          timestamp without time zone default now(),
+    lastcheck18       timestamp without time zone default now(),
+    nbsuccess18       int                         default 0,
+    total18           int                         default 0,
+    params18          character varying(1000),
+    nextrdv18         timestamp without time zone default NULL
+
 );
 
 
@@ -49,14 +58,27 @@ CREATE TABLE IF NOT EXISTS vaccine_phone
     CONSTRAINT salt_unique UNIQUE (phonesalt)
 );
 
+alter table vaccine_center add column lastok18      timestamp without time zone default null;
+alter table vaccine_center add column lastcheck18   timestamp without time zone default null;
+alter table vaccine_center add column nbsuccess18   int                         default 0;
+alter table vaccine_center add column total18       int                         default 0;
+alter table vaccine_center add column nextrdv18     timestamp without time zone default NULL;
+alter table vaccine_center add column status18      int                         default 3;
+alter table vaccine_center add column params18      character varying(1000);
+
+
+
 alter table vaccine_center
     add constraint uniquecenter_vaccine_center UNIQUE (center_id, vaccine_id);
 
-alter table vaccine_center alter column params  type character varying(1000);
+alter table vaccine_center
+    alter column params type character varying(1000);
 
+alter table vaccine_center
+    add column nextRdv timestamp without time zone default NULL;
 
-
-alter table vaccine_center alter column primary_link  type character varying(250);
+alter table vaccine_center
+    alter column primary_link type character varying(250);
 -- alter table TABLE_NAME alter column COLUMN_NAME type character varying(120);
 
 drop table vaccine_phone;
@@ -65,46 +87,54 @@ drop table vaccine_center;
 -- various maintenance operations below
 
 
-COPY vaccine_center (center_id, provider, vaccine_id, primary_link)
-    FROM '~/covid/center/load_center_sql.csv'
-    WITH DELIMITER ';'
-;
 
 
+
+select a.name, a.zipcode, a.center_id
+from vaccine_center_info
+order by zipcode, center_id;
+select a.name, a.zipcode, a.center_id, b.status
+from vaccine_center_infos a,
+     vaccine_center b
+where a.center_id = b.center_id
+order by zipcode,
+select substr(a.name, 0, 15), a.center_id, b.status, b.params
+from vaccine_center_infos a,
+     vaccine_center b
+where a.center_id = b.center_id
+  and a.vaccine_id = b.vaccine_id
+order by zipcode, center_id;
+select substr(a.name, 0, 15), a.center_id, b.status, b.params
+from vaccine_center_infos a,
+     vaccine_center b
+where a.center_id = b.center_id
+  and a.vaccine_id = b.vaccine_id
+  and zipcode > 21000
+  and zipcode < 23000
+order by zipcode, center_id;
+select substr(a.name, 0, 15), a.center_id, b.status, b.params
+from vaccine_center_infos a,
+     vaccine_center b
+where a.center_id = b.center_id
+  and a.vaccine_id = b.vaccine_id
+  and zipcode > 34000
+  and zipcode < 36000
+order by zipcode, center_id;
+
+select substr(a.name, 0, 15), a.center_id, b.status, b.params
+from vaccine_center_infos a,
+     vaccine_center b
+where a.center_id = b.center_id
+  and a.vaccine_id = b.vaccine_id
+  and primary_link like '%keldoc%'
+order by zipcode, center_id;
+
+heroku psql -a torr-penn - c "\COPY  vaccine_center(center_id,provider,vaccine_id,primary_link) FROM '~/covid/center/load_center_sql.csv' WITH DELIMITER ';' ;"
+
+\COPY  vaccine_center(center_id,provider,vaccine_id,result_topology,params,primary_link) FROM '/tmp/load_center_sql.csv' WITH DELIMITER ';';
 \COPY  vaccine_center_infos (name,address,city,zipcode,open_date,close_date,center_id,vaccine_id,platform_id) FROM '/tmp/bretagne.csv' WITH (DELIMITER ';', NULL '');
 
-select a.name, a.zipcode, a.center_id from vaccine_center_info order by zipcode, center_id;
-select a.name, a.zipcode, a.center_id,b.status from vaccine_center_infos a,vaccine_center b where a.center_id=b.center_id order by zipcode,
-select substr(a.name,0,15), a.center_id, b.status,b.params from vaccine_center_infos a,vaccine_center b where a.center_id=b.center_id and a.vaccine_id=b.vaccine_id order by zipcode, center_id ;
-select substr(a.name,0,15), a.center_id, b.status,b.params from vaccine_center_infos a,vaccine_center b where a.center_id=b.center_id and a.vaccine_id=b.vaccine_id and zipcode>21000 and zipcode<23000 order by zipcode, center_id ;
-select substr(a.name,0,15), a.center_id, b.status,b.params from vaccine_center_infos a,vaccine_center b where a.center_id=b.center_id and a.vaccine_id=b.vaccine_id and zipcode>34000 and zipcode<36000 order by zipcode, center_id ;
 
-
-torr-penn::DATABASE=>
-insert into vaccine_center (id, center_id)
-values (0, 0);
-INSERT
-    0 1
-    heroku psql -a torr-penn - c "\COPY  vaccine_center(center_id,provider,vaccine_id,primary_link)
-FROM '~/covid/center/load_center_sql.csv'
-WITH DELIMITER ';'
-;"
-
-\COPY  vaccine_center(center_id,provider,vaccine_id,result_topology,params,primary_link)
-FROM '/tmp/load_center_sql.csv'
-WITH DELIMITER ';';
-
-update vaccine_center
-set result_topology=2,
-    status=1,
-    params='2678861:449685:175124'
-where center_id = 1009;
-update vaccine_center
-set result_topology=2,
-    status=1,
-    vaccine_id=2,
-    params='2575758:429756-417446-416771-433205-436456-436455:167193'
-where center_id = 1277;
 
 \COPY  center_temp(center_id,provider,vaccine_id,result_topology,params) FROM '/tmp/extra_29.txt' WITH DELIMITER ';' ;
 \COPY  center_temp(center_id,provider,vaccine_id,result_topology,params) FROM '/tmp/extra_22.txt' WITH DELIMITER ';' ;
@@ -113,26 +143,7 @@ where center_id = 1277;
 \COPY  center_temp(center_id,provider,vaccine_id,result_topology,params) FROM '/tmp/extra_22.txt' WITH DELIMITER ';' ;
 
 
-delete
-from vaccine_center
-where center_id = 925
-  and vaccine_id = 1;
-update vaccine_center
-set vaccine_id=2
-where center_id = 1438
-  and vaccine_id = 5;
-update vaccine_center
-set vaccine_id=2
-where center_id = 2001
-  and vaccine_id = 5;
-update vaccine_center
-set vaccine_id=2
-where center_id = 422
-  and vaccine_id = 5;
-update vaccine_center
-set vaccine_id=2
-where center_id = 56
-  and vaccine_id = 5;
+
 update vaccine_center
 set result_topology=b.result_topology,
     params=b.params,
@@ -142,6 +153,7 @@ where vaccine_center.vaccine_id = b.vaccine_id
   and vaccine_center.center_id = b.center_id;
 
 
-
+1438
+2457
 
 

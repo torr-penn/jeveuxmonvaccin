@@ -208,4 +208,4 @@ rm tmp.csv
 cp bretagne.csv /tmp
 
 
-diff load_center_sql.csv  prev_sql.csv
+echo "kdiff3 load_center_sql.csv  prev_sql.csv"
