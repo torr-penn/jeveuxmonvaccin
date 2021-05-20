@@ -1,0 +1,21 @@
+## cotes d'armor 
+854;/centre-municipal-de-sante/st-brieuc-22000/robien-saint-brieuc;0;
+886;/maison-de-sante/lamballe-22400/lamballe;0;
+889;/centre-municipal-de-sante/loudeac-22600/centre-de-vaccination-loudeac-foyer-municipal;0;
+890;/centre-municipal-de-sante/guingamp-22200/guingamp;0;
+893;/centre-municipal-de-sante/lannion-22300/centre-de-vaccination-de-lannion;0;
+1302;/cabinet-medical/rostrenen-22110/salle-des-fetes-rostrenen;0;
+1303;/cabinet-medical/lanvollon-22290/ville-de-lanvollon;0;
+2348;/cabinet-medical/paimpol-22500/centre-de-vaccination-de-paimpol-gymnase-k2/centre-de-vaccination-de-paimpol-gymnase-k2;0;
+2510;/centre-municipal-de-sante/st-brieuc-22000/centre-de-vaccination-saint-brieuc-palais-des-congres-et-des-expositions-de-la-baie-de-saint-brieuc-brezillet-2;0;
+## Finistere
+918;/centre-municipal-de-sante/st-renan-29290/saint-renan;0;
+925;/centre-municipal-de-sante/quimper-29000/quimper/centre-de-vaccination-de-quimper;0;
+927;/centre-municipal-de-sante/douarnenez-29100/gradlon;0;
+## Ille et Vilaine
+1439;/cabinet-medical/bain-de-bretagne-35470/salle-des-fetes-de-bain-de-bretagne;0;
+## Morbihan
+454;/centre-hospitalier/pontivy-56300/centre-hospitalier-centre-bretagne;0;
+904;/centre-hospitalier-regional/lorient-56100/groupe-hospitalier-bretagne-sud-lorient-hopital-du-scorff;16913;
+1215;/centre-hospitalier-regional/lorient-56100/groupe-hospitalier-bretagne-sud-lorient-hopital-du-scorff;16910;
+2350;/centre-hospitalier-regional/lorient-56100/groupe-hospitalier-bretagne-sud-lorient-hopital-du-scorff;18780;

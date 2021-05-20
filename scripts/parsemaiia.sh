@@ -9,10 +9,17 @@ LAND=600599c2e4e80549d8cb9eaa
 
 # 1275
 LESN=600686103b987b202a404143
-cid=$RETI
+#600686103b987b202a404143
+cid=$LAND
 
+
+function search_maiia(){
+echo " ----------------------------"
+echo " $1 $2 $3" 
+cid=$1
 curl -s "https://www.maiia.com/api/pat-public/consultation-reason-hcd?rootCenterId=$cid&limit=200&page=0"|python3.8 -m json.tool --sort-keys > maiiatmp.json
 
+echo "https://www.maiia.com/api/pat-public/consultation-reason-hcd?rootCenterId=$cid&limit=200&page=0" 
 i=0
 step=0
 while IFS= read -r line
@@ -47,9 +54,14 @@ do
 		fi
 		FOUNDEND=`echo $line |egrep "]," |wc -l`
 		if [ "$FOUNDEND" = "1" ]; then
-			exit 0
+			break;
 		fi
 
 	fi
 	  
 done < "maiiatmp.json"
+}
+
+search_maiia $LAND Landerneau 929
+search_maiia $LESN Lesneven 1275
+search_maiia $RETI Retier 1737

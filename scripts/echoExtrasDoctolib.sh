@@ -81,5 +81,6 @@ function check_from_new(){
 check_files
 check_from_new
 
+cat "f2.txt" |grep " no data center "
 echo "##################################"
 echo "kdiff3 f1.txt f2.txt"
