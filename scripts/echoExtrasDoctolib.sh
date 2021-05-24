@@ -58,7 +58,8 @@ function missing_line(){
 		cid=`echo $NEW |awk -F\; ' {print $1;}'`
 	if [ "$paramO" != "$paramN" ]; then
 	if [ "$cid" != "" ]; then
-		echo "$cid is missing in extra file;"
+		city=`cat positions.csv |grep -o "^$cid;.*" | awk -F\; '{print $2;}'`
+		echo "$cid =$city is missing in extra file;"
 	fi
 	fi
 }

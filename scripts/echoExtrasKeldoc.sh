@@ -81,6 +81,11 @@ function check_from_new(){
 check_files
 check_from_new
 
+
+
 cat "k2.txt" |grep " no data center "
+cat "k2.txt" |grep -B 1 "KO ---"
+
 echo "##################################"
 echo "kdiff3 k1.txt k2.txt"
+

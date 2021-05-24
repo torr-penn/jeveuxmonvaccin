@@ -82,5 +82,6 @@ check_files
 check_from_new
 
 cat "18k2.txt" |grep " no data center "
+cat "18k2.txt" |grep -B 1 "******* WARNING ---"
 echo "##################################"
 echo "kdiff3 18k1.txt 18k2.txt"

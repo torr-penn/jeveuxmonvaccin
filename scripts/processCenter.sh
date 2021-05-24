@@ -11,6 +11,7 @@ DEPARTEMENT=29
 FILEO="$WDIR/center/filtered_center${IDX}.csv"
 cp load_center_sql.csv  prev_sql.csv
 echo -n ""> load_center_sql.csv
+echo -n ""> positions.csv
 
 MYDATE=`date`
 	nbcenterseen=0
@@ -79,6 +80,7 @@ function output_to_file(){
 
 		      				echo -e "$nom;$monadresse;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA1"   >> c$DEPARTEMENT.csv
 						echo -e "$EXTRA1;$rdv_site_web" >> load_center_sql.csv
+						echo -e "$GID;$nom;$com_cp;$lat_coor1;$long_coor1" >> positions.csv 
 				        else
 				               if [ "$EXTRANB" = "2" ]; then
 		      			 		echo -e "$nom;$monadresse;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA1"   >> c$DEPARTEMENT.csv

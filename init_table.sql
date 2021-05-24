@@ -68,17 +68,13 @@ alter table vaccine_center add column params18      character varying(1000);
 
 
 
-alter table vaccine_center
-    add constraint uniquecenter_vaccine_center UNIQUE (center_id, vaccine_id);
+alter table vaccine_center     add constraint uniquecenter_vaccine_center UNIQUE (center_id, vaccine_id);
 
-alter table vaccine_center
-    alter column params type character varying(1000);
+alter table vaccine_center     alter column params type character varying(1000);
 
-alter table vaccine_center
-    add column nextRdv timestamp without time zone default NULL;
+alter table vaccine_center     add column nextRdv timestamp without time zone default NULL;
 
-alter table vaccine_center
-    alter column primary_link type character varying(250);
+alter table vaccine_center     alter column primary_link type character varying(250);
 -- alter table TABLE_NAME alter column COLUMN_NAME type character varying(120);
 
 drop table vaccine_phone;
@@ -90,35 +86,15 @@ drop table vaccine_center;
 
 
 
-select a.name, a.zipcode, a.center_id
-from vaccine_center_info
-order by zipcode, center_id;
-select a.name, a.zipcode, a.center_id, b.status
-from vaccine_center_infos a,
-     vaccine_center b
-where a.center_id = b.center_id
-order by zipcode,
-select substr(a.name, 0, 15), a.center_id, b.status, b.params
-from vaccine_center_infos a,
-     vaccine_center b
-where a.center_id = b.center_id
-  and a.vaccine_id = b.vaccine_id
-order by zipcode, center_id;
-select substr(a.name, 0, 15), a.center_id, b.status, b.params
-from vaccine_center_infos a,
-     vaccine_center b
-where a.center_id = b.center_id
-  and a.vaccine_id = b.vaccine_id
-  and zipcode > 21000
-  and zipcode < 23000
-order by zipcode, center_id;
-select substr(a.name, 0, 15), a.center_id, b.status, b.params
-from vaccine_center_infos a,
-     vaccine_center b
-where a.center_id = b.center_id
-  and a.vaccine_id = b.vaccine_id
-  and zipcode > 34000
-  and zipcode < 36000
+select a.name, a.zipcode, a.center_id from vaccine_center_info a order by zipcode, center_id;
+select substr(a.name, 0, 15), a.center_id, b.status, b.params from vaccine_center_infos a,     vaccine_center b
+where a.center_id = b.center_id   and a.vaccine_id = b.vaccine_id order by zipcode, center_id;
+
+select substr(a.name, 0, 15), a.center_id, b.status, b.params from vaccine_center_infos a,      vaccine_center b
+where a.center_id = b.center_id   and a.vaccine_id = b.vaccine_id   and zipcode > 21000   and zipcode < 23000 order by zipcode, center_id;
+
+select substr(a.name, 0, 15), a.center_id, b.status, b.params from vaccine_center_infos a,   vaccine_center b
+where a.center_id = b.center_id   and a.vaccine_id = b.vaccine_id   and zipcode > 34000   and zipcode < 36000
 order by zipcode, center_id;
 
 select substr(a.name, 0, 15), a.center_id, b.status, b.params
@@ -144,16 +120,46 @@ heroku psql -a torr-penn - c "\COPY  vaccine_center(center_id,provider,vaccine_i
 
 
 
-update vaccine_center
-set result_topology=b.result_topology,
-    params=b.params,
-    status=2
-from center_temp b
-where vaccine_center.vaccine_id = b.vaccine_id
-  and vaccine_center.center_id = b.center_id;
+update vaccine_center set result_topology=b.result_topology,     params=b.params,     status=2 from center_temp b
+where vaccine_center.vaccine_id = b.vaccine_id   and vaccine_center.center_id = b.center_id;
 
 
-1438
-2457
+
+CREATE TABLE IF NOT EXISTS vaccine_center_histo
+(
+    id              BIGSERIAL PRIMARY KEY,
+    center_id       int,
+    vaccine_id      int,
+    date            date,
+    nbsuccess       int,
+    total           int,
+    nbsuccess18     int,
+    total18         int
+);
+
+alter table vaccine_center_histo     add constraint unique_vaccine_center_histo UNIQUE (center_id, vaccine_id,date);
+
+
+
+CREATE TABLE IF NOT EXISTS vaccine_histo_status
+(
+    id              BIGSERIAL PRIMARY KEY,
+    date            date,
+    lastok          timestamp
+);
+insert into vaccine_histo_status (date, lastok) values ((current_date-2), (now()-INTERVAL '1 day')::Timestamp);
+
+CREATE TABLE IF NOT EXISTS vaccine_center_ref
+(
+    id              BIGSERIAL PRIMARY KEY,
+    center_id       int,
+    vaccine_id      int,
+    nbsuccess       int,
+    total           int,
+    nbsuccess18     int,
+    total18         int
+);
+
+alter table vaccine_center_ref     add constraint unique_vaccine_center_ref UNIQUE (center_id, vaccine_id);
 
 
