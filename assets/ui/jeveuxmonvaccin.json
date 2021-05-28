@@ -15,6 +15,12 @@
 	"explications": {
 		"file": "Montserrat-Regular.fnt"
 	},
+	"list": {
+		"file": "junction-light.fnt"
+	},
+	"listBold": {
+		"file": "junction-lightBold.fnt"
+	},
 	"menu": {
 		"file": "Montserrat-Bold.fnt"
 	},
@@ -123,6 +129,18 @@
 	"default": {
 		"font": "smallfont",
 		"fontColor": "white"
+	},
+	"list": {
+		"font": "list",
+		"fontColor": "white"
+	},
+	"listBold": {
+		"font": "listBold",
+		"fontColor": "white"
+	},
+	"listpct": {
+		"font": "menu",
+		"fontColor": "white"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle": {
@@ -183,6 +201,21 @@
 		"fontColor": "blue_vaccine",
 		"up": "redlink_external",
 		"down": "link_external"
+	},
+	"listTitle": {
+		"font": "list",
+		"fontColor": "blue_vaccine",
+		"downFontColor": "black",
+		"overFontColor": "blue",
+		"checkedFontColor": "blue",
+		"up": "listTitle",
+		"down": "listTitlewhite",
+		"checked": "listTitle"
+	},
+	"listTitleNeutral": {
+		"font": "list",
+		"fontColor": "black",
+		"up": "listTitlewhite"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {

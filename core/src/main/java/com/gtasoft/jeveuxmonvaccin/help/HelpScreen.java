@@ -161,7 +161,7 @@ public class HelpScreen implements Screen, ApplicationListener {
 
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
-                Gdx.net.openURI("https://www.torr-penn.bzh/index.php?lang=fr");
+                Gdx.net.openURI("https://www.torr-penn.bzh/jvmv.php");
                 return true;
 
             }
@@ -207,15 +207,15 @@ public class HelpScreen implements Screen, ApplicationListener {
             }
         }
 
-//        if (page == 3) {
-        //          if (!stage.getActors().contains(btnWebsite, true)) {
-        //            stage.addActor(btnWebsite);
-        //       }
-//        } else {
-        //          if (stage.getActors().contains(btnWebsite, true)) {
-        //            btnWebsite.remove();
-        //      }
-        //}
+        if (page == 2) {
+            if (!stage.getActors().contains(btnWebsite, true)) {
+                stage.addActor(btnWebsite);
+            }
+        } else {
+            if (stage.getActors().contains(btnWebsite, true)) {
+                btnWebsite.remove();
+            }
+        }
 
         camera.update();
         sb.setProjectionMatrix(camera.combined);
@@ -224,17 +224,16 @@ public class HelpScreen implements Screen, ApplicationListener {
             if (Gdx.input.getX() < w - 24 - 32 || Gdx.input.getY() > 24 + 32) {
                 if (page == 0) {
                     page = 1;
-                    lblTitle.setText("Origines ");
+                    lblTitle.setText("Objectif ");
                     lblMesgTop.setText("");
                     lblMesgBottom.setText(
                             "L'idée est venue de l'observation qu'il faillait parfois \n" +
                                     "des jours pour avoir la chance de trouver un créneau \n" +
                                     "de vaccination dans le centre proche de chez soi.\n\n" +
-                                    "Mes parents ayant plus de 70 ans, ils n'étaient pas armés \n" +
-                                    "pour attendre devant leur écran une disponibilité.\n\n" +
-                                    "Cette application n'est pas idéale non plus, il faut avoir\n" +
-                                    "une connaissance des applications mobiles pour pouvoir\n" +
-                                    "l'installer et l'utiliser...\n\n\n" +
+                                    "Quand on ne voit pas de disponibilités, on ne sait pas  \n" +
+                                    "trop à quel point cela sera compliqué.\n" +
+                                    "Les informations de cette applications sont là pour vous\n" +
+                                    "aider dans votre démarche à ne pas abandonner.\n\n\n" +
                                     "L'ambition est de vous aider à attendre et à prendre \n" +
                                     "rendez-vous au bon moment.\n" +
                                     "L'espoir est que vite vous puissiez désinstaller \n" +
@@ -243,37 +242,16 @@ public class HelpScreen implements Screen, ApplicationListener {
 
                 } else if (page == 1) {
                     page = 2;
-                    lblTitle.setText("Limitations");
-                    lblMesgTop.setText("\n\n\n Remarque :\n\n" +
-                            "Pour que tout le monde ait sa chance, quand une place\n" +
-                            "se libère, tous les téléphones ne reçoivent pas l'information.\n\n " +
-                            "Vous comprenez qu'il est inutile que 100 personnes stressent \n" +
-                            "et essaient d'avoir une seule place disponible en même temps."
-                    );
-                    lblMesgBottom.setText(
-                            "Tout le monde a la même chance d'avoir l'information.\n\n" +
-                                    "Cette  application est proposée au lancement :\n" +
-                                    "  - uniquement en Bretagne\n" +
-                                    "  - uniquement sur Android\n" +
-                                    "\n\n Attention : \n" +
-                                    "L'application ne fonctionne que lorsque vous \n" +
-                                    "avez une connexion internet active.");
-
-                } else if (page == 2) {
-                    page = 3;
                     lblMesgTop.setText("\n\n\nLe code de l'application mobile est libre. \n" +
-                            "Application éphémère  très bientôt inutile espérons-le.\n" +
-                            "Une version PC est possible depuis le code source.\n"
-                    );
+                            "L'application ne fonctionne que lorsque vous \n" +
+                            "avez une connexion internet active.");
+
                     lblMesgBottom.setText("Pour toute question : \ne-mail : contact@torr-penn.bzh\n" +
                             "\n" +
-                            "Pour une réaction, une remarque, \npour exprimer la joie d'avoir obtenu un rendez-vous :\n" +
-                            "Twitter : https://twitter.com/TorrpennBzh \n\n" +
-                            "Merci!\n\n" +
-                            " Pour découvrir mes autres applications :\n " +
-                            "              http://www.torr-penn.bzh");
+                            "Une version web de cette application été réalisée \n" +
+                            "fin avril en attendant sa publication/validation. \n\n");
 
-                } else if (page == 3) {
+                } else if (page == 2) {
                     page = 0;
                     app.setScreen(app.mainMenuScreen);
 

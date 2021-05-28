@@ -21,11 +21,12 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class CenterAlerter extends Worker {
-    private static String CHECK_CENTER = "http://www.torr-penn.com/jeveuxmonvaccin/centerCheck";
+    private static String CHECK_CENTER = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/centerCheck.php";
     private static String COUNTERFILENAME = "alertcounter.dat";
     WorkerParameters workerParams;
     private Context mycontext;
     private long lastPhoneControl = 0;
+    private String displayDate = "";
 
 
     public CenterAlerter(@NonNull Context context, @NonNull WorkerParameters params) {
@@ -67,7 +68,7 @@ public class CenterAlerter extends Worker {
             FileHandle file = Gdx.files.local(fileName);
             if (file != null && file.exists()) {
                 String s = file.readString();
-                if (!s.isEmpty()) {
+                if (s != null && !"".equals(s)) {
                     return s;
                 }
             }
@@ -124,7 +125,7 @@ public class CenterAlerter extends Worker {
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(mycontext, AlertManager.CHANNEL_ID)
                             //.setSmallIcon(R.drawable.notification_icon)
                             .setSmallIcon(R.drawable.ic_launcher)
-                            .setContentTitle("Rendez-vous disponible!")
+                            .setContentTitle("RDV : " + getDisplayDate() + " !")
                             .setContentText("Faites vite... [ " + centerName + "]")
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .setContentIntent(pendingIntent)
@@ -162,7 +163,7 @@ public class CenterAlerter extends Worker {
             urlParameters = "phonesalt=" + URLEncoder.encode(salt, "UTF-8") +
                     "&cid=" + centerid + "&vid=" + vaccineid;
 
-            //System.out.println(" calling  center : " + CHECK_CENTER + "?" + urlParameters);
+            System.out.println(" calling  center : " + CHECK_CENTER + "?" + urlParameters);
             String res = executePost(CHECK_CENTER, urlParameters);
             System.out.println("*** check center  Result : " + res);
             incrementCounter();
@@ -178,12 +179,14 @@ public class CenterAlerter extends Worker {
     public boolean processCheck(String res) {
 
         if (res != null) {
-            if (res.startsWith("{-")) {
+            if (res.startsWith("-")) {
                 return false;
             } else {
-                if (partThree(res) == null) {
+                String sd = part(res, 4);
+                if (sd == null || "".equals(sd.trim())) {
                     return false;
                 } else {
+                    setDisplayDate(sd);
                     return true;
                 }
             }
@@ -192,18 +195,36 @@ public class CenterAlerter extends Worker {
 
     }
 
-    private String partThree(String str) {
-        String strx;
+    private String part(String str, int x) {
+        if (x < 1) {
+            return null;
+        }
         int idxSemicolon = str.indexOf(";");
         if (idxSemicolon != -1) {
-            strx = str.substring(idxSemicolon + 1, str.length() - 2);
-            idxSemicolon = strx.indexOf(";");
-            if (idxSemicolon != -1) {
-                strx = strx.substring(idxSemicolon + 1, strx.length());
-                return strx;
+            String ret[] = str.split(";");
+            if (ret.length >= x) {
+                return ret[x - 1].trim();
             } else {
                 return null;
             }
+        } else {
+            return null;
+        }
+
+    }
+
+    private String partThree(String str) {
+
+        int idxSemicolon = str.indexOf(";");
+        if (idxSemicolon != -1) {
+            String ret[] = str.split(";");
+            if (ret.length > 2) {
+                return ret[2].trim();
+            } else {
+                return null;
+            }
+
+
         } else {
             return null;
         }
@@ -269,5 +290,12 @@ public class CenterAlerter extends Worker {
 
     }
 
+    public String getDisplayDate() {
+        return displayDate;
+    }
+
+    public void setDisplayDate(String displayDate) {
+        this.displayDate = displayDate;
+    }
 }
 

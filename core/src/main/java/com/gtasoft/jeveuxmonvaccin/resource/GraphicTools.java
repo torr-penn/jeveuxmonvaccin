@@ -30,10 +30,14 @@ public class GraphicTools {
     private Texture imgNext;
     private Texture imgRegistration;
     private Texture imgRestart;
+    private Texture imgReloadOff;
     private Texture imgSearch;
     private Texture imgSelectPlace;
     private Texture imgSettings;
     private Texture imgStart;
+    private Texture imgOk;
+    private Texture imgKo;
+    private Texture imgBon;
 
 
     public GraphicTools() {
@@ -74,6 +78,11 @@ public class GraphicTools {
         imgRestart = new Texture(Gdx.files.internal("img/menu/retry-icon.png"));
         skin.add("imgRestart", imgRestart);
 
+        setImgReloadOff(new Texture(Gdx.files.internal("img/menu/retry-icon-off.png")));
+        skin.add("imgReloadOff", imgReloadOff);
+        Texture imageListe = new Texture(Gdx.files.internal("img/menu/list-icon.png"));
+        this.skin.add("list-icon", imageListe);
+
         imgSearch = new Texture(Gdx.files.internal("img/menu/search-icon.png"));
         skin.add("imgSearch", imgSearch);
 
@@ -85,6 +94,13 @@ public class GraphicTools {
 
         imgStart = new Texture(Gdx.files.internal("img/menu/start-icon.png"));
         skin.add("imgStart", imgStart);
+
+        imgOk = new Texture(Gdx.files.internal("img/selection/ok.png"));
+        skin.add("imgOk", imgOk);
+        imgKo = new Texture(Gdx.files.internal("img/selection/ko.png"));
+        skin.add("imgKo", imgKo);
+        imgBon = new Texture(Gdx.files.internal("img/selection/bon.png"));
+        skin.add("imgBon", imgBon);
 
 
         msgLoading = "Chargement";
@@ -243,4 +259,11 @@ public class GraphicTools {
     }
 
 
+    public Texture getImgReloadOff() {
+        return imgReloadOff;
+    }
+
+    public void setImgReloadOff(Texture imgReloadOff) {
+        this.imgReloadOff = imgReloadOff;
+    }
 }

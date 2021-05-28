@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.gtasoft.jeveuxmonvaccin.alert.AlertScreen;
+import com.gtasoft.jeveuxmonvaccin.center.CenterListScreen;
 import com.gtasoft.jeveuxmonvaccin.center.CenterScreen;
 import com.gtasoft.jeveuxmonvaccin.center.CenterTools;
 import com.gtasoft.jeveuxmonvaccin.control.ControlScreen;
@@ -25,6 +26,7 @@ public class JeVeuxMonVaccin extends Game implements ApplicationListener {
     public HelpScreen helpScreen;
     public VaccineScreen selectScreen;
     public CenterScreen centerScreen;
+    public CenterListScreen centerListScreen;
     public ControlScreen controlScreen;
 
     public AlertScreen alertScreen;
@@ -78,6 +80,7 @@ public class JeVeuxMonVaccin extends Game implements ApplicationListener {
         mainMenuScreen = new MenuScreen(this);
         selectScreen = new VaccineScreen(this);
         centerScreen = new CenterScreen(this);
+        centerListScreen = new CenterListScreen(this);
         prepareScreen = new PrepareScreen(this);
         controlScreen = new ControlScreen(this);
         alertScreen = new AlertScreen(this);

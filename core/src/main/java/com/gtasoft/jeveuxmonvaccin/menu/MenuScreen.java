@@ -51,6 +51,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
     private ImageButton btnPreparation;
     private ImageButton btnAlert;
     private ImageButton btnAvailability;
+    private ImageButton btnliste;
     private Texture imgBretagne;
     private OrthographicCamera camera;
     private FitViewport viewport;
@@ -127,6 +128,10 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         ibtnStyleAvailability.up = skin.getDrawable("imgSearch");
         btnAvailability = new ImageButton(ibtnStyleAvailability);
 
+        ImageButton.ImageButtonStyle btnStylelist = new ImageButton.ImageButtonStyle();
+        btnStylelist.up = this.skin.getDrawable("list-icon");
+        this.btnliste = new ImageButton(btnStylelist);
+
 
         Label.LabelStyle lblStyleMenu = new Label.LabelStyle();
         lblStyleMenu.fontColor = Color.WHITE;
@@ -186,9 +191,26 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
             }
         });
         // --------------------
-        //  2- Center
+        //  2- Center+list
         // --------------------
+        btnliste.setSize(96, 96);
+        btnliste.setPosition(24, hmiddle + 100);
+        this.btnliste.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent e, float x, float y, int point, int button) {
 
+
+                return;
+            }
+
+            @Override
+            public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
+
+                app.setScreen(app.centerListScreen);
+                return true;
+
+            }
+        });
         btnCenter.setSize(96, 96);
         btnCenter.setPosition(w / 4, hmiddle + 100);
         btnCenter.addListener(new ClickListener() {
@@ -411,7 +433,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         lblStyleTitle.font = this.skin.getFont("bar-font");
         lblTitle.setStyle(lblStyleTitle);
         lblTitle.setAlignment(Align.center);
-        lblTitle.setPosition(w / 2 - lblTitle.getWidth() / 2, h - 150, Align.center);
+        lblTitle.setPosition(w / 2, h - 150, Align.center);
 
         stage.setViewport(viewport);
         stage.addActor(btnExit);
@@ -624,6 +646,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
             hideit(lbl_availability);
 
             hideit(btnCenter);
+            hideit(btnliste);
             hideit(lbl_center);
 
             hideit(btnAlert);
@@ -636,6 +659,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
             showit(lbl_vaccineInfo);
             showit(lbl_centerInfo);
 
+            showit(btnliste);
             showit(btnCenter);
             showit(lbl_center);
             hideit(btnPreparation);
@@ -655,7 +679,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
             showit(lbl_vaccineInfo);
             showit(lbl_centerInfo);
 
-
+            showit(btnliste);
             showit(btnCenter);
             showit(lbl_center);
 
@@ -674,7 +698,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
             hideit(lbl_alertInfo);
             showit(lbl_vaccineInfo);
             showit(lbl_centerInfo);
-
+            showit(btnliste);
             showit(btnCenter);
             showit(lbl_center);
 
@@ -693,7 +717,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
             showit(lbl_alertInfo);
             showit(lbl_vaccineInfo);
             showit(lbl_centerInfo);
-
+            showit(btnliste);
             showit(btnCenter);
             showit(lbl_center);
 

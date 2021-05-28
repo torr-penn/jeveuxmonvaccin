@@ -30,11 +30,12 @@ public class ControlScreen implements Screen, ApplicationListener {
     Label lblResult;
     Label lblStats;
     Label lbl_continue;
-
+    Label lblNextRdv;
+    Label lblNoInternet;
     Label lbl_countdown;
 
     long lastPhoneControl = 0;
-    long deltaTime = 120;//in seconds
+    long deltaTime = 21;//in seconds
     float w;
     float h;
     float stateTime;
@@ -84,7 +85,6 @@ public class ControlScreen implements Screen, ApplicationListener {
         viewport = new FitViewport(768, 1280, camera);
 
 
-        int wmiddle = (int) w / 2;
         int hmiddle = (int) h / 2;
 
 
@@ -96,20 +96,30 @@ public class ControlScreen implements Screen, ApplicationListener {
         lblStats = new Label(" - vérifications. Rendez-vous possible - fois.", skin);
         lblCenterName = new Label("", skin);
 
-        lblResult = new Label("Réservation actuellement : -" +
-                "", skin);
+        lblResult = new Label("Réservation actuellement : -" + "", skin);
         tbPlatformLink = new TextButton("Prendre\nrendez-vous", skin, "hotlink");
+        lblNextRdv = new Label(" ", skin);
+        Color myBlue = new Color(0.9f, 0.9f, 1.0f, 1f);
 
         Label.LabelStyle lblStyleTitle = new Label.LabelStyle();
         lblStyleTitle.fontColor = Color.WHITE;
         lblStyleTitle.font = this.skin.getFont("bar-font");
         lblTitle.setStyle(lblStyleTitle);
         lblTitle.setAlignment(Align.center);
+        Label.LabelStyle lblStyleError = new Label.LabelStyle();
+        lblStyleError.fontColor = Color.ORANGE;
+        lblStyleError.font = this.skin.getFont("explications");
+        lblNoInternet = new Label("Erreur - problème de connexion internet? ", skin);
+        lblNoInternet.setStyle(lblStyleError);
+        lblNoInternet.setAlignment(Align.center);
+        lblNoInternet.setPosition(w / 2, h - 250, Align.center);
+
 
         Label.LabelStyle lblStyleContinue = new Label.LabelStyle();
-        lblStyleContinue.fontColor = Color.BLACK;
-        lblStyleContinue.font = this.skin.getFont("smallfont");
+        lblStyleContinue.fontColor = myBlue;
+        lblStyleContinue.font = this.skin.getFont("explications");
         lblLastControl.setStyle(lblStyleContinue);
+
 
         Label.LabelStyle lblStyleCountdown = new Label.LabelStyle();
         lblStyleCountdown.fontColor = Color.ORANGE;
@@ -121,7 +131,9 @@ public class ControlScreen implements Screen, ApplicationListener {
         Label.LabelStyle lblStyleInfo = new Label.LabelStyle();
         lblStyleInfo.fontColor = Color.WHITE;
         lblStyleInfo.font = this.skin.getFont("explications");
+        lblResult.setAlignment(Align.center);
         lblResult.setStyle(lblStyleInfo);
+
 
         Label.LabelStyle lblStyleIntitule = new Label.LabelStyle();
         lblStyleIntitule.fontColor = Color.WHITE;
@@ -129,6 +141,10 @@ public class ControlScreen implements Screen, ApplicationListener {
         lblCenterName.setColor(skin.getColor("yellow"));
         lblCenterName.setAlignment(Align.center);
         lblCenterName.setStyle(lblStyleIntitule);
+
+        lblNextRdv.setStyle(lblStyleIntitule);
+        lblNextRdv.setColor(myBlue);
+        lblNextRdv.setAlignment(Align.center);
 
 
         Label.LabelStyle lblStyleStats = new Label.LabelStyle();
@@ -168,7 +184,7 @@ public class ControlScreen implements Screen, ApplicationListener {
 
 
         btnBackMenu.setSize(64, 64);
-        btnBackMenu.setPosition(w - 24 - 64, h - 24 - 64);
+
         this.btnBackMenu.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
@@ -233,15 +249,16 @@ public class ControlScreen implements Screen, ApplicationListener {
         });
 
         lblTitle.setPosition(w / 2 - lblTitle.getWidth() / 2, h - 150, Align.center);
-        lblLastControl.setPosition(3 * w / 4 - lblLastControl.getWidth() / 2, 5 * h / 6);
-
+        lblLastControl.setPosition(w - 24 - 64 - lblLastControl.getWidth() / 2, h - 24 - 64 - 40);
+        btnBackMenu.setPosition(w - 24 - 64, h - 24 - 64);
 
         lblCenterName.setPosition(w / 2, h / 2 + 320);
-        lblResult.setPosition(20, h / 2 + 100);
+        lblResult.setPosition(w / 2, h / 2 + 100);
+        lblNextRdv.setPosition(w / 2, h / 2 + 20);
         lbl_countdown.setPosition(170, (int) (h / 3), Align.left);
 
 
-        tbPlatformLink.setPosition(w / 2 - tbPlatformLink.getWidth() / 2, h / 2 - 160);
+        tbPlatformLink.setPosition(w / 2 - tbPlatformLink.getWidth() / 2, h / 2 - 130);
 
 
         btnNext.setPosition(w / 2 - btnNext.getWidth() / 2, hmiddle - 440);
@@ -260,6 +277,8 @@ public class ControlScreen implements Screen, ApplicationListener {
 
         stage.addActor(lblTitle);
         stage.addActor(lblResult);
+        stage.addActor(lblNextRdv);
+
         stage.addActor(lblStats);
 
 
@@ -317,6 +336,12 @@ public class ControlScreen implements Screen, ApplicationListener {
         verifyCheck();
         app.getGraphicTools().isLoadingTextWithAnimation(loading, stage, 170, (int) h / 3, true);
 
+        if (centerTools != null && centerTools.getCenterStatus() == centerTools.ERROR_LOADING) {
+            if (!stage.getActors().contains(lblNoInternet, true)) {
+                stage.addActor(lblNoInternet);
+            }
+        }
+
         stage.act(delta);
         stage.draw();
     }
@@ -325,8 +350,10 @@ public class ControlScreen implements Screen, ApplicationListener {
     public void verifyCheck() {
         if (centerTools != null) {
             if (centerTools.getCheckStatus() != CenterTools.NO_LOAD) {
+                lblNextRdv.setText(centerTools.getNextRdv());
 
                 lblResult.setText(centerTools.getCheckMsg());
+                lblResult.setPosition(w / 2 - lblResult.getWidth() / 2, h / 2 + 100);
                 lblLastControl.setText(centerTools.getTimeMsg());
                 int res = centerTools.getLastCheckCode();
                 if (res == 1 || res == -5) {

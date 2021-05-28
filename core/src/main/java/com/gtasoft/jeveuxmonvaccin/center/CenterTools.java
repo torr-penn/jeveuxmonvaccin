@@ -1,5 +1,7 @@
 package com.gtasoft.jeveuxmonvaccin.center;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.gtasoft.jeveuxmonvaccin.JeVeuxMonVaccin;
 import com.gtasoft.jeveuxmonvaccin.setup.Machine;
 import com.gtasoft.jeveuxmonvaccin.setup.Options;
@@ -11,44 +13,50 @@ import java.net.URLEncoder;
 import java.util.*;
 
 public class CenterTools {
+    private final static boolean DEBUG = true;
     public static int NO_LOAD = 0;
     public static int LOADING = 1;
     public static int LOADED = 2;
-    private static String URL_DEPARTMENT = "http://www.torr-penn.bzh/jeveuxmonvaccin/department_list.csv";
-    private static String CENTER_LIST = "http://www.torr-penn.bzh/jeveuxmonvaccin/";
-    private static String CHECK_CENTER = "http://www.torr-penn.com/jeveuxmonvaccin/centerCheck";
+    public static int ERROR_LOADING = 3;
+    private static String URL_DEPARTMENT = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/department_list.csv";
+    private static String CENTER_LIST = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/";
+    private static String FULL_CENTER_LIST = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/dataCenter.php";
+    private static String CHECK_CENTER = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/centerCheck.php";
     private static String REGISTER_CENTER = "http://www.torr-penn.com/jeveuxmonvaccin/changeCenter";
     private static String INFO_CENTER = "http://www.torr-penn.com/jeveuxmonvaccin/infoCenter";
     ArrayList<Department> listDepartment;
     ArrayList<VaccinationCenter> listCenter;
     Machine machine;
+    private ArrayList<VaccinationCenterFull> fullList;
+    private int fullCenterStatus;
+    private int fullCheckStatus;
+
     private int centerStatus;
     private int checkStatus;
-
     private int lastCheckCode = -1;
     private String checkMsg;
     private String timeMsg;
-
-
+    private String nextRdv;
     private int registerStatus;
     private String registerMsg;
-
     private int infoStatus;
     private int infoReturnCode;
     private String infoMsg;
     private String infoLastok;
     private String infoClosing;
     private float infoPct;
-
-
     // private boolean loadingCenter = false;
     private JeVeuxMonVaccin app;
+    private Gson gson;
 
     public CenterTools() {
         System.out.println("Dummy constructor do not use");
+        gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+
     }
 
     public CenterTools(Machine machine, JeVeuxMonVaccin app) {
+        gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         this.app = app;
         setCenterStatus(NO_LOAD);
         setRegisterStatus(NO_LOAD);
@@ -144,6 +152,15 @@ public class CenterTools {
 
     }
 
+    public void process_full_center(String s) {
+
+        VaccinationCenterFull vcf[] = gson.fromJson(s, VaccinationCenterFull[].class);
+        List<VaccinationCenterFull> lvcf = Arrays.asList(vcf);
+        fullList = new ArrayList<VaccinationCenterFull>(lvcf);
+        Collections.sort(fullList);
+
+    }
+
     public Department getDepartment(String sid) {
         if (sid != null) {
             try {
@@ -207,16 +224,23 @@ public class CenterTools {
                 @Override
                 public void run() {
                     try {
-                        String urlParameters;
-                        urlParameters = "phonesalt=" + URLEncoder.encode(app.getMachine().getSalt(), "UTF-8") +
-                                "&cid=" + app.getOptions().getCenterId() + "&vid=" + app.getOptions().getVaccineId();
+                        try {
+                            String urlParameters;
+                            urlParameters = "phonesalt=" + URLEncoder.encode(app.getMachine().getSalt(), "UTF-8") +
+                                    "&cid=" + app.getOptions().getCenterId() + "&vid=" + app.getOptions().getVaccineId() + "&source=3";
 
-                        //System.out.println(" calling  center : " + CHECK_CENTER + "?" + urlParameters);
-                        String res = executePost(CHECK_CENTER, urlParameters);
-                        // System.out.println("*** check center  Result : " + res);
-                        processCheck(res);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+//                        System.out.println(" center check : " + CHECK_CENTER + "?" + urlParameters);
+                            String res = executePost(CHECK_CENTER, urlParameters);
+                            //System.out.println("*** check center  Result : " + res);
+                            processCheck(res);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                            processCheck(null);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        processCheck(null);
+
                     }
 
                 }
@@ -295,32 +319,51 @@ public class CenterTools {
     }
 
     private String partTwo(String str) {
-        String strx = null;
+
         int idxSemicolon = str.indexOf(";");
         if (idxSemicolon != -1) {
-            strx = str.substring(idxSemicolon + 1, str.length() - 2);
-            idxSemicolon = strx.indexOf(";");
-            if (idxSemicolon != -1) {
-                strx = strx.substring(0, idxSemicolon);
-                return strx;
+            String ret[] = str.split(";");
+            if (ret.length >= 2) {
+                return ret[1].trim();
             } else {
-                return strx;
+                return null;
             }
+
+
+        } else {
+            return null;
+        }
+
+
+    }
+
+    private String partThree(String str) {
+
+        int idxSemicolon = str.indexOf(";");
+        if (idxSemicolon != -1) {
+            String ret[] = str.split(";");
+            if (ret.length >= 3) {
+                return ret[2].trim();
+            } else {
+                return null;
+            }
+
+
         } else {
             return null;
         }
 
     }
 
-    private String partThree(String str) {
-        String strx;
+    private String part(String str, int x) {
+        if (x < 1) {
+            return null;
+        }
         int idxSemicolon = str.indexOf(";");
         if (idxSemicolon != -1) {
-            strx = str.substring(idxSemicolon + 1, str.length() - 2);
-            idxSemicolon = strx.indexOf(";");
-            if (idxSemicolon != -1) {
-                strx = strx.substring(idxSemicolon + 1, strx.length());
-                return strx;
+            String ret[] = str.split(";");
+            if (ret.length >= x) {
+                return ret[x - 1].trim();
             } else {
                 return null;
             }
@@ -330,19 +373,21 @@ public class CenterTools {
 
     }
 
+
     private int codeOne(String str) {
-        String strx;
         int idxSemicolon = str.indexOf(";");
         if (idxSemicolon != -1) {
-            strx = str.substring(1, idxSemicolon);
-
-            idxSemicolon = strx.indexOf(";");
+            String ret[] = str.split(";");
             try {
-                int res = Integer.parseInt(strx);
-                return res;
+                if (ret.length >= 1) {
+                    return Integer.parseInt(ret[0].trim());
+                } else {
+                    return -1;
+                }
             } catch (Exception e) {
                 return -1;
             }
+
         } else {
             return -1;
         }
@@ -353,7 +398,7 @@ public class CenterTools {
 
         if (res != null) {
             app.getOptions().incrementCheckTotal();
-            if (res.startsWith("{-")) {
+            if (res.startsWith("-6")) {
                 setTimeMsg("");
                 setCheckStatus(-2);
                 setLastCheckCode(codeOne(res));
@@ -362,9 +407,21 @@ public class CenterTools {
                     setCheckMsg("Erreur");
                 }
                 setTimeMsg(partThree(res));
+                setNextRdv(part(res, 4));
 
+            } else if (res.startsWith("-2")) {
+                setTimeMsg("");
+                setCheckStatus(-2);
+                setLastCheckCode(codeOne(res));
+                setCheckMsg(partTwo(res));
+                if (getCheckMsg() == null) {
+                    setCheckMsg("Erreur");
+                }
+                setTimeMsg(partThree(res));
+                setNextRdv("");
             } else {
                 setCheckMsg("");
+                setNextRdv("");
                 setTimeMsg(partThree(res));
                 setLastCheckCode(codeOne(res));
                 if (getTimeMsg() == null) {
@@ -376,13 +433,16 @@ public class CenterTools {
                     setCheckStatus(1);
                     setCheckMsg(partTwo(res));
                     setTimeMsg(partThree(res));
+                    setNextRdv(part(res, 4));
                 }
+
             }
         } else {
             setLastCheckCode(-1);
             setCheckStatus(-1);
             setCheckMsg("Erreur");
             setTimeMsg("-");
+            setNextRdv("");
         }
 
     }
@@ -421,16 +481,21 @@ public class CenterTools {
                 @Override
                 public void run() {
                     try {
-                        String urlParameters;
-                        urlParameters = "" + URLEncoder.encode(machine.getSalt(), "UTF-8");
-                        String res = executePost(CENTER_LIST + "c" + depId + ".csv", urlParameters);
-                        //System.out.println(" calling  center : " + CENTER_LIST + "c" + depId + ".csv?" + urlParameters);
-                        process_center(res);
-                        //System.out.println(" result is " + res);
-                        setCenterStatus(LOADED);
+                        try {
+                            String urlParameters;
+                            urlParameters = "" + URLEncoder.encode(machine.getSalt(), "UTF-8");
+                            String res = executePost(CENTER_LIST + "c" + depId + ".csv", urlParameters);
+                            //print("load center  : " + CENTER_LIST + "c" + depId + ".csv?" + urlParameters);
+                            process_center(res);
+                            // print("load center result is " + res);
+                            setCenterStatus(LOADED);
 
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        setCenterStatus(ERROR_LOADING);
                     }
 
                 }
@@ -482,11 +547,11 @@ public class CenterTools {
 
     public void infoCenter() {
         if (app.getMachine() == null) {
-            System.out.println("houston pb no salt");
+            print("houston pb no salt");
             return;
         }
         if (app.getOptions().getCenterId() == Options.UNDEFINED || app.getOptions().getVaccineId() == Options.UNDEFINED) {
-            System.out.println("houston pb no center");
+            print("houston pb no center");
             return;
         }
 
@@ -501,9 +566,9 @@ public class CenterTools {
                         urlParameters = "phonesalt=" + URLEncoder.encode(app.getMachine().getSalt(), "UTF-8") +
                                 "&cid=" + app.getOptions().getCenterId() + "&vid=" + app.getOptions().getVaccineId();
 
-                        //                      System.out.println(" calling  center : " + INFO_CENTER + "?" + urlParameters);
+                        //print("info  center : " + INFO_CENTER + "?" + urlParameters);
                         String res = executePost(INFO_CENTER, urlParameters);
-//                        System.out.println("*** info center  Result : " + res);
+                        //print("*** info center  Result : " + res);
                         processInfo(res);
                         setInfoStatus(LOADED);
                     } catch (UnsupportedEncodingException e) {
@@ -787,4 +852,78 @@ public class CenterTools {
     public void setInfoPct(float infoPct) {
         this.infoPct = infoPct;
     }
+
+    public void print(String s) {
+        if (DEBUG) {
+            System.out.println("[centerTools]" + s);
+        }
+    }
+
+    public String getNextRdv() {
+        return nextRdv;
+    }
+
+    public void setNextRdv(String nextRdv) {
+        this.nextRdv = nextRdv;
+    }
+
+    public ArrayList<VaccinationCenterFull> getFullList() {
+        return fullList;
+    }
+
+    public void setFullList(ArrayList<VaccinationCenterFull> fullList) {
+        this.fullList = fullList;
+    }
+
+    public int getFullCenterStatus() {
+        return fullCenterStatus;
+    }
+
+    public void setFullCenterStatus(int fullCenterStatus) {
+        this.fullCenterStatus = fullCenterStatus;
+    }
+
+    public int getFullCheckStatus() {
+        return fullCheckStatus;
+    }
+
+    public void setFullCheckStatus(int fullCheckStatus) {
+        this.fullCheckStatus = fullCheckStatus;
+    }
+
+    public void loadFullCenter(int depId) {
+        //System.out.println(" load center from :" + depId);
+        if (getFullCenterStatus() != LOADING && getFullCenterStatus() != LOADED) {
+            setFullCenterStatus(LOADING);
+
+            Timer validTimer = new Timer();
+
+            validTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        try {
+                            String urlParameters;
+                            urlParameters = "phonesalt=" + URLEncoder.encode(machine.getSalt(), "UTF-8") + "&source=3";
+                            String res = executePost(FULL_CENTER_LIST, urlParameters);
+                            //   print("load center  : " + FULL_CENTER_LIST + "?" + urlParameters);
+                            process_full_center(res);
+                            // print("load center result is " + res);
+                            setFullCenterStatus(LOADED);
+
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                            setFullCenterStatus(ERROR_LOADING);
+                        }
+                    } catch (Exception se) {
+                        se.printStackTrace();
+                        setFullCenterStatus(ERROR_LOADING);
+                    }
+
+                }
+            }, 1);
+        }
+    }
+
+
 }

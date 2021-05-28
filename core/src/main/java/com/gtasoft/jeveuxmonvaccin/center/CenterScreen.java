@@ -67,6 +67,7 @@ public class CenterScreen implements Screen, ApplicationListener {
     boolean translated = false;
     private ImageButton btnBackMenu;
     private ImageButton btnNext;
+    private ImageButton btnliste;
     private ImageButton btnWebsiteD;
     private Texture imageWebsiteD;
     private ImageButton btnWebsiteM;
@@ -250,6 +251,11 @@ public class CenterScreen implements Screen, ApplicationListener {
         btnStylewd.up = this.skin.getDrawable("imgWebsiteD");
         this.btnWebsiteD = new ImageButton(btnStylewd);
 
+
+        ImageButton.ImageButtonStyle btnStylelist = new ImageButton.ImageButtonStyle();
+        btnStylelist.up = this.skin.getDrawable("list-icon");
+        this.btnliste = new ImageButton(btnStylelist);
+
         this.imageWebsiteM = new Texture(Gdx.files.internal("img/selection/maiia250x80.png"));
         this.skin.add("imgWebsiteM", this.imageWebsiteM);
 
@@ -267,6 +273,25 @@ public class CenterScreen implements Screen, ApplicationListener {
         btnWebsiteD.setSize(250, 80);
         btnWebsiteK.setSize(250, 80);
         btnWebsiteM.setSize(250, 80);
+
+        btnliste.setSize(96, 96);
+        btnliste.setPosition(w - 24 - 64, h - 24 - 64);
+        this.btnliste.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent e, float x, float y, int point, int button) {
+
+
+                return;
+            }
+
+            @Override
+            public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
+
+                app.setScreen(app.centerListScreen);
+                return true;
+
+            }
+        });
 
         tbPlatformLink.addListener(new ClickListener() {
             @Override
@@ -357,7 +382,7 @@ public class CenterScreen implements Screen, ApplicationListener {
         centerBox.setAlignment(Align.center);
         centerBox.setSize(500, 40);
         centerBox.setPosition(w / 2 - centerBox.getWidth() / 2, h / 2 + 150);
-
+        this.btnliste.setPosition(5, h / 2 + 185);
         centerBox.addListener(
                 new ChangeListener() {
                     @Override
@@ -396,6 +421,8 @@ public class CenterScreen implements Screen, ApplicationListener {
         btnWebsiteD.setPosition(w / 4 - btnWebsiteD.getWidth() / 2, h / 2 - 170);
         btnWebsiteK.setPosition(w / 4 - btnWebsiteK.getWidth() / 2, h / 2 - 170);
         btnWebsiteM.setPosition(w / 4 - btnWebsiteM.getWidth() / 2, h / 2 - 170);
+
+
         tbPlatformLink.setPosition(3 * w / 4 - tbPlatformLink.getWidth() / 2, hmiddle - 180);
 
         btnNext.setPosition(w / 2 - btnNext.getWidth() / 2, hmiddle - 440);
@@ -405,6 +432,8 @@ public class CenterScreen implements Screen, ApplicationListener {
 
         stage.setViewport(viewport);
         stage.addActor(btnBackMenu);
+
+
         stage.addActor(lblTitle);
         stage.addActor(lblMyDept);
 
@@ -492,6 +521,9 @@ public class CenterScreen implements Screen, ApplicationListener {
             if (stage.getActors().contains(lblNoCenter, true)) {
                 lblNoCenter.remove();
             }
+            if (stage.getActors().contains(btnliste, true)) {
+                btnliste.remove();
+            }
 
         } else {
             departmentBox.setSelected(ct.getDepartment(app.getOptions().getDepartment() + ""));
@@ -502,6 +534,10 @@ public class CenterScreen implements Screen, ApplicationListener {
                     if (!stage.getActors().contains(lblMyCenter, true)) {
                         stage.addActor(lblMyCenter);
                     }
+                    if (!stage.getActors().contains(btnliste, true)) {
+                        stage.addActor(btnliste);
+                    }
+
                     if (!stage.getActors().contains(centerBox, true)) {
                         stage.addActor(centerBox);
                         centerBox.setSelected(app.getOptions().getCenterSelected());
@@ -532,11 +568,17 @@ public class CenterScreen implements Screen, ApplicationListener {
             if (stage.getActors().contains(lblNoCenter, true)) {
                 lblNoCenter.remove();
             }
+            if (stage.getActors().contains(btnliste, true)) {
+                btnliste.remove();
+            }
 
         } else {
             if (fillCenterBox()) {
                 if (!stage.getActors().contains(lblMyCenter, true)) {
                     stage.addActor(lblMyCenter);
+                }
+                if (!stage.getActors().contains(btnliste, true)) {
+                    stage.addActor(btnliste);
                 }
                 if (!stage.getActors().contains(centerBox, true)) {
                     stage.addActor(centerBox);
@@ -589,7 +631,7 @@ public class CenterScreen implements Screen, ApplicationListener {
     }
 
     private boolean fillCenterBox(int centerid, int vaccineid) {
-        if (selectedDep != null && ct.listCenter.size() > 0 && ct.getCenterStatus() == CenterTools.LOADED) {
+        if (selectedDep != null && ct.listCenter != null && ct.listCenter.size() > 0 && ct.getCenterStatus() == CenterTools.LOADED) {
             if (centerBox.getItems().size > 0) {
                 centerBox.clearItems();
             }
@@ -624,7 +666,7 @@ public class CenterScreen implements Screen, ApplicationListener {
             ct.setCenterStatus(CenterTools.NO_LOAD);
             return true;
         }
-        System.out.println(" not good selected Dep " + selectedDep + " list center " + ct.listCenter + " status : " + ct.getCenterStatus());
+        //  System.out.println(" not good selected Dep " + selectedDep + " list center " + ct.listCenter + " status : " + ct.getCenterStatus());
         return false;
 
     }
