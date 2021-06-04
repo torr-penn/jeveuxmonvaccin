@@ -96,13 +96,13 @@ public class ControlScreen implements Screen, ApplicationListener {
         lblStats = new Label(" - vérifications. Rendez-vous possible - fois.", skin);
         lblCenterName = new Label("", skin);
 
-        lblResult = new Label("Réservation actuellement : -" + "", skin);
+        lblResult = new Label("vérification en cours" + "", skin);
         tbPlatformLink = new TextButton("Prendre\nrendez-vous", skin, "hotlink");
         lblNextRdv = new Label(" ", skin);
-        Color myBlue = new Color(0.9f, 0.9f, 1.0f, 1f);
+        Color myBlue = new Color(0.2f, 0.2f, 0.7f, 1f);
 
         Label.LabelStyle lblStyleTitle = new Label.LabelStyle();
-        lblStyleTitle.fontColor = Color.WHITE;
+        lblStyleTitle.fontColor = app.getGraphicTools().getBluetext();
         lblStyleTitle.font = this.skin.getFont("bar-font");
         lblTitle.setStyle(lblStyleTitle);
         lblTitle.setAlignment(Align.center);
@@ -122,28 +122,28 @@ public class ControlScreen implements Screen, ApplicationListener {
 
 
         Label.LabelStyle lblStyleCountdown = new Label.LabelStyle();
-        lblStyleCountdown.fontColor = Color.ORANGE;
-        lblStyleCountdown.font = this.skin.getFont("retron2000");
+        lblStyleCountdown.fontColor = app.getGraphicTools().getBluetext();
+        lblStyleCountdown.font = this.skin.getFont("list");
         //lblStyleCountdown.font.getData().setScale(1.5f);
         lbl_countdown.setStyle(lblStyleCountdown);
-
+        lbl_countdown.setAlignment(Align.center);
 
         Label.LabelStyle lblStyleInfo = new Label.LabelStyle();
-        lblStyleInfo.fontColor = Color.WHITE;
+        lblStyleInfo.fontColor = app.getGraphicTools().getBluetext();
         lblStyleInfo.font = this.skin.getFont("explications");
         lblResult.setAlignment(Align.center);
         lblResult.setStyle(lblStyleInfo);
 
 
         Label.LabelStyle lblStyleIntitule = new Label.LabelStyle();
-        lblStyleIntitule.fontColor = Color.WHITE;
+        // lblStyleIntitule.fontColor = app.getGraphicTools().getBluetext();
         lblStyleIntitule.font = this.skin.getFont("menu");
-        lblCenterName.setColor(skin.getColor("yellow"));
+        lblCenterName.setColor(skin.getColor("orange"));
         lblCenterName.setAlignment(Align.center);
         lblCenterName.setStyle(lblStyleIntitule);
 
         lblNextRdv.setStyle(lblStyleIntitule);
-        lblNextRdv.setColor(myBlue);
+        lblNextRdv.setColor(skin.getColor("green"));
         lblNextRdv.setAlignment(Align.center);
 
 
@@ -170,13 +170,14 @@ public class ControlScreen implements Screen, ApplicationListener {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
 
+                goCenterLink();
 
                 return;
             }
 
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
-                goCenterLink();
+
                 return true;
 
             }
@@ -233,7 +234,7 @@ public class ControlScreen implements Screen, ApplicationListener {
         });
 
 
-        tbPlatformLink.setSize(390, 96);
+        // tbPlatformLink.setSize(390, 96);
         this.tbPlatformLink.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
@@ -253,9 +254,9 @@ public class ControlScreen implements Screen, ApplicationListener {
         btnBackMenu.setPosition(w - 24 - 64, h - 24 - 64);
 
         lblCenterName.setPosition(w / 2, h / 2 + 320);
-        lblResult.setPosition(w / 2, h / 2 + 100);
+        lblResult.setPosition(w / 2, h / 2 + 100, Align.center);
         lblNextRdv.setPosition(w / 2, h / 2 + 20);
-        lbl_countdown.setPosition(170, (int) (h / 3), Align.left);
+        lbl_countdown.setPosition(w / 2, (int) (h / 3), Align.center);
 
 
         tbPlatformLink.setPosition(w / 2 - tbPlatformLink.getWidth() / 2, h / 2 - 130);
@@ -334,7 +335,7 @@ public class ControlScreen implements Screen, ApplicationListener {
 
         makeACheck();
         verifyCheck();
-        app.getGraphicTools().isLoadingTextWithAnimation(loading, stage, 170, (int) h / 3, true);
+        app.getGraphicTools().isLoadingTextWithAnimation(loading, stage, (int) (w / 2), (int) (h / 3) - 10, true);
 
         if (centerTools != null && centerTools.getCenterStatus() == centerTools.ERROR_LOADING) {
             if (!stage.getActors().contains(lblNoInternet, true)) {
@@ -446,7 +447,7 @@ public class ControlScreen implements Screen, ApplicationListener {
     public String printDiff(long diff) {
         long secs = diff / 1000;
         // long milisec = ((diff - (Math.round(secs) * 1000)));
-        String display = String.format("Prochain contrôle \n dans %02d Min %02d Sec", (secs % 3600) / 60, (secs % 60));
+        String display = String.format("Recherche dans %02d Min %02d Sec", (secs % 3600) / 60, (secs % 60));
         return display;
     }
 

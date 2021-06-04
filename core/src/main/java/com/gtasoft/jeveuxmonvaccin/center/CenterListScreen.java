@@ -29,15 +29,14 @@ import java.util.Collections;
 public class CenterListScreen implements Screen, ApplicationListener {
 
     private static String PHONE_REGISTER = "http://www.torr-penn.com/jeveuxmonvaccin/phoneRegister";
+    private static int WAITINGTIME = 5;
     Stage stage;
     Skin skin;
     Label lblTitle;
     Label lblNoInternet;
-
+    Label lblTimer;
 
     CenterTools ct;
-
-
     float w;
     float h;
     float stateTime;
@@ -56,7 +55,6 @@ public class CenterListScreen implements Screen, ApplicationListener {
     private SpriteBatch sb;
     private boolean reloadCenter = false;
     private int dep = 0;
-
 
     public CenterListScreen(JeVeuxMonVaccin app) {
         this.app = app;
@@ -102,7 +100,7 @@ public class CenterListScreen implements Screen, ApplicationListener {
         camera = new OrthographicCamera();
         viewport = new FitViewport(768, 1280, camera);
         ImageButton.ImageButtonStyle btnStyle = new ImageButton.ImageButtonStyle();
-        btnStyle.up = this.skin.getDrawable("imgBack");
+        btnStyle.up = this.skin.getDrawable("imgBackRetour");
         this.btnBackMenu = new ImageButton(btnStyle);
 
         ImageButton.ImageButtonStyle btnStyleroff = new ImageButton.ImageButtonStyle();
@@ -114,7 +112,7 @@ public class CenterListScreen implements Screen, ApplicationListener {
         this.btnReload = new ImageButton(btnStyler);
 
         Label.LabelStyle lblStyleTitle = new Label.LabelStyle();
-        lblStyleTitle.fontColor = Color.WHITE;
+        lblStyleTitle.fontColor = app.getGraphicTools().getBluetext();
         lblStyleTitle.font = this.skin.getFont("bar-font");
         lblTitle = new Label("Je Veux Mon Vaccin!", skin);
         lblTitle.setStyle(lblStyleTitle);
@@ -127,7 +125,14 @@ public class CenterListScreen implements Screen, ApplicationListener {
         lblNoInternet = new Label("Erreur - problème de connexion internet? ", skin);
         lblNoInternet.setStyle(lblStyleError);
         lblNoInternet.setAlignment(Align.center);
-        lblNoInternet.setPosition(w / 2, h - 250, Align.center);
+        lblNoInternet.setPosition(w / 2, h - 25, Align.center);
+
+        Label.LabelStyle lblStyleCountdown = new Label.LabelStyle();
+        lblStyleCountdown.fontColor = app.getGraphicTools().getBluetext();
+        lblStyleCountdown.font = this.skin.getFont("listBold");
+        lblTimer = new Label("", skin);
+        lblTimer.setStyle(lblStyleCountdown);
+
 
         btnBackMenu.setSize(64, 64);
         btnBackMenu.setPosition(w - 24 - 64, h - 24 - 64);
@@ -142,7 +147,7 @@ public class CenterListScreen implements Screen, ApplicationListener {
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
 
-                app.setScreen(app.mainMenuScreen);
+                app.setScreen(app.centerScreen);
                 return true;
 
             }
@@ -151,6 +156,7 @@ public class CenterListScreen implements Screen, ApplicationListener {
         btnReloadOff.setPosition(24, h - 24 - 64);
         btnReload.setSize(64, 64);
         btnReload.setPosition(24, h - 24 - 64);
+        lblTimer.setPosition(24 + 32, h - 24 - 64 - 24);
         this.btnReload.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
@@ -180,6 +186,7 @@ public class CenterListScreen implements Screen, ApplicationListener {
         //tableleft.setColor(Color.LIGHT_GRAY);
         tableleft.add(scroller);
         stage.addActor(lblTitle);
+        stage.addActor(lblTimer);
         //stage.addActor(tableleft);
         stage.addActor(btnBackMenu);
     }
@@ -206,6 +213,7 @@ public class CenterListScreen implements Screen, ApplicationListener {
         sb.draw(app.getGraphicTools().getImgBackground(), 0, 0, w, h, 0, 20, 12, 0);
         //sb.draw(app.getGraphicTools().getImgTitle(), (int) ((w - app.getGraphicTools().getImgTitle().getWidth()) / 2), h - app.getGraphicTools().getImgTitle().getHeight() - 50);
         sb.end();
+        app.getGraphicTools().isLoadingTextWithAnimation((ct.getFullCenterStatus() == CenterTools.LOADING), stage, (int) (w / 2), (int) (h - 220), true);
 
         if (ct.getFullCenterStatus() == CenterTools.LOADED) {
             ct.setFullCenterStatus(CenterTools.NO_LOAD);
@@ -217,24 +225,51 @@ public class CenterListScreen implements Screen, ApplicationListener {
             if (!stage.getActors().contains(btnReloadOff, true)) {
                 stage.addActor(btnReloadOff);
             }
+            if (!stage.getActors().contains(lblTimer, true)) {
+                stage.addActor(lblTimer);
+            }
+            if (app.getOptions().getDepartment() == 29) {
+                lblTitle.setText("Je Veux Mon Vaccin!\nFinistère");
+            }
+            if (app.getOptions().getDepartment() == 22) {
+                lblTitle.setText("Je Veux Mon Vaccin!\nCôtes-d'Armor");
+            }
+            if (app.getOptions().getDepartment() == 35) {
+                lblTitle.setText("Je Veux Mon Vaccin!\nIlle-et-Vilaine");
+            }
+            if (app.getOptions().getDepartment() == 56) {
+                lblTitle.setText("Je Veux Mon Vaccin!\nMorbihan");
+            }
+            if (stage.getActors().contains(lblNoInternet, true)) {
+                lblNoInternet.remove();
+            }
 
         }
         if (ct.getFullCenterStatus() == CenterTools.ERROR_LOADING) {
-
             if (!stage.getActors().contains(lblNoInternet, true)) {
                 stage.addActor(lblNoInternet);
+            }
+            if (stage.getActors().contains(lblTimer, true)) {
+                lblTimer.remove();
             }
         }
 
         if (ltimer != 0) {
             long now = System.currentTimeMillis();
-            if (ltimer + 10 * 1000 < now) {
+            if (ltimer + WAITINGTIME * 1000 < now) {
+
                 if (stage.getActors().contains(btnReloadOff, true)) {
                     btnReloadOff.remove();
                 }
                 if (!stage.getActors().contains(btnReload, true)) {
                     stage.addActor(btnReload);
                 }
+                if (stage.getActors().contains(lblTimer, true)) {
+                    lblTimer.remove();
+                }
+
+            } else {
+                lblTimer.setText("" + (WAITINGTIME - (int) ((now - ltimer) / 1000)));
             }
         }
         stage.act(delta);
@@ -266,18 +301,7 @@ public class CenterListScreen implements Screen, ApplicationListener {
 
         Gdx.input.setInputProcessor(stage);
         if (app.getCenterTools() != null) {
-            long now = System.currentTimeMillis();
-            if (app.getCenterTools().getFullList() != null) {
-                if (dep == app.getOptions().getDepartment() && dep != 0) {
-                    if (ltimer != 0) {
-                        if (now - ltimer - 10 * 1000 > 0) {
-
-                            initResources();
-                        }
-                    }
-
-                }
-            }
+            initResources();
         }
     }
 
@@ -376,13 +400,13 @@ public class CenterListScreen implements Screen, ApplicationListener {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
 
-
+                resetStage(1);
                 return;
             }
 
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
-                resetStage(1);
+
 
                 return true;
 
@@ -400,14 +424,14 @@ public class CenterListScreen implements Screen, ApplicationListener {
         buttont.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
-
+                resetStage(2);
 
                 return;
             }
 
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
-                resetStage(2);
+
 
                 return true;
 
@@ -422,13 +446,13 @@ public class CenterListScreen implements Screen, ApplicationListener {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
 
-
+                resetStage(0);
                 return;
             }
 
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
-                resetStage(0);
+
 
                 return true;
 
@@ -441,7 +465,7 @@ public class CenterListScreen implements Screen, ApplicationListener {
         buttons.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
-
+                resetStage(0);
 
                 return;
             }
@@ -449,7 +473,6 @@ public class CenterListScreen implements Screen, ApplicationListener {
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
 
-                resetStage(0);
 
                 return true;
 
@@ -482,8 +505,8 @@ public class CenterListScreen implements Screen, ApplicationListener {
         myfullTable.add(titleTable);
         myfullTable.row();
         int j = 0;
-        Color bluetext = new Color(0.47f, 0.59f, 0.72f, 1f);
-        Color greentext = new Color(0.47f, 0.72f, 0.59f, 1f);
+        Color bluetext = app.getGraphicTools().getBluetext();
+        Color greentext = skin.getColor("green");
         for (int i = 0; i < nb; i++) {
 
             VaccinationCenterFull vc = subSelect.get(i);
@@ -558,14 +581,15 @@ public class CenterListScreen implements Screen, ApplicationListener {
                 btnRdv.addListener(new ClickListener() {
                     @Override
                     public void touchUp(InputEvent e, float x, float y, int point, int button) {
-
+                        Gdx.net.openURI(vc.getLink().trim());
 
                         return;
                     }
 
+
                     @Override
                     public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
-                        Gdx.net.openURI(vc.getLink().trim());
+
 
                         return true;
 

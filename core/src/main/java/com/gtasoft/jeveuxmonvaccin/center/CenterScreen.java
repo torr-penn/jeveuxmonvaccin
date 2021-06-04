@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -24,7 +23,10 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.Iterator;
+import java.util.StringTokenizer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CenterScreen implements Screen, ApplicationListener {
 
@@ -32,15 +34,12 @@ public class CenterScreen implements Screen, ApplicationListener {
     Stage stage;
     Skin skin;
     Label lblTitle;
-    SelectBox<Department> departmentBox;
+    Label lblNoInternet;
     SelectBox<VaccinationCenter> centerBox;
+    int centerdep = 0;
 
-
-    Label lblMyDept;
     Label lblMyCenter;
     Label lblInfo;
-
-    Label lblIndisponibilite;
 
 
     Label lblNoCenter;
@@ -77,7 +76,7 @@ public class CenterScreen implements Screen, ApplicationListener {
     private OrthographicCamera camera;
     private FitViewport viewport;
     private SpriteBatch sb;
-    private Department selectedDep = null;
+
     private boolean reloadCenter = false;
 
 
@@ -124,70 +123,49 @@ public class CenterScreen implements Screen, ApplicationListener {
 
         int wmiddle = (int) w / 2;
         int hmiddle = (int) h / 2;
-        ArrayList<Department> aldp = ct.getListDepartment();
-        if (departmentBox == null) {
-            departmentBox = new SelectBox<Department>(skin, "default");
 
-        }
-        ListIterator<Department> itDep = aldp.listIterator();
-        Department[] sdept = new Department[aldp.size()];
-        int idx = 0;
-        //sdept[0] = choixdept;
-        while (itDep.hasNext()) {
-
-            Department d = itDep.next();
-            //mydeptStr.add(d.getId() + "");
-            //sdept[idx] = d.getId() + "";
-            sdept[idx] = d;
-            idx++;
-        }
-        departmentBox.setItems(sdept);
-
-        departmentBox.setSize(200, 50);
-        SelectBox.SelectBoxStyle boxStyle = departmentBox.getStyle();
-        List.ListStyle ls = boxStyle.listStyle;
-        ScrollPane.ScrollPaneStyle sps = boxStyle.scrollStyle;
-        ScrollPane sp = departmentBox.getScrollPane();
-        sp.setWidth(500);
-        ls.selection.setMinWidth(180);
-        ls.selection.setTopHeight(5);
-        ls.selection.setBottomHeight(2);
-
-        ls.selection.setLeftWidth(5);
-        ls.selection.setRightWidth(5);
-        boxStyle.listStyle = ls;
-        departmentBox.setStyle(boxStyle);
+//        SelectBox.SelectBoxStyle boxStyle = departmentBox.getStyle();
+//        List.ListStyle ls = boxStyle.listStyle;
+//        ScrollPane.ScrollPaneStyle sps = boxStyle.scrollStyle;
+//        ScrollPane sp = departmentBox.getScrollPane();
+//        sp.setWidth(500);
+//        ls.selection.setMinWidth(180);
+//        ls.selection.setTopHeight(5);
+//        ls.selection.setBottomHeight(2);
+//
+//        ls.selection.setLeftWidth(5);
+//        ls.selection.setRightWidth(5);
+//        boxStyle.listStyle = ls;
+//        departmentBox.setStyle(boxStyle);
 
         lblTitle = new Label("Centre de Vaccination", skin);
         lbl_continue = new Label("Poursuivre", skin);
-        lblIndisponibilite = new Label("Poursuivez si vous n'obtenez pas de RDV.\n Cette application va vous accompagner.", skin);
+
         lblInfo = new Label("Remarque : \nJe vérifie que je suis bien autorisé à recevoir ce vaccin\n" +
                 "Je demande l'aide de mon médecin si ma situation est particulière.", skin);
 
 
         Label.LabelStyle lblStyleTitle = new Label.LabelStyle();
-        lblStyleTitle.fontColor = Color.WHITE;
+        lblStyleTitle.fontColor = app.getGraphicTools().getBluetext();
         lblStyleTitle.font = this.skin.getFont("bar-font");
         lblTitle.setStyle(lblStyleTitle);
         lblTitle.setAlignment(Align.center);
 
         Label.LabelStyle lblStyleIntitule = new Label.LabelStyle();
-        lblStyleIntitule.fontColor = Color.WHITE;
+        lblStyleIntitule.fontColor = app.getGraphicTools().getBluetext();
         lblStyleIntitule.font = this.skin.getFont("menu");
 
         Label.LabelStyle lblStyleDetail = new Label.LabelStyle();
-        lblStyleDetail.fontColor = Color.WHITE;
+        lblStyleDetail.fontColor = app.getGraphicTools().getBluetext();
         lblStyleDetail.font = this.skin.getFont("explications");
 
         Label.LabelStyle lblStyleContinue = new Label.LabelStyle();
         lblStyleContinue.fontColor = Color.BLACK;
         lblStyleContinue.font = this.skin.getFont("smallfont");
-        lblIndisponibilite.setStyle(lblStyleContinue);
 
 
         tbPlatformLink = new TextButton("Prendre\nrendez-vous", skin, "link");
 
-        lblMyDept = new Label("Département :", skin);
 
         lblMyCenter = new Label("Centre de Vaccination :", skin);
 
@@ -197,7 +175,7 @@ public class CenterScreen implements Screen, ApplicationListener {
         lblNoCenter.setStyle(lblStyleDetail);
 
         lblManagedBy = new Label("", skin);
-        lblManagedBy.setColor(Color.WHITE);
+        lblManagedBy.setColor(app.getGraphicTools().getBluetext());
         lblManagedBy.setStyle(lblStyleDetail);
 
         lblcenterAddress1 = new Label("", skin);
@@ -208,6 +186,14 @@ public class CenterScreen implements Screen, ApplicationListener {
         lblVaccine = new Label("xxx", skin);
         lblVaccine.setStyle(lblStyleDetail);
         lblVaccine.setColor(skin.getColor("blue_vaccine"));
+        lblNoInternet = new Label("Erreur - problème de connexion internet? ", skin);
+
+        Label.LabelStyle lblStyleError = new Label.LabelStyle();
+        lblStyleError.fontColor = Color.ORANGE;
+        lblStyleError.font = this.skin.getFont("explications");
+        lblNoInternet.setStyle(lblStyleError);
+        lblNoInternet.setAlignment(Align.center);
+        lblNoInternet.setPosition(w / 2, h - 250, Align.center);
 
 
         lblcenterAddress1.setStyle(lblStyleDetail);
@@ -216,8 +202,6 @@ public class CenterScreen implements Screen, ApplicationListener {
         lblclosingDate.setStyle(lblStyleDetail);
         lblclosingDate.setColor(Color.ORANGE);
 
-        lblMyDept.setStyle(lblStyleIntitule);
-        lblMyDept.setAlignment(Align.center);
 
         lblMyCenter.setStyle(lblStyleIntitule);
         lblMyCenter.setAlignment(Align.center);
@@ -226,7 +210,7 @@ public class CenterScreen implements Screen, ApplicationListener {
         lblcenterAddress2.setAlignment(Align.left);
 
         Label.LabelStyle lblStyleInfo = new Label.LabelStyle();
-        lblStyleInfo.fontColor = Color.WHITE;
+        lblStyleInfo.fontColor = app.getGraphicTools().getBluetext();
         lblStyleInfo.font = this.skin.getFont("explications");
         lblInfo.setStyle(lblStyleInfo);
 
@@ -275,7 +259,7 @@ public class CenterScreen implements Screen, ApplicationListener {
         btnWebsiteM.setSize(250, 80);
 
         btnliste.setSize(96, 96);
-        btnliste.setPosition(w - 24 - 64, h - 24 - 64);
+        btnliste.setPosition(w / 2 - btnliste.getWidth() / 2, 4 * h / 5 - 100);
         this.btnliste.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
@@ -297,13 +281,15 @@ public class CenterScreen implements Screen, ApplicationListener {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
 
+                System.out.println(" i click " + System.currentTimeMillis());
+                goCenterLink();
 
                 return;
             }
 
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
-                goCenterLink();
+
                 return true;
 
             }
@@ -363,26 +349,26 @@ public class CenterScreen implements Screen, ApplicationListener {
         });
 
 
-        departmentBox.setAlignment(Align.center);
-        departmentBox.setPosition(w / 2 - 35, h / 2 + 320);
-        departmentBox.setSize(355, 40);
-        departmentBox.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        Department newValue = (Department) departmentBox.getSelected();
-                        deptValueChanged(newValue);
-                        //displayElements();
-                    }
-                }
-
-
-        );
+//        departmentBox.setAlignment(Align.center);
+//        departmentBox.setPosition(w / 2 - 35, h / 2 + 320);
+//        departmentBox.setSize(355, 40);
+//        departmentBox.addListener(
+//                new ChangeListener() {
+//                    @Override
+//                    public void changed(ChangeEvent event, Actor actor) {
+//                        Department newValue = (Department) departmentBox.getSelected();
+//                        deptValueChanged(newValue);
+//                        //displayElements();
+//                    }
+//                }
+//
+//
+//        );
         centerBox = new SelectBox<VaccinationCenter>(skin, "default");
         centerBox.setAlignment(Align.center);
         centerBox.setSize(500, 40);
         centerBox.setPosition(w / 2 - centerBox.getWidth() / 2, h / 2 + 150);
-        this.btnliste.setPosition(5, h / 2 + 185);
+
         centerBox.addListener(
                 new ChangeListener() {
                     @Override
@@ -393,9 +379,6 @@ public class CenterScreen implements Screen, ApplicationListener {
                 }
         );
 
-        lblMyDept.setPosition(w / 7, h / 2 + 320);
-        lblMyDept.setAlignment(Align.left);
-
 
         lblMyCenter.setPosition(w / 7, h / 2 + 200);
         lblMyCenter.setAlignment(Align.left);
@@ -403,12 +386,12 @@ public class CenterScreen implements Screen, ApplicationListener {
 
 //        lblDepartmentSelected.setPosition(w / 2 - lblDepartmentSelected.getWidth() / 2, h / 2 + 225);
 
-        lblTitle.setPosition(w / 2 - lblTitle.getWidth() / 2, h - 150, Align.center);
+        lblTitle.setPosition(w / 2, h - 150, Align.center);
         lblVaccine.setPosition(2 * w / 3, h - 180, Align.left);
         lblInfo.setPosition(20, h / 2 - 190);
 
 
-        tbPlatformLink.setSize(330, 96);
+        //tbPlatformLink.setSize(330, 96);
 
         lblNoCenter.setPosition(10, h / 2 + 100);
 
@@ -428,14 +411,13 @@ public class CenterScreen implements Screen, ApplicationListener {
         btnNext.setPosition(w / 2 - btnNext.getWidth() / 2, hmiddle - 440);
         lbl_continue.setPosition(w / 2 - lbl_continue.getWidth() / 2, hmiddle - 480);
 
-        lblIndisponibilite.setPosition(w / 2 - lblIndisponibilite.getWidth() / 2, hmiddle - 550);
 
         stage.setViewport(viewport);
         stage.addActor(btnBackMenu);
 
 
         stage.addActor(lblTitle);
-        stage.addActor(lblMyDept);
+
 
         stage.addActor(lblcenterAddress1);
         stage.addActor(lblcenterAddress2);
@@ -443,7 +425,10 @@ public class CenterScreen implements Screen, ApplicationListener {
         stage.addActor(lblclosingDate);
 
         stage.addActor(lblVaccine);
-        stage.addActor(departmentBox);
+        //    stage.addActor(departmentBox);
+        if (ct == null) {
+            ct = app.getCenterTools();
+        }
 
     }
 
@@ -473,8 +458,16 @@ public class CenterScreen implements Screen, ApplicationListener {
         if (ct.getCenterStatus() == CenterTools.LOADED) {
             displayElements();
             ct.setCenterStatus(CenterTools.NO_LOAD);
-        }
+            if (stage.getActors().contains(lblNoInternet, true)) {
+                lblNoInternet.remove();
+            }
 
+        }
+        if (ct.getCenterStatus() == CenterTools.ERROR_LOADING) {
+            if (!stage.getActors().contains(lblNoInternet, true)) {
+                stage.addActor(lblNoInternet);
+            }
+        }
 
         stage.act(delta);
         stage.draw();
@@ -501,54 +494,25 @@ public class CenterScreen implements Screen, ApplicationListener {
             }
             setReloadCenter(false);
         }
+        if (ct.getCenterStatus() == CenterTools.LOADED) {
+            if (fillCenterBox(app.getOptions().getCenterId(), app.getOptions().getVaccineId())) {
+                if (!stage.getActors().contains(lblMyCenter, true)) {
+                    stage.addActor(lblMyCenter);
+                }
+                if (!stage.getActors().contains(btnliste, true)) {
+                    stage.addActor(btnliste);
+                }
 
-        //System.out.println(" ----------- showElements");
-        if (departmentBox == null) {
-            return;
-        }
-        if (departmentBox.getItems() != null) {
-            if (!stage.getActors().contains(departmentBox, true)) {
-                stage.addActor(departmentBox);
-            }
-        }
-        if (app.getOptions().getDepartment() == Options.UNDEFINED) {
-            if (stage.getActors().contains(lblMyCenter, true)) {
-                lblMyCenter.remove();
-            }
-            if (stage.getActors().contains(centerBox, true)) {
-                centerBox.remove();
-            }
-            if (stage.getActors().contains(lblNoCenter, true)) {
-                lblNoCenter.remove();
-            }
-            if (stage.getActors().contains(btnliste, true)) {
-                btnliste.remove();
-            }
-
-        } else {
-            departmentBox.setSelected(ct.getDepartment(app.getOptions().getDepartment() + ""));
-
-            if (ct.getCenterStatus() == CenterTools.LOADED) {
-
-                if (fillCenterBox(app.getOptions().getCenterId(), app.getOptions().getVaccineId())) {
-                    if (!stage.getActors().contains(lblMyCenter, true)) {
-                        stage.addActor(lblMyCenter);
-                    }
-                    if (!stage.getActors().contains(btnliste, true)) {
-                        stage.addActor(btnliste);
-                    }
-
-                    if (!stage.getActors().contains(centerBox, true)) {
-                        stage.addActor(centerBox);
-                        centerBox.setSelected(app.getOptions().getCenterSelected());
-                    }
-                    if (stage.getActors().contains(centerBox, true)) {
-                        lblNoCenter.remove();
-                    }
-                } else {
-                    if (!stage.getActors().contains(lblNoCenter, true)) {
-                        stage.addActor(lblNoCenter);
-                    }
+                if (!stage.getActors().contains(centerBox, true)) {
+                    stage.addActor(centerBox);
+                    centerBox.setSelected(app.getOptions().getCenterSelected());
+                }
+                if (stage.getActors().contains(centerBox, true)) {
+                    lblNoCenter.remove();
+                }
+            } else {
+                if (!stage.getActors().contains(lblNoCenter, true)) {
+                    stage.addActor(lblNoCenter);
                 }
             }
         }
@@ -586,21 +550,8 @@ public class CenterScreen implements Screen, ApplicationListener {
                 if (stage.getActors().contains(lblNoCenter, true)) {
                     lblNoCenter.remove();
                 }
-            } else {
-
-                if (departmentBox != null && departmentBox.getSelectedIndex() > 0) {
-                    if (!stage.getActors().contains(lblNoCenter, true)) {
-                        stage.addActor(lblNoCenter);
-                    }
-                    if (stage.getActors().contains(lblMyCenter, true)) {
-                        lblMyCenter.remove();
-                    }
-                    if (stage.getActors().contains(centerBox, true)) {
-                        centerBox.remove();
-                    }
-
-                }
             }
+
         }
     }
 
@@ -631,7 +582,8 @@ public class CenterScreen implements Screen, ApplicationListener {
     }
 
     private boolean fillCenterBox(int centerid, int vaccineid) {
-        if (selectedDep != null && ct.listCenter != null && ct.listCenter.size() > 0 && ct.getCenterStatus() == CenterTools.LOADED) {
+        if (ct.listCenter != null && ct.listCenter.size() > 0 && ct.getCenterStatus() == CenterTools.LOADED) {
+
             if (centerBox.getItems().size > 0) {
                 centerBox.clearItems();
             }
@@ -666,7 +618,7 @@ public class CenterScreen implements Screen, ApplicationListener {
             ct.setCenterStatus(CenterTools.NO_LOAD);
             return true;
         }
-        //  System.out.println(" not good selected Dep " + selectedDep + " list center " + ct.listCenter + " status : " + ct.getCenterStatus());
+//        System.out.println(" not good selected  list center " + ct.listCenter + " status : " + ct.getCenterStatus());
         return false;
 
     }
@@ -707,10 +659,6 @@ public class CenterScreen implements Screen, ApplicationListener {
 
             if (stage.getActors().contains(lbl_continue, true)) {
                 lbl_continue.remove();
-            }
-            if (stage.getActors().contains(lblIndisponibilite, true)) {
-
-                lblIndisponibilite.remove();
             }
 
             return;
@@ -780,9 +728,6 @@ public class CenterScreen implements Screen, ApplicationListener {
         if (!stage.getActors().contains(lbl_continue, true)) {
             stage.addActor(lbl_continue);
         }
-        if (!stage.getActors().contains(lblIndisponibilite, true)) {
-            stage.addActor(lblIndisponibilite);
-        }
 
 
         if (availableLink()) {
@@ -822,26 +767,6 @@ public class CenterScreen implements Screen, ApplicationListener {
         return output.toString();
     }
 
-    public void deptValueChanged(Department value) {
-        if (value == null) {
-            selectedDep = null;
-            displayElements();
-            app.getOptions().setDepartment(0);
-            return;
-        }
-
-        selectedDep = value;
-        if (selectedDep.getId() == 0) {
-            selectedDep = null;
-            displayElements();
-            centerValueChanged(VaccinationCenter.getFirstInstance());
-            return;
-        }
-
-        ct.loadCenter(selectedDep);
-        app.getOptions().setDepartment(selectedDep.getId());
-
-    }
 
     public void loadCenter(int deptid) {
         if (ct == null) {
@@ -894,14 +819,9 @@ public class CenterScreen implements Screen, ApplicationListener {
         }
 
         if (app.getOptions().getVaccineId() != Options.UNDEFINED) {
-            if (app.getOptions().getVaccineId() == Options.ASTRAZENECA) {
-                lblVaccine.setText("[Astrazeneca]");
-            }
+
             if (app.getOptions().getVaccineId() == Options.PFIZER) {
                 lblVaccine.setText("[ARN-m]");
-            }
-            if (app.getOptions().getVaccineId() == Options.JANSSEN) {
-                lblVaccine.setText("[pour Janssen]");
             }
 
         } else {
@@ -911,15 +831,53 @@ public class CenterScreen implements Screen, ApplicationListener {
 
         Gdx.input.setInputProcessor(stage);
 
-
-        if (app.getOptions().getCenterId() != Options.UNDEFINED && app.getOptions().getCenterSelected() == null) {
-            ct.selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
-            showElements();
-        } else {
+        if (ct.listCenter != null) {
             if (reloadCenter) {
+                if (centerdep != app.getOptions().getDepartment()) {
+                    if (app.getOptions().getCenterId() != Options.UNDEFINED && app.getOptions().getCenterSelected() == null) {
+                        ct.selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
+                        showElements();
+                        System.out.println(" reload 0");
+                    } else {
+                        if (app.getOptions().getCenterId() != Options.UNDEFINED && app.getOptions().getCenterSelected() != null) {
+                            System.out.println("NO reload 0");
+                            ct.selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
+                            showElements();
+                        } else {
+
+                            loadCenter(app.getOptions().getDepartment());
+                            showElements();
+                            System.out.println(" reload 1");
+
+                        }
+                    }
+                } else {
+                    if (app.getOptions().getCenterId() != Options.UNDEFINED && app.getOptions().getCenterSelected() == null) {
+                        ct.selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
+                        showElements();
+                        System.out.println(" reload 3");
+                    } else {
+                        if (app.getOptions().getCenterId() != Options.UNDEFINED && app.getOptions().getCenterSelected() != null) {
+                            System.out.println("NO reload 1");
+                            ct.selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
+                        }
+                    }
+                }
+            } else {
+                ct.selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
                 showElements();
+                System.out.println("NO reload 2");
+
             }
+
+        } else {
+            loadCenter(app.getOptions().getDepartment());
+            showElements();
+            System.out.println(" reload 4");
+
         }
+        System.out.println(" done");
+
         registerPhone();
 
     }

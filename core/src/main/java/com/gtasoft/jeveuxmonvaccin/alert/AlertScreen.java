@@ -48,14 +48,13 @@ public class AlertScreen implements Screen, ApplicationListener {
     private ImageButton btnBackMenu;
 
 
-    private int step = 0;
     private OrthographicCamera camera;
     private FitViewport viewport;
     private SpriteBatch sb;
 
 
     public AlertScreen(JeVeuxMonVaccin app) {
-        step = 0;
+
         this.app = app;
 
 
@@ -66,7 +65,7 @@ public class AlertScreen implements Screen, ApplicationListener {
         FileHandle file = Gdx.files.local(fileName);
         if (file != null && file.exists()) {
             String s = file.readString();
-            if (!s.isEmpty()) {
+            if (s != null && !"".equals(s)) {
                 return s.trim();
             }
         }
@@ -104,18 +103,19 @@ public class AlertScreen implements Screen, ApplicationListener {
         lblCenterName = new Label(
                 "---", skin);
 
-        lblIntroExplanations1 = new Label("Si vous n'avez pas de rendez-vous dans votre centre\n aux étapes précédentes" +
+        lblIntroExplanations1 = new Label("Vous n'obtenez pas de rendez-vous dans votre centre?" +
                 " ", skin);
 
 
         lblIntroExplanations2 = new Label(
-                "Certains téléphones peuvent faire une recherche \n de temps en temps."
+                "Certains téléphones peuvent effectuer la surveillance pour vous." +
+                        ""
                 , skin);
 
         lblIntroExplanations3 = new Label(
-                "Vous serez notifiés d'un rendez-vous disponible.", skin);
+                "Une notification vous indiquera d'une disponibilité.", skin);
         lblIntroExplanations4 = new Label(
-                "Les alertes peuvent dépendre du modèle de téléphone utilisé.\n", skin);
+                "(vérification toutes les 15 minutes environ si accès internet)\n", skin);
 
         lblStats = new Label(" --- ", skin);
 
@@ -126,6 +126,10 @@ public class AlertScreen implements Screen, ApplicationListener {
                 if (cbAlertActivation.isChecked()) {
                     cbAlertDeactivation.setChecked(false);
                 }
+                if (!cbAlertActivation.isChecked()) {
+                    cbAlertDeactivation.setChecked(true);
+                }
+
                 checkChecked();
             }
 
@@ -142,6 +146,10 @@ public class AlertScreen implements Screen, ApplicationListener {
                 if (cbAlertDeactivation.isChecked()) {
                     cbAlertActivation.setChecked(false);
                 }
+                if (!cbAlertDeactivation.isChecked()) {
+                    cbAlertActivation.setChecked(true);
+                }
+
                 checkChecked();
             }
 
@@ -153,17 +161,17 @@ public class AlertScreen implements Screen, ApplicationListener {
 
 
         Label.LabelStyle lblStyleTitle = new Label.LabelStyle();
-        lblStyleTitle.fontColor = Color.WHITE;
+        lblStyleTitle.fontColor = app.getGraphicTools().getBluetext();
         lblStyleTitle.font = this.skin.getFont("bar-font");
         lblTitle.setStyle(lblStyleTitle);
         lblTitle.setAlignment(Align.center);
 
         Label.LabelStyle lblStyleIntitule = new Label.LabelStyle();
-        lblStyleIntitule.fontColor = Color.WHITE;
+        //lblStyleIntitule.fontColor = app.getGraphicTools().getBluetext();
         lblStyleIntitule.font = this.skin.getFont("menu");
 
         Label.LabelStyle lblStyleDetail = new Label.LabelStyle();
-        lblStyleDetail.fontColor = Color.WHITE;
+        lblStyleDetail.fontColor = app.getGraphicTools().getBluetext();
         lblStyleDetail.font = this.skin.getFont("explications");
 
 
@@ -177,18 +185,18 @@ public class AlertScreen implements Screen, ApplicationListener {
         lblIntroExplanations3.setStyle(lblStyleDetail);
         lblIntroExplanations4.setStyle(lblStyleDetail);
 
-        lblCenterName.setColor(skin.getColor("yellow"));
+        lblCenterName.setColor(skin.getColor("orange"));
         lblCenterName.setAlignment(Align.center);
         lblCenterName.setStyle(lblStyleIntitule);
 
 
         Label.LabelStyle lblStyleInfo = new Label.LabelStyle();
-        lblStyleInfo.fontColor = Color.WHITE;
+        lblStyleInfo.fontColor = app.getGraphicTools().getBluetext();
         lblStyleInfo.font = this.skin.getFont("explications");
 
 
         ImageButton.ImageButtonStyle btnStyle = new ImageButton.ImageButtonStyle();
-        btnStyle.up = this.skin.getDrawable("imgBackFr");
+        btnStyle.up = this.skin.getDrawable("imgBack");
         this.btnBackMenu = new ImageButton(btnStyle);
 
 
@@ -252,15 +260,18 @@ public class AlertScreen implements Screen, ApplicationListener {
             if (app.getOptions().getCenterId() != Options.UNDEFINED && app.getOptions().getVaccineId() != Options.UNDEFINED
                     && app.getMachine() != null && app.getMachine().getSalt() != null) {
                 app.initAlert(app.getOptions().getCenterId(), app.getOptions().getVaccineId(), app.getMachine().getSalt(), app.getOptions().getCenterName());
-
+                cbAlertDeactivation.setChecked(false);
             } else {
                 lblStats.setText("Alertes impossibles\n Recommencez toutes les étapes éventuellement?");
             }
+
         } else {
+            cbAlertActivation.setChecked(false);
             app.stopAlert();
             app.getOptions().setAlert(false);
             app.getOptions().saveOptions();
         }
+
 
     }
 
@@ -316,7 +327,7 @@ public class AlertScreen implements Screen, ApplicationListener {
             create();
 
         }
-        step = 0;
+
         Gdx.input.setInputProcessor(stage);
         lblCenterName.setText(app.getOptions().getCenterName());
         lblStats.setText(app.infoAlert());

@@ -4,14 +4,16 @@ import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
+import androidx.annotation.NonNull;
 import com.gtasoft.jeveuxmonvaccin.AndroidPlatform;
 
 
 public class AlertManager {
+    @NonNull
     public static String CHANNEL_ID = AndroidPlatform.TAGID;
     Activity myContext;
 
-    public AlertManager(Activity context) {
+    public AlertManager(@NonNull Activity context) {
 
 
         myContext = context;

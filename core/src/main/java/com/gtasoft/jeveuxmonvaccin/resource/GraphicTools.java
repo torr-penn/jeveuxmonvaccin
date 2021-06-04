@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Align;
 
 public class GraphicTools {
     static public String LOADING_MSG = "Chargement";//loading message in local language
+    private static Color bluetext = new Color(0.47f, 0.59f, 0.72f, 1f);
     Label labelLoad;
     Label.LabelStyle lblStyle;
     String msgLoading;
@@ -21,8 +22,7 @@ public class GraphicTools {
     private Texture imgAlert;
     private Texture imgBackground;
     private Texture imgBack;
-    private Texture imgBackFr;
-
+    private Texture imgBackRetour;
     private Texture imgExit;
     private Texture imgHelp;
     private Texture imgLoading;
@@ -39,7 +39,6 @@ public class GraphicTools {
     private Texture imgKo;
     private Texture imgBon;
 
-
     public GraphicTools() {
         lblStyle = new Label.LabelStyle();
         setSkin(new Skin(Gdx.files.internal("ui/jeveuxmonvaccin.json")));
@@ -51,11 +50,11 @@ public class GraphicTools {
         imgAlert = new Texture(Gdx.files.internal("img/menu/alert-icon.png"));
         skin.add("imgAlert", imgAlert);
 
-        this.imgBack = new Texture(Gdx.files.internal("img/menu/back-icon-medium.png"));
+        this.imgBack = new Texture(Gdx.files.internal("img/menu/back-menu.png"));
         skin.add("imgBack", imgBack);
 
-        this.imgBackFr = new Texture(Gdx.files.internal("img/menu/back-icon.png"));
-        skin.add("imgBackFr", imgBackFr);
+        this.imgBackRetour = new Texture(Gdx.files.internal("img/menu/back-retour-medium.png"));
+        skin.add("imgBackRetour", imgBackRetour);
 
         imgExit = new Texture(Gdx.files.internal("img/menu/cross-icon-small.png"));
         skin.add("imgExit", imgExit);
@@ -107,10 +106,18 @@ public class GraphicTools {
         labelLoad = new Label(msgLoading, getSkin());
         labelLoad.setStyle(lblStyle);
         labelLoad.setName(LOADING_MSG);
-        labelLoad.setAlignment(Align.left);
+        labelLoad.setAlignment(Align.center);
         //labelLoad.setSize(200, 40);
-        imgBackground = new Texture(Gdx.files.internal("img/menu/background.png"));
+        imgBackground = new Texture(Gdx.files.internal("img/menu/backgroundlight.png"));
         getImgBackground().setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+    }
+
+    public static Color getBluetext() {
+        return bluetext;
+    }
+
+    public static void setBluetext(Color bluetext) {
+        GraphicTools.bluetext = bluetext;
     }
 
 
@@ -171,7 +178,8 @@ public class GraphicTools {
         }
         boolean found = false;
 
-        labelLoad.setPosition(posx, posy);
+        labelLoad.setAlignment(Align.center);
+        labelLoad.setPosition(posx, posy, Align.center);
 
         if (visible) {
 

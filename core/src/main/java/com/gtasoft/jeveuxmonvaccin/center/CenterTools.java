@@ -23,7 +23,7 @@ public class CenterTools {
     private static String FULL_CENTER_LIST = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/dataCenter.php";
     private static String CHECK_CENTER = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/centerCheck.php";
     private static String REGISTER_CENTER = "http://www.torr-penn.com/jeveuxmonvaccin/changeCenter";
-    private static String INFO_CENTER = "http://www.torr-penn.com/jeveuxmonvaccin/infoCenter";
+    private static String INFO_CENTER = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/centerInfo.php";
     ArrayList<Department> listDepartment;
     ArrayList<VaccinationCenter> listCenter;
     Machine machine;
@@ -138,13 +138,15 @@ public class CenterTools {
 
                 int vtype = app.getOptions().getVaccineId();
                 //  System.out.println(" center ids: " + vc.getCenterId() + " -- " + vc.getVaccineId() + " -- " + gid);
-                if (vtype == Options.ASTRAZENECA && vc.getVaccineId() == VaccinationCenter.astrazenecaID) {
-                    listCenter.add(vc);
-                } else if (vtype == Options.PFIZER && vc.getVaccineId() == VaccinationCenter.pfizerID) {
-                    listCenter.add(vc);
-                } else if (vtype == Options.JANSSEN && vc.getVaccineId() == VaccinationCenter.janssenID) {
+                //if (vtype == Options.ASTRAZENECA && vc.getVaccineId() == VaccinationCenter.astrazenecaID) {
+                //  listCenter.add(vc);
+                //} else
+                if (vtype == Options.PFIZER && vc.getVaccineId() == VaccinationCenter.pfizerID) {
                     listCenter.add(vc);
                 }
+                //else if (vtype == Options.JANSSEN && vc.getVaccineId() == VaccinationCenter.janssenID) {
+                //listCenter.add(vc);
+                //}
             }
         }
         scanner.close();
@@ -153,11 +155,13 @@ public class CenterTools {
     }
 
     public void process_full_center(String s) {
-
-        VaccinationCenterFull vcf[] = gson.fromJson(s, VaccinationCenterFull[].class);
-        List<VaccinationCenterFull> lvcf = Arrays.asList(vcf);
-        fullList = new ArrayList<VaccinationCenterFull>(lvcf);
-        Collections.sort(fullList);
+        if (s != null) {
+            VaccinationCenterFull vcf[] = gson.fromJson(s, VaccinationCenterFull[].class);
+            List<VaccinationCenterFull> lvcf = Arrays.asList(vcf);
+            Collections.sort(lvcf);
+            fullList = new ArrayList<VaccinationCenterFull>(lvcf);
+            //Collections.sort(fullList);
+        }
 
     }
 
@@ -271,17 +275,27 @@ public class CenterTools {
                     @Override
                     public void run() {
                         try {
-                            String urlParameters;
-                            urlParameters = "phonesalt=" + URLEncoder.encode(app.getMachine().getSalt(), "UTF-8") +
-                                    "&cid=" + app.getOptions().getCenterId() + "&vid=" + app.getOptions().getVaccineId();
+                            try {
+                                String urlParameters;
+                                urlParameters = "phonesalt=" + URLEncoder.encode(app.getMachine().getSalt(), "UTF-8") +
+                                        "&cid=" + app.getOptions().getCenterId() + "&vid=" + app.getOptions().getVaccineId();
 
-                            //System.out.println(" calling  center : " + REGISTER_CENTER + "?" + urlParameters);
-                            String res = executePost(REGISTER_CENTER, urlParameters);
-                            //     System.out.println("*** register center  Result : " + res);
-                            processRegister(res);
+                                //System.out.println(" calling  center : " + REGISTER_CENTER + "?" + urlParameters);
+                                String res = executePost(REGISTER_CENTER, urlParameters);
+                                //     System.out.println("*** register center  Result : " + res);
+                                processRegister(res);
 
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
+                            } catch (UnsupportedEncodingException e) {
+                                System.out.println("1 error in register " + e);
+                                processRegister(null);
+                                setRegisterStatus(ERROR_LOADING);
+                            }
+                        } catch (Exception ex) {
+                            System.out.println("2 error in register " + ex);
+
+                            processRegister(null);
+                            setRegisterStatus(ERROR_LOADING);
+
                         }
 
                     }
@@ -309,9 +323,10 @@ public class CenterTools {
             } else {
                 setRegisterStatus(LOADED);
                 setRegisterMsg("ok");
+                app.getOptions().setCenterRegistered(true);
             }
         } else {
-            setRegisterStatus(NO_LOAD);
+            setRegisterStatus(ERROR_LOADING);
             setRegisterMsg("Préparation de la recherche : Erreur\n recommencez les étapes précédentes SVP");
 
         }
@@ -492,6 +507,7 @@ public class CenterTools {
 
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
+                            setCenterStatus(ERROR_LOADING);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -535,7 +551,7 @@ public class CenterTools {
             rd.close();
             return response.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(" error internet " + e);
             return null;
         } finally {
             if (connection != null) {
@@ -546,6 +562,62 @@ public class CenterTools {
     }
 
     public void infoCenter() {
+        if (app.getMachine() == null) {
+            print("houston pb no salt");
+            return;
+        }
+        if (app.getOptions().getCenterId() == Options.UNDEFINED || app.getOptions().getVaccineId() == Options.UNDEFINED) {
+            print("houston pb no center");
+            return;
+        }
+
+        if (getInfoStatus() != LOADING) {
+            setInfoStatus(LOADING);
+            Timer validTimer = new Timer();
+            validTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        try {
+                            String urlParameters;
+                            urlParameters = "phonesalt=" + URLEncoder.encode(app.getMachine().getSalt(), "UTF-8") +
+                                    "&cid=" + app.getOptions().getCenterId() + "&vid=" + app.getOptions().getVaccineId();
+
+//                        print("info  center : " + INFO_CENTER + "?" + urlParameters);
+                            String res = executePost(INFO_CENTER, urlParameters);
+                            //                      print("*** info center  Result : " + res);
+                            if (res == null) {
+                                processInfo(null);
+                                setInfoStatus(ERROR_LOADING);
+                            } else {
+                                processInfo(res);
+                                setInfoStatus(LOADED);
+                            }
+                        } catch (UnsupportedEncodingException e) {
+                            System.out.println(" error in infocenter " + e);
+
+                            processInfo(null);
+                            setInfoStatus(ERROR_LOADING);
+                        }
+                    } catch (Exception ex) {
+                        System.out.println(" error in infocenter " + ex);
+
+                        processInfo(null);
+                        setInfoStatus(ERROR_LOADING);
+                    }
+
+                }
+            }, 5);
+        } else {
+            System.out.println(" gathering info");
+            processInfo(null);
+
+        }
+
+
+    }
+
+    public void infoCenterPrevious() {
         if (app.getMachine() == null) {
             print("houston pb no salt");
             return;
@@ -704,7 +776,7 @@ public class CenterTools {
     public void processInfo(String res) {
 
         if (res != null) {
-            if (res.startsWith("{-")) {
+            if (res.startsWith("-")) {
 
 
                 setInfoMsg(extractStrAtIndex(res, 1));
@@ -732,7 +804,7 @@ public class CenterTools {
             setInfoClosing("");
             setInfoLastok("--");
             setInfoPct(-1);
-            setInfoReturnCode(codeOne(res));
+            setInfoReturnCode(-1);
         }
 
     }
@@ -909,7 +981,11 @@ public class CenterTools {
                             //   print("load center  : " + FULL_CENTER_LIST + "?" + urlParameters);
                             process_full_center(res);
                             // print("load center result is " + res);
-                            setFullCenterStatus(LOADED);
+                            if (res != null) {
+                                setFullCenterStatus(LOADED);
+                            } else {
+                                setFullCenterStatus(ERROR_LOADING);
+                            }
 
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();

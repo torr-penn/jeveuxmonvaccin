@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 import java.sql.Timestamp;
 import java.util.Comparator;
 
-public class VaccinationCenterFull implements Comparable {
+public class VaccinationCenterFull implements Comparable<VaccinationCenterFull> {
     public static int ASTRAZENECA = 1;
     public static int PFIZER = 2;
     public static int JANNSEN = 3;
@@ -437,15 +437,15 @@ public class VaccinationCenterFull implements Comparable {
         this.lastok18 = lastok18;
     }
 
+
     @Override
-    public int compareTo(Object o) {
-        if (o instanceof VaccinationCenterFull) {
-            int oid = ((VaccinationCenterFull) o).getCenterId();
+    public int compareTo(VaccinationCenterFull o) {
+        if (o != null) {
+            int oid = o.getCenterId();
             return centerId - oid;
 
         }
         return 0;
+
     }
-
-
 }

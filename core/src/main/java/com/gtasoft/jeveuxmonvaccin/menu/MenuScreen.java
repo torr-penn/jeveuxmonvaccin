@@ -51,7 +51,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
     private ImageButton btnPreparation;
     private ImageButton btnAlert;
     private ImageButton btnAvailability;
-    private ImageButton btnliste;
+
     private Texture imgBretagne;
     private OrthographicCamera camera;
     private FitViewport viewport;
@@ -95,7 +95,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
 
         Label.LabelStyle lblStyleInfo = new Label.LabelStyle();
         lblStyleInfo.fontColor = Color.DARK_GRAY;
-        lblStyleInfo.font = skin.getFont("smallfont");
+        lblStyleInfo.font = skin.getFont("list");
 
         ImageButton.ImageButtonStyle ibtnStyleHelp = new ImageButton.ImageButtonStyle();
         ibtnStyleHelp.up = skin.getDrawable("imgHelp");
@@ -128,13 +128,8 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         ibtnStyleAvailability.up = skin.getDrawable("imgSearch");
         btnAvailability = new ImageButton(ibtnStyleAvailability);
 
-        ImageButton.ImageButtonStyle btnStylelist = new ImageButton.ImageButtonStyle();
-        btnStylelist.up = this.skin.getDrawable("list-icon");
-        this.btnliste = new ImageButton(btnStylelist);
-
 
         Label.LabelStyle lblStyleMenu = new Label.LabelStyle();
-        lblStyleMenu.fontColor = Color.WHITE;
         lblStyleMenu.font = skin.getFont("menu");
 
         lbl_vaccineInfo = new Label("", skin);
@@ -170,7 +165,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         });
 
 
-        lbl_vaccine = new Label("1 La vaccination", skin);
+        lbl_vaccine = new Label("1 Vaccination", skin);
         lbl_vaccine.setAlignment(Align.left);
         lbl_vaccine.setPosition((w / 3 - lbl_vaccine.getWidth() / 2 + btnVaccine.getWidth() + 10), hmiddle + 300 + btnVaccine.getHeight() / 2);
         lbl_vaccineInfo.setPosition((w / 3 - lbl_vaccine.getWidth() / 2 + btnVaccine.getWidth() + 10), hmiddle + 300 + btnVaccine.getHeight() / 2 - 20);
@@ -193,24 +188,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         // --------------------
         //  2- Center+list
         // --------------------
-        btnliste.setSize(96, 96);
-        btnliste.setPosition(24, hmiddle + 100);
-        this.btnliste.addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent e, float x, float y, int point, int button) {
 
-
-                return;
-            }
-
-            @Override
-            public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
-
-                app.setScreen(app.centerListScreen);
-                return true;
-
-            }
-        });
         btnCenter.setSize(96, 96);
         btnCenter.setPosition(w / 4, hmiddle + 100);
         btnCenter.addListener(new ClickListener() {
@@ -429,7 +407,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         });
         lblTitle = new Label("JE VEUX MON VACCIN", skin);
         Label.LabelStyle lblStyleTitle = new Label.LabelStyle();
-        lblStyleTitle.fontColor = Color.WHITE;
+        lblStyleTitle.fontColor = app.getGraphicTools().getBluetext();
         lblStyleTitle.font = this.skin.getFont("bar-font");
         lblTitle.setStyle(lblStyleTitle);
         lblTitle.setAlignment(Align.center);
@@ -573,14 +551,19 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
 
     private void vaccineInfo() {
         if (app.getOptions().getVaccineId() != Options.UNDEFINED) {
-            if (app.getOptions().getVaccineId() == Options.ASTRAZENECA) {
-                lbl_vaccineInfo.setText("[Astrazeneca]");
-            }
             if (app.getOptions().getVaccineId() == Options.PFIZER) {
-                lbl_vaccineInfo.setText("[ARN-m]");
-            }
-            if (app.getOptions().getVaccineId() == Options.JANSSEN) {
-                lbl_vaccineInfo.setText("[Janssen]");
+                if (app.getOptions().getDepartment() == 22) {
+                    lbl_vaccineInfo.setText("[ARN-m] 22");
+                }
+                if (app.getOptions().getDepartment() == 29) {
+                    lbl_vaccineInfo.setText("[ARN-m] 29");
+                }
+                if (app.getOptions().getDepartment() == 35) {
+                    lbl_vaccineInfo.setText("[ARN-m] 35");
+                }
+                if (app.getOptions().getDepartment() == 56) {
+                    lbl_vaccineInfo.setText("[ARN-m] 56");
+                }
             }
 
         }
@@ -589,7 +572,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
 
     private void adaptMenu() {
 
-        Color myyellow = new Color(1, 0.77f, 0, 1);
+        Color myyellow = skin.getColor("orange");
         displayElements();
         if (step == 0) {
             lbl_vaccine.setColor(myyellow);
@@ -646,7 +629,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
             hideit(lbl_availability);
 
             hideit(btnCenter);
-            hideit(btnliste);
+
             hideit(lbl_center);
 
             hideit(btnAlert);
@@ -659,7 +642,6 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
             showit(lbl_vaccineInfo);
             showit(lbl_centerInfo);
 
-            showit(btnliste);
             showit(btnCenter);
             showit(lbl_center);
             hideit(btnPreparation);
@@ -679,7 +661,6 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
             showit(lbl_vaccineInfo);
             showit(lbl_centerInfo);
 
-            showit(btnliste);
             showit(btnCenter);
             showit(lbl_center);
 
@@ -698,7 +679,6 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
             hideit(lbl_alertInfo);
             showit(lbl_vaccineInfo);
             showit(lbl_centerInfo);
-            showit(btnliste);
             showit(btnCenter);
             showit(lbl_center);
 
@@ -717,7 +697,6 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
             showit(lbl_alertInfo);
             showit(lbl_vaccineInfo);
             showit(lbl_centerInfo);
-            showit(btnliste);
             showit(btnCenter);
             showit(lbl_center);
 
@@ -844,11 +823,10 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
     public void checkStep() {
         step = 0;
         if (app.getOptions() != null) {
-            if (app.getOptions().getVaccineId() == Options.UNDEFINED) {
+            if (app.getOptions().getVaccineId() == Options.UNDEFINED || app.getOptions().getDepartment() == Options.UNDEFINED) {
                 step = 0;
             } else {
                 if (app.getOptions().getCenterId() != Options.UNDEFINED) {
-
                     if (app.getOptions().isSubscriptionPageSeen()) {
                         if (app.getOptions().isControlPageSeen()) {
                             step = 4;

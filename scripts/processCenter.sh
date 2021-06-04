@@ -208,6 +208,11 @@ cat c22.csv c29.csv c35.csv c56.csv > tmp.csv
 cat tmp.csv |awk -F\; '{print $1";"$2";"$3";"$4";"$5";"$6";"$8";"$10";"$11;}' >bretagne.csv
 rm tmp.csv
 cp bretagne.csv /tmp
+PUBLIDIR="/home/gtanguy/Desktop/website_tp/jeveuxmonvaccin/center/"
+cp c22.csv  $PUBLIDIR
+cp c29.csv  $PUBLIDIR
+cp c35.csv  $PUBLIDIR
+cp c56.csv  $PUBLIDIR
 
 
 echo "kdiff3 load_center_sql.csv  prev_sql.csv"

@@ -76,7 +76,7 @@ public class Options {
         FileHandle file = Gdx.files.local(fileName);
         if (file != null && file.exists()) {
             String s = file.readString();
-            if (!s.isEmpty()) {
+            if (s != null && !"".equals(s.trim())) {
                 return s;
             }
         }

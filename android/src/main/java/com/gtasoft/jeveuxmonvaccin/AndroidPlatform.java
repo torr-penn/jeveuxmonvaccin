@@ -1,5 +1,6 @@
 package com.gtasoft.jeveuxmonvaccin;
 
+import androidx.annotation.NonNull;
 import androidx.work.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -16,10 +17,11 @@ import java.util.concurrent.TimeUnit;
 import static androidx.work.WorkManager.getInstance;
 
 public class AndroidPlatform implements NativePlatform {
+    @NonNull
+    public static final String TAGID = "LookingForVaccine";
     private static final int iWaitMINUTE = 1;
     static private final int rWaitMINUTE_slow = 120;
     static private final int rWaitMINUTE_fast = 1;
-    public static String TAGID = "LookingForVaccine";
     public static String FILENAMEUSER = "player.dat";
     static int adStatus = -2;
     private static int MINUTE = 1000 * 60;
@@ -72,8 +74,8 @@ public class AndroidPlatform implements NativePlatform {
             FileHandle file = Gdx.files.local(fileName);
             if (file != null && file.exists()) {
                 String s = file.readString();
-                if (!s.isEmpty()) {
-                    return s;
+                if (s != null && !"".equals(s)) {
+                    return s.trim();
                 }
             }
         } catch (Exception ex) {

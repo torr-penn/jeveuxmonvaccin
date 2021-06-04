@@ -113,7 +113,7 @@ cursor
   index: -1
 default-round
   rotate: false
-  xy: 1029, 1670
+  xy: 1100, 1702
   size: 14, 22
   split: 4, 4, 6, 7
   pad: 0, 0, 0, 0
@@ -122,7 +122,7 @@ default-round
   index: -1
 default-round-down
   rotate: false
-  xy: 1100, 1702
+  xy: 1201, 1768
   size: 14, 22
   split: 6, 6, 7, 6
   pad: 0, 0, 0, 0
@@ -135,6 +135,15 @@ link_external
   size: 170, 96
   split: 20, 68, 43, 42
   pad: 0, 0, 0, 0
+  orig: 170, 96
+  offset: 0, 0
+  index: -1
+link
+  rotate: false
+  xy: 1029, 1726
+  size: 170, 96
+  split: 19, 69, 44, 42
+  pad: 11, 68, 8, 8
   orig: 170, 96
   offset: 0, 0
   index: -1
@@ -173,6 +182,15 @@ my-window
   orig: 60, 64
   offset: 0, 0
   index: -1
+newselector
+  rotate: false
+  xy: 586, 1097
+  size: 29, 22
+  split: 5, 13, 9, 9
+  pad: 5, 13, 4, 4
+  orig: 29, 22
+  offset: 0, 0
+  index: -1
 redlink_external
   rotate: false
   xy: 1537, 1839
@@ -180,6 +198,24 @@ redlink_external
   split: 19, 69, 44, 42
   pad: 0, 0, 0, 0
   orig: 170, 96
+  offset: 0, 0
+  index: -1
+redlink
+  rotate: false
+  xy: 1537, 1839
+  size: 170, 96
+  split: 17, 69, 44, 42
+  pad: 16, 69, 7, 8
+  orig: 170, 96
+  offset: 0, 0
+  index: -1
+scrollpane
+  rotate: false
+  xy: 1771, 1913
+  size: 14, 22
+  split: 7, 6, 7, 6
+  pad: 4, 4, 5, 4
+  orig: 14, 22
   offset: 0, 0
   index: -1
 selector
@@ -193,7 +229,7 @@ selector
   index: -1
 textfield
   rotate: false
-  xy: 586, 1103
+  xy: 1029, 1676
   size: 16, 16
   split: 6, 5, 4, 5
   pad: 0, 0, 0, 0
@@ -202,7 +238,7 @@ textfield
   index: -1
 tfield-round
   rotate: false
-  xy: 1201, 1768
+  xy: 1272, 1800
   size: 14, 22
   split: 5, 5, 4, 6
   pad: 0, 0, 0, 0
@@ -211,7 +247,7 @@ tfield-round
   index: -1
 tfield-round-down
   rotate: false
-  xy: 1272, 1800
+  xy: 1709, 1847
   size: 14, 22
   split: 6, 6, 6, 5
   pad: 0, 0, 0, 0

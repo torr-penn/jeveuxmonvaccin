@@ -3,14 +3,16 @@ package com.gtasoft.jeveuxmonvaccin.selection;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -24,10 +26,12 @@ public class VaccineScreen implements Screen, ApplicationListener {
     Stage stage;
     Skin skin;
     Label lblTitle;
-    CheckBox cbVaccineAstra;
     CheckBox cbVaccinePfizer;
-    CheckBox cbVaccineJanssen;
-    Label lblNeedInformation;
+    CheckBox cb29;
+    CheckBox cb22;
+    CheckBox cb35;
+    CheckBox cb56;
+    Label choixDepartement;
     Label lblInfo;
     Label lbl_continue;
     float w;
@@ -38,7 +42,6 @@ public class VaccineScreen implements Screen, ApplicationListener {
     int page = 0;
     private ImageButton btnBackMenu;
     private ImageButton btnNext;
-    private TextButton btnWebsite;
     private OrthographicCamera camera;
     private FitViewport viewport;
     private SpriteBatch sb;
@@ -75,25 +78,34 @@ public class VaccineScreen implements Screen, ApplicationListener {
         int hmiddle = (int) h / 2;
 
 
-        lblTitle = new Label("La vaccination", skin);
-        lblNeedInformation = new Label(" En cas de doute : ", skin);
+        lblTitle = new Label("Vaccination", skin);
+        choixDepartement = new Label("Département", skin);
         lbl_continue = new Label("Poursuivre", skin);
 
-        lblInfo = new Label("Je vérifie que je suis bien autorisé à recevoir ce vaccin\n" +
-                "Je demande l'aide d'un médecin si ma situation est particulière.", skin);
+        lblInfo = new Label("Cette application accompagne le grand public breton\n " +
+                "uniquement pour un vaccin de type ARN-messager", skin);
 
 
         Label.LabelStyle lblStyleTitle = new Label.LabelStyle();
-        lblStyleTitle.fontColor = Color.WHITE;
+        lblStyleTitle.fontColor = app.getGraphicTools().getBluetext();
         lblStyleTitle.font = this.skin.getFont("bar-font");
         lblTitle.setStyle(lblStyleTitle);
         lblTitle.setAlignment(Align.center);
 
+        Label.LabelStyle lblStyleTitlesmall = new Label.LabelStyle();
+        lblStyleTitlesmall.fontColor = app.getGraphicTools().getBluetext();
+        lblStyleTitlesmall.font = this.skin.getFont("bar-font");
+
+        choixDepartement.setStyle(lblStyleTitlesmall);
+        choixDepartement.setScale(0.8f);
+        choixDepartement.setAlignment(Align.center);
+
         Label.LabelStyle lblStyleInfo = new Label.LabelStyle();
-        lblStyleInfo.fontColor = Color.WHITE;
+        lblStyleInfo.fontColor = app.getGraphicTools().getBluetext();
         lblStyleInfo.font = this.skin.getFont("explications");
-        lblNeedInformation.setStyle(lblStyleInfo);
+
         lblInfo.setStyle(lblStyleInfo);
+        lblInfo.setAlignment(Align.center);
 
         lbl_continue.setStyle(lblStyleTitle);
         lbl_continue.setAlignment(Align.center);
@@ -109,34 +121,11 @@ public class VaccineScreen implements Screen, ApplicationListener {
         this.btnNext = new ImageButton(btnStyleNext);
 
 
-        cbVaccineAstra = new CheckBox(" - AstraZeneca", skin, "vaccine");
-        cbVaccineAstra.setChecked(false);
         cbVaccinePfizer = new CheckBox(" - ARN-Messager\n  (Pfizer/BioNTech ou Moderna)", skin, "vaccine");
         cbVaccinePfizer.setChecked(false);
 
-        cbVaccineJanssen = new CheckBox(" - Janssen", skin, "vaccine");
-        cbVaccineJanssen.setChecked(false);
-
-        cbVaccineAstra.addListener(new InputListener() {
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (cbVaccineAstra.isChecked()) {
-                    cbVaccinePfizer.setChecked(false);
-                    cbVaccineJanssen.setChecked(false);
-                }
-                checkChecked();
-            }
-
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-
-        });
         cbVaccinePfizer.addListener(new InputListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (cbVaccinePfizer.isChecked()) {
-                    cbVaccineJanssen.setChecked(false);
-                    cbVaccineAstra.setChecked(false);
-                }
                 checkChecked();
             }
 
@@ -145,15 +134,26 @@ public class VaccineScreen implements Screen, ApplicationListener {
             }
 
         });
-        cbVaccineJanssen.addListener(new InputListener() {
+
+
+        cb22 = new CheckBox("  Côtes-d'Armor", skin, "vaccine");
+        cb29 = new CheckBox("  Finistère", skin, "vaccine");
+        cb35 = new CheckBox("  Ille-et-Vilaine", skin, "vaccine");
+        cb56 = new CheckBox("  Morbihan", skin, "vaccine");
+        cb22.setChecked(false);
+        cb29.setChecked(false);
+        cb35.setChecked(false);
+        cb56.setChecked(false);
+        cb22.addListener(new InputListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (cbVaccineJanssen.isChecked()) {
-                    cbVaccinePfizer.setChecked(false);
-                    cbVaccineAstra.setChecked(false);
+                if (cb22.isChecked()) {
+                    cb29.setChecked(false);
+                    cb35.setChecked(false);
+                    cb56.setChecked(false);
 
                 }
-                checkChecked();
 
+                checkChecked();
             }
 
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -161,14 +161,59 @@ public class VaccineScreen implements Screen, ApplicationListener {
             }
 
         });
+        cb29.addListener(new InputListener() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (cb29.isChecked()) {
+                    cb22.setChecked(false);
+                    cb35.setChecked(false);
+                    cb56.setChecked(false);
 
+                }
+                checkChecked();
+            }
+
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+        });
+        cb35.addListener(new InputListener() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (cb35.isChecked()) {
+                    cb22.setChecked(false);
+                    cb29.setChecked(false);
+                    cb56.setChecked(false);
+
+                }
+                checkChecked();
+            }
+
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+        });
+        cb56.addListener(new InputListener() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (cb56.isChecked()) {
+                    cb22.setChecked(false);
+                    cb29.setChecked(false);
+                    cb35.setChecked(false);
+                }
+                checkChecked();
+            }
+
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+        });
 
 //        this.imgWebsite = new Texture(Gdx.files.internal("img/selection/go_website_vaccine_choice.png"));
 //        this.skin.add("imgWebsiteVaccine", this.imgWebsite);
 //
 //        ImageButton.ImageButtonStyle btnStylewww = new ImageButton.ImageButtonStyle();
 //        btnStylewww.up = this.skin.getDrawable("imgWebsiteVaccine");
-        this.btnWebsite = new TextButton("Je m'informe\n depuis sante.fr", skin, "link");
 
 
         btnBackMenu.setSize(64, 64);
@@ -221,44 +266,48 @@ public class VaccineScreen implements Screen, ApplicationListener {
         });
 
 
-        btnWebsite.setSize(390, 96);
-        this.btnWebsite.addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent e, float x, float y, int point, int button) {
-                return;
-            }
-
-            @Override
-            public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
-                Gdx.net.openURI("https://www.sante.fr/la-vaccination-covid-19-pour-le-grand-public");
-                return true;
-            }
-        });
-
         lblTitle.setPosition(w / 2 - lblTitle.getWidth() / 2, h - 150, Align.center);
 
-        cbVaccinePfizer.setPosition(w / 6, h / 2 + 225);
-        cbVaccineAstra.setPosition(w / 6, h / 2 + 100);
-        cbVaccineJanssen.setPosition(w / 6, h / 2 - 25);
+        cbVaccinePfizer.setPosition(w / 6, 3 * h / 4);
 
 
-        lblInfo.setPosition(20, h / 2 - 70);
+        lblInfo.setPosition(w / 2, 3 * h / 4 - 70, Align.center);
 
 
         btnNext.setPosition(w / 2 - btnNext.getWidth() / 2, hmiddle - 440);
         lbl_continue.setPosition(w / 2 - lbl_continue.getWidth() / 2, hmiddle - 480);
 
-        lblNeedInformation.setPosition(w / 4, 50 + h / 2 - 250 + 45);
-        btnWebsite.setPosition(w / 4, h / 2 - 250);
+        choixDepartement.setPosition(w / 2, 4 * h / 7, Align.center);
+        cb22.setPosition(w / 8, 3 * h / 7);
+        cb29.setPosition(0.55f * w, 3 * h / 7);
+        cb35.setPosition(w / 8, 2 * h / 7);
+        cb56.setPosition(0.55f * w, 2 * h / 7);
+        if (app.getOptions() != null) {
+            int d = app.getOptions().getDepartment();
+            if (d != Options.UNDEFINED) {
+                if (d == 22) {
+                    cb22.setChecked(true);
+                } else if (d == 29) {
+                    cb29.setChecked(true);
+                } else if (d == 35) {
+                    cb35.setChecked(true);
+                } else if (d == 56) {
+                    cb56.setChecked(true);
+                }
+            }
+        }
 
 
         stage.setViewport(viewport);
         stage.addActor(btnBackMenu);
-        stage.addActor(btnWebsite);
-        stage.addActor(lblNeedInformation);
-        //  stage.addActor(cbVaccineAstra);
+        stage.addActor(lblInfo);
+        stage.addActor(choixDepartement);
         stage.addActor(cbVaccinePfizer);
-        //stage.addActor(cbVaccineJanssen);
+        stage.addActor(cb22);
+        stage.addActor(cb29);
+        stage.addActor(cb35);
+        stage.addActor(cb56);
+
         stage.addActor(lblTitle);
 
     }
@@ -292,20 +341,16 @@ public class VaccineScreen implements Screen, ApplicationListener {
     }
 
     public void displayElements() {
-        if (cbVaccineAstra != null) {
-            if (cbVaccineAstra.isChecked() || cbVaccinePfizer.isChecked() || cbVaccineJanssen.isChecked()) {
-                if (!stage.getActors().contains(lblInfo, true)) {
-                    stage.addActor(lblInfo);
-                }
+        if (cbVaccinePfizer != null) {
+            if (cbVaccinePfizer.isChecked() && (cb22.isChecked() || cb29.isChecked() || cb35.isChecked() || cb56.isChecked())) {
+
                 if (!stage.getActors().contains(btnNext, true)) {
                     stage.addActor(btnNext);
                     stage.addActor(lbl_continue);
 
                 }
             } else {
-                if (stage.getActors().contains(lblInfo, true)) {
-                    lblInfo.remove();
-                }
+
                 if (stage.getActors().contains(btnNext, true)) {
                     btnNext.remove();
                     lbl_continue.remove();
@@ -315,17 +360,23 @@ public class VaccineScreen implements Screen, ApplicationListener {
     }
 
     private void checkChecked() {
-        if (cbVaccineAstra.isChecked()) {
-            app.getOptions().setVaccineId(Options.ASTRAZENECA);
-        } else if (cbVaccinePfizer.isChecked()) {
+        if (cbVaccinePfizer.isChecked()) {
             app.getOptions().setVaccineId(Options.PFIZER);
-
-        } else if (cbVaccineJanssen.isChecked()) {
-            app.getOptions().setVaccineId(Options.JANSSEN);
-
         } else {
             app.getOptions().setVaccineId(Options.UNDEFINED);
         }
+        if (cb22.isChecked()) {
+            app.getOptions().setDepartment(22);
+        } else if (cb29.isChecked()) {
+            app.getOptions().setDepartment(29);
+        } else if (cb35.isChecked()) {
+            app.getOptions().setDepartment(35);
+        } else if (cb56.isChecked()) {
+            app.getOptions().setDepartment(56);
+        } else {
+            app.getOptions().setDepartment(Options.UNDEFINED);
+        }
+
         app.getOptions().setCenterSelected(null);
         app.getOptions().setCenterId(Options.UNDEFINED);
         app.getOptions().setSubscriptionPageSeen(false);
@@ -368,17 +419,7 @@ public class VaccineScreen implements Screen, ApplicationListener {
     private void initCheck() {
         if (app.getOptions().getVaccineId() != Options.UNDEFINED) {
             if (Options.PFIZER == app.getOptions().getVaccineId()) {
-                cbVaccineAstra.setChecked(false);
                 cbVaccinePfizer.setChecked(true);
-                cbVaccineJanssen.setChecked(false);
-            } else if (Options.ASTRAZENECA == app.getOptions().getVaccineId()) {
-                cbVaccineAstra.setChecked(true);
-                cbVaccinePfizer.setChecked(false);
-                cbVaccineJanssen.setChecked(false);
-            } else if (Options.JANSSEN == app.getOptions().getVaccineId()) {
-                cbVaccineAstra.setChecked(false);
-                cbVaccinePfizer.setChecked(false);
-                cbVaccineJanssen.setChecked(true);
             }
         }
 

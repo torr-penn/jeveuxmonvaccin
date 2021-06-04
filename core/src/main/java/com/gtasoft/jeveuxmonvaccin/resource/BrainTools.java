@@ -11,8 +11,8 @@ public class BrainTools {
         FileHandle file = Gdx.files.local(fileName);
         if (file != null && file.exists()) {
             String s = file.readString();
-            if (!s.isEmpty()) {
-                return s;
+            if (s != null && !"".equals(s)) {
+                return s.trim();
             }
         }
         return null;

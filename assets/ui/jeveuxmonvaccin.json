@@ -74,6 +74,12 @@
 		"b": 0.27333334,
 		"a": 1
 	},
+	"green": {
+		"r": 0.25653338,
+		"g": 0.6933334,
+		"b": 0.46152896,
+		"a": 1
+	},
 	"grey": {
 		"r": 0.5366667,
 		"g": 0.5366667,
@@ -84,6 +90,12 @@
 		"r": 0.18,
 		"g": 0.7942254,
 		"b": 1,
+		"a": 1
+	},
+	"orange": {
+		"r": 1,
+		"g": 0.40784314,
+		"b": 0.2509804,
 		"a": 1
 	},
 	"purple": {
@@ -112,17 +124,17 @@
 },
 "com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": {
 	"default": {
-		"checkboxOn": "textfield",
+		"checkboxOn": "scrollpane",
 		"checkboxOff": "tfield-round-down",
 		"font": "typewriter",
-		"fontColor": "yellow"
+		"fontColor": "orange"
 	},
 	"vaccine": {
 		"checkboxOn": "checkbox_checked",
 		"checkboxOff": "checkbox_unchecked",
 		"font": "menu",
 		"fontColor": "dark_grey",
-		"checkedFontColor": "yellow"
+		"checkedFontColor": "orange"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
@@ -146,22 +158,22 @@
 "com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle": {
 	"default": {
 		"font": "explications",
-		"fontColorSelected": "yellow",
+		"fontColorSelected": "orange",
 		"fontColorUnselected": "black",
-		"selection": "tfield-round-down"
+		"selection": "scrollpane"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
 	"default": {
-		"background": "tfield-round-down"
+		"background": "scrollpane"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle": {
 	"default": {
 		"font": "explications",
-		"fontColor": "yellow",
+		"fontColor": "orange",
 		"disabledFontColor": "dark_grey",
-		"background": "selector",
+		"background": "newselector",
 		"scrollStyle": "default",
 		"listStyle": "default"
 	}
@@ -176,8 +188,7 @@
 		"font": "menu",
 		"fontColor": "blue_vaccine",
 		"checkedFontColor": "blue_vaccine",
-		"up": "link_external",
-		"down": "redlink_external",
+		"down": "redlink",
 		"disabled": "checkbox_unchecked"
 	},
 	"ranking": {
@@ -193,14 +204,13 @@
 	"link": {
 		"font": "menu",
 		"fontColor": "blue_vaccine",
-		"up": "link_external",
-		"down": "redlink_external"
+		"up": "link",
+		"down": "redlink"
 	},
 	"hotlink": {
 		"font": "menu",
 		"fontColor": "blue_vaccine",
-		"up": "redlink_external",
-		"down": "link_external"
+		"up": "redlink"
 	},
 	"listTitle": {
 		"font": "list",

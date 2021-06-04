@@ -3,7 +3,6 @@ package com.gtasoft.jeveuxmonvaccin.help;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -24,6 +24,7 @@ public class HelpScreen implements Screen, ApplicationListener {
     private static ImageButton btnBackMenu;
 
     private static ImageButton btnWebsite;
+    private static TextButton btnSante;
     private static ImageButton btnVideo;
     Texture imgWebsite;
     Texture imgVideo;
@@ -75,21 +76,26 @@ public class HelpScreen implements Screen, ApplicationListener {
                 "Elle est réalisée en soutien et complément gratuit \n" +
                 "aux sites professionnels : Doctolib, KelDoc et Maiia.\n" +
                 "Merci à ces plateformes !\n" +
-                "Votre rendez-vous sera pris sur ces sites.", skin);
+                "Votre rendez-vous sera pris sur ces sites.\n\n\n" +
+                "Sante.fr vous informe sur les vaccins, leur fonctionnement\n" +
+                "leur utilité et la stratégie de vaccination ", skin);
 
         Label.LabelStyle lblStylePlay = new Label.LabelStyle();
-        lblStylePlay.fontColor = Color.WHITE;
+        lblStylePlay.fontColor = app.getGraphicTools().getBluetext();
         lblStylePlay.font = this.skin.getFont("bar-font");
         lblTitle.setStyle(lblStylePlay);
 
 
         Label.LabelStyle lblStyleMesg = new Label.LabelStyle();
-        lblStyleMesg.fontColor = Color.WHITE;
+        lblStyleMesg.fontColor = app.getGraphicTools().getBluetext();
         lblStyleMesg.font = this.skin.getFont("explications");
         lblMesgTop.setStyle(lblStyleMesg);
         lblMesgTop.setAlignment(Align.left);
         lblMesgBottom.setStyle(lblStyleMesg);
         lblMesgBottom.setAlignment(Align.left);
+
+        btnSante = new TextButton("Sante.fr", skin, "link");
+
 
         ImageButton.ImageButtonStyle btnStyle = new ImageButton.ImageButtonStyle();
         btnStyle.up = this.skin.getDrawable("imgBack");
@@ -166,7 +172,23 @@ public class HelpScreen implements Screen, ApplicationListener {
 
             }
         });
+        btnSante.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent e, float x, float y, int point, int button) {
 
+
+                return;
+            }
+
+            @Override
+            public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
+                Gdx.net.openURI("https://www.gouvernement.fr/info-coronavirus/vaccins");
+                return true;
+
+            }
+        });
+
+        btnSante.setPosition(w / 2, h / 2 - 250, Align.center);
         lblTitle.setPosition(50, h - 150);
         lblMesgTop.setPosition(40, h - 250);
         lblMesgBottom.setPosition(40, h / 2 - 100);
@@ -201,9 +223,16 @@ public class HelpScreen implements Screen, ApplicationListener {
             if (!stage.getActors().contains(btnVideo, true)) {
                 stage.addActor(btnVideo);
             }
+            if (!stage.getActors().contains(btnSante, true)) {
+                stage.addActor(btnSante);
+            }
+
         } else {
             if (stage.getActors().contains(btnVideo, true)) {
                 btnVideo.remove();
+            }
+            if (stage.getActors().contains(btnSante, true)) {
+                btnSante.remove();
             }
         }
 
@@ -301,7 +330,9 @@ public class HelpScreen implements Screen, ApplicationListener {
                             "Elle est réalisée en soutien et complément gratuit \n" +
                             "aux sites professionnels : Doctolib, KelDoc et Maiia.\n" +
                             "Merci à ces plateformes !\n" +
-                            "Votre rendez-vous sera pris sur ces sites.");
+                            "Votre rendez-vous sera pris sur ces sites.\n\n\n" +
+                            "Sante.fr vous informe sur les vaccins, leur fonctionnement\n" +
+                            "leur utilité et la stratégie de vaccination en France ");
 
         }
         Gdx.input.setInputProcessor(stage);

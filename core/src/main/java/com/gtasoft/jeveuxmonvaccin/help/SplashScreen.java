@@ -3,7 +3,6 @@ package com.gtasoft.jeveuxmonvaccin.help;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -98,7 +97,7 @@ public class SplashScreen implements Screen, ApplicationListener {
             graphicTools.isLoadingImg(batch, (int) (w - 58) / 2, (int) 250);
         }
         if (System.currentTimeMillis() > splashTime - 500 && splashTime > 0) {
-            graphicTools.isLoadingTextWithAnimation(true, stage, (int) (w - 135) / 2, (int) 200, true);
+            graphicTools.isLoadingTextWithAnimation(true, stage, (int) (w) / 2, (int) 200, true);
         }
         batch.end();
         stage.act(delta);
@@ -155,12 +154,12 @@ public class SplashScreen implements Screen, ApplicationListener {
 
         stage.setViewport(viewport);
 
-        imgBack = new Texture(Gdx.files.internal("img/menu/background.png"));
+        imgBack = new Texture(Gdx.files.internal("img/menu/backgroundlight.png"));
         imgBack.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         skin = app.getGraphicTools().getSkin();
 
         Label.LabelStyle lblStyleCountdown = new Label.LabelStyle();
-        lblStyleCountdown.fontColor = Color.WHITE;
+        lblStyleCountdown.fontColor = app.getGraphicTools().getBluetext();
         lblStyleCountdown.font = this.skin.getFont("retron2000");
         //lblStyleCountdown.font.getData().setScale(1.5f);
         lbl_internet = new Label("Lancement de l'application impossible\nInternet non détecté ", skin);
@@ -185,7 +184,7 @@ public class SplashScreen implements Screen, ApplicationListener {
 
             }
         });
-        splashTime = System.currentTimeMillis() + 2000;
+        splashTime = System.currentTimeMillis() + 10000;
         ressourceLoadTimer = new Timer();
         this.ressourceLoadTimer.schedule(new TimerTask() {
             @Override

@@ -1,39 +1,44 @@
 buildscript {
-	repositories {
-		mavenLocal()
-		mavenCentral()
-		google()
-		gradlePluginPortal()
-		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-	}
-	dependencies {
-		classpath "com.android.tools.build:gradle:$androidPluginVersion"
-	}
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:${androidPluginVersion}"
+    }
 }
 
 allprojects {
-	apply plugin: 'eclipse'
-	apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+//    gradle.projectsEvaluated {
+//       tasks.withType(JavaCompile) {
+//          options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+//     }
+// }
 }
 
 configure(subprojects - project(':android')) {
-	apply plugin: 'java-library'
-	sourceCompatibility = 8.0
-	compileJava {
-		options.incremental = true
-	}
+    apply plugin: 'java-library'
+    sourceCompatibility = 8.0
+    compileJava {
+        options.incremental = true
+    }
 }
 
 subprojects {
-	version = '0.0.1'
-	ext.appName = 'JeVeuxMonVaccin'
-	repositories {
-		mavenLocal()
-		mavenCentral()
-		gradlePluginPortal()
-		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-		maven { url 'https://jitpack.io' }
-	}
+    version = '0.0.1'
+    ext.appName = 'JeVeuxMonVaccin'
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url 'https://jitpack.io' }
+    }
 }
 
 eclipse.project.name = 'JeVeuxMonVaccin' + '-parent'

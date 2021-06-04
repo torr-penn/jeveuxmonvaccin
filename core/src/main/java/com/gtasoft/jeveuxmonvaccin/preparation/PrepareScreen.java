@@ -34,7 +34,7 @@ public class PrepareScreen implements Screen, ApplicationListener {
 
 
     Label lblCenterName;
-
+    Label lblNoInternet;
     String URL_SUBSCRIBE_MAIIA = "https://www.maiia.com/register";
     String URL_SUBSCRIBE_DOCTOLIB = "https://www.doctolib.fr/sessions/new";
     String URL_SUBSCRIBE_KElDOC = "https://www.keldoc.com";
@@ -136,22 +136,22 @@ public class PrepareScreen implements Screen, ApplicationListener {
         lblInfoCenter3 = new Label("Fermeture du centre : ...", skin);
 
         Label.LabelStyle lblStyleTitle = new Label.LabelStyle();
-        lblStyleTitle.fontColor = Color.WHITE;
+        lblStyleTitle.fontColor = app.getGraphicTools().getBluetext();
         lblStyleTitle.font = this.skin.getFont("bar-font");
         lblTitle.setStyle(lblStyleTitle);
         lblTitle.setAlignment(Align.center);
 
         Label.LabelStyle lblStyleIntitule = new Label.LabelStyle();
-        lblStyleIntitule.fontColor = Color.WHITE;
+        //   lblStyleIntitule.fontColor = app.getGraphicTools().getBluetext();
         lblStyleIntitule.font = this.skin.getFont("menu");
 
         Label.LabelStyle lblStyleDetail = new Label.LabelStyle();
-        lblStyleDetail.fontColor = Color.WHITE;
+        lblStyleDetail.fontColor = app.getGraphicTools().getBluetext();
         lblStyleDetail.font = this.skin.getFont("explications");
 
         Label.LabelStyle lblStyleInfos = new Label.LabelStyle();
-        lblStyleInfos.fontColor = Color.WHITE;
-        lblStyleInfos.font = this.skin.getFont("babel");
+        lblStyleInfos.fontColor = app.getGraphicTools().getBluetext();
+        lblStyleInfos.font = this.skin.getFont("listBold");
 
         lblInfoCenter1.setStyle(lblStyleInfos);
         lblInfoCenter2.setStyle(lblStyleInfos);
@@ -162,22 +162,28 @@ public class PrepareScreen implements Screen, ApplicationListener {
         lblSubscribeHelp.setStyle(lblStyleDetail);
         lblIntroExplanations4.setStyle(lblStyleDetail);
 
-        lblCenterName.setColor(skin.getColor("yellow"));
+        lblCenterName.setColor(skin.getColor("orange"));
         lblCenterName.setAlignment(Align.center);
         lblCenterName.setStyle(lblStyleIntitule);
 
         lblManagedBy = new Label("", skin);
-        lblManagedBy.setColor(Color.WHITE);
+        lblManagedBy.setColor(app.getGraphicTools().getBluetext());
         lblManagedBy.setStyle(lblStyleDetail);
 
 
         Label.LabelStyle lblStyleInfo = new Label.LabelStyle();
-        lblStyleInfo.fontColor = Color.WHITE;
+        lblStyleInfo.fontColor = app.getGraphicTools().getBluetext();
         lblStyleInfo.font = this.skin.getFont("explications");
 
         lbl_continue.setStyle(lblStyleTitle);
         lbl_continue.setAlignment(Align.center);
-
+        Label.LabelStyle lblStyleError = new Label.LabelStyle();
+        lblStyleError.fontColor = Color.ORANGE;
+        lblStyleError.font = this.skin.getFont("explications");
+        lblNoInternet = new Label("Erreur - problème de connexion internet? ", skin);
+        lblNoInternet.setStyle(lblStyleError);
+        lblNoInternet.setAlignment(Align.center);
+        lblNoInternet.setPosition(w / 2, h - 25, Align.center);
 
         ImageButton.ImageButtonStyle btnStyle = new ImageButton.ImageButtonStyle();
         btnStyle.up = this.skin.getDrawable("imgBack");
@@ -329,7 +335,7 @@ public class PrepareScreen implements Screen, ApplicationListener {
             }
         });
 
-        tbSubscribeLink.setSize(280, 80);
+        //  tbSubscribeLink.setSize(280, 80);
 
 
         lblTitle.setPosition(w / 2 - lblTitle.getWidth() / 2, h - 150, Align.center);
@@ -419,7 +425,7 @@ public class PrepareScreen implements Screen, ApplicationListener {
                 hideit(lblInfoCenter3);
             } else {
                 lblInfoCenter1.setText("Informations du centre : " + ct.getInfoMsg());
-                lblInfoCenter2.setText("Chances de rendez-vous constatées : " + getDisplayablePct(ct.getInfoPct()) + "% ");
+                lblInfoCenter2.setText("Chances de rendez-vous rapide constatées : " + getDisplayablePct(ct.getInfoPct()) + "% ");
                 showit(lblInfoCenter1);
                 showit(lblInfoCenter2);
 
@@ -431,7 +437,24 @@ public class PrepareScreen implements Screen, ApplicationListener {
                 }
             }
             ct.setInfoStatus(CenterTools.NO_LOAD);
+            hideit(lblNoInternet);
+            showit(btnNext);
+            showit(lbl_continue);
         }
+        if (ct.getInfoStatus() == CenterTools.ERROR_LOADING) {
+            showit(lblNoInternet);
+            hideit(btnNext);
+            hideit(lbl_continue);
+            lblInfoCenter1.setText("");
+            lblInfoCenter2.setText("");
+            lblInfoCenter3.setText("");
+        }
+        if (ct.getRegisterStatus() == CenterTools.ERROR_LOADING) {
+            showit(lblNoInternet);
+            hideit(btnNext);
+            hideit(lbl_continue);
+        }
+
     }
 
     private String getDisplayablePct(float pct) {
@@ -537,12 +560,20 @@ public class PrepareScreen implements Screen, ApplicationListener {
 
             }
         }
-        if (app.getOptions() != null) {
+        app.getCenterTools().setInfoMsg("");
+        app.getCenterTools().setInfoClosing("");
+        app.getCenterTools().setInfoLastok("--");
+        app.getCenterTools().setInfoPct(-1);
+        app.getCenterTools().setInfoReturnCode(-1);
+
+        if (
+                app.getOptions() != null) {
             if (!"".equals(app.getOptions().getCenterName())) {
                 lblCenterName.setText(app.getOptions().getCenterName());
             }
         }
         if (app.getOptions().getCenterId() != Options.UNDEFINED) {
+
             app.getCenterTools().selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
         }
         infoCenter();
