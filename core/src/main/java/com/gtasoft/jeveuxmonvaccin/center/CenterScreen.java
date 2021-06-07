@@ -837,17 +837,14 @@ public class CenterScreen implements Screen, ApplicationListener {
                     if (app.getOptions().getCenterId() != Options.UNDEFINED && app.getOptions().getCenterSelected() == null) {
                         ct.selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
                         showElements();
-                        System.out.println(" reload 0");
                     } else {
                         if (app.getOptions().getCenterId() != Options.UNDEFINED && app.getOptions().getCenterSelected() != null) {
-                            System.out.println("NO reload 0");
                             ct.selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
                             showElements();
                         } else {
 
                             loadCenter(app.getOptions().getDepartment());
                             showElements();
-                            System.out.println(" reload 1");
 
                         }
                     }
@@ -855,28 +852,27 @@ public class CenterScreen implements Screen, ApplicationListener {
                     if (app.getOptions().getCenterId() != Options.UNDEFINED && app.getOptions().getCenterSelected() == null) {
                         ct.selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
                         showElements();
-                        System.out.println(" reload 3");
                     } else {
                         if (app.getOptions().getCenterId() != Options.UNDEFINED && app.getOptions().getCenterSelected() != null) {
-                            System.out.println("NO reload 1");
                             ct.selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
                         }
                     }
                 }
             } else {
-                ct.selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
-                showElements();
-                System.out.println("NO reload 2");
+                if (centerBox.getSelected() == null) {
+                    ct.selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
+                    showElements();
+
+                }
+
 
             }
 
         } else {
             loadCenter(app.getOptions().getDepartment());
             showElements();
-            System.out.println(" reload 4");
 
         }
-        System.out.println(" done");
 
         registerPhone();
 

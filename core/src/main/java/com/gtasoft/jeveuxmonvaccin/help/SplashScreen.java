@@ -184,7 +184,7 @@ public class SplashScreen implements Screen, ApplicationListener {
 
             }
         });
-        splashTime = System.currentTimeMillis() + 10000;
+        splashTime = System.currentTimeMillis() + 2000;
         ressourceLoadTimer = new Timer();
         this.ressourceLoadTimer.schedule(new TimerTask() {
             @Override

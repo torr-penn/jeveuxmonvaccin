@@ -1,14 +1,14 @@
 ### Cotes d armor 
 887;gh-rance-emeraude-vaccination-covid
 ####FINISTERE Manual 920 crozon - 2393 chateaulin
-#920;centre-de-vaccination-covid-19-chateaulin-crozon
+920;centre-de-vaccination-covid-19-chateaulin-crozon
 930;centre-de-vaccination-covid-19-de-quimperle
 1009;centre-de-vaccination-covid-19-brest-arena
 1154;centre-de-vaccination-covid-19-de-concarneau
 1277;centre-de-vaccination-covid-19-bigouden
 1649;ch-morlaix-centre-de-vaccination-covid-19
 1997;centre-de-vaccination-covid-19-carhaix-espace-glenmor
-#2393;centre-de-vaccination-covid-19-chateaulin-crozon
+2393;centre-de-vaccination-covid-19-chateaulin-crozon
 2426;centre-de-vaccination-hia-brest
 ####ILLE ET VILAINE - sauf 901 saint MALO
 411;ch-de-vitre-centre-de-vaccination-covid-19
@@ -19,7 +19,7 @@
 896;centre-de-vaccination-de-saint-gregoire
 901;centre-de-vaccination-covid-centre-de-vaccination-du-naye
 1438;centre-de-vaccination-dol-de-bretagne
-#1440;centre-de-vaccination-covid-19-de-broceliande
+1440;centre-de-vaccination-covid-19-de-broceliande
 1450;centre-de-vaccination-covid-19-de-liffre
 1968;centre-de-vaccination-parc-expo-bruz
 2001;centre-de-vaccination-covid-19-de-la-cpts-de-bretagne-romantique

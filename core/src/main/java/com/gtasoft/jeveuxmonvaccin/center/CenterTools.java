@@ -137,7 +137,7 @@ public class CenterTools {
                 vc.setVaccineId(Integer.parseInt(values[9]));
 
                 int vtype = app.getOptions().getVaccineId();
-                //  System.out.println(" center ids: " + vc.getCenterId() + " -- " + vc.getVaccineId() + " -- " + gid);
+                //System.out.println(" center ids: " + vc.getCenterId() + " -- " + vc.getVaccineId() + " -- " + gid + " / " + cname);
                 //if (vtype == Options.ASTRAZENECA && vc.getVaccineId() == VaccinationCenter.astrazenecaID) {
                 //  listCenter.add(vc);
                 //} else

@@ -53,13 +53,18 @@ function check_files(){
 function missing_line(){
 		ORIGIN=$2
 		NEW=$1
+		old=$3
 		paramO=`echo $ORIGIN |awk -F\; ' {print $5;}'`
 		paramN=`echo $NEW |awk -F\; ' {print $5;}'`
 		cid=`echo $NEW |awk -F\; ' {print $1;}'`
 	if [ "$paramO" != "$paramN" ]; then
 	if [ "$cid" != "" ]; then
 		city=`cat positions.csv |grep -o "^$cid;.*" | awk -F\; '{print $2;}'`
-		echo "$cid =$city is missing in extra file;"
+		if [ "$old" == "y" ]; then
+			echo "$cid =$city is missing in extra file;"
+		else
+			echo "$cid =$city is missing in produced file;"
+		fi
 	fi
 	fi
 }
@@ -73,14 +78,29 @@ function check_from_new(){
 			if [ "$firstchar" != "#" ]; then
 				centerid=`echo $line |awk -F\; ' {print $1;}'`
 				line2=`cat f1.txt|grep -o "^$centerid;.*"`
-			 	missing_line $line $line2
+			 	missing_line $line $line2 N
 			fi
 
 
 	done < "f2.txt"
 }
+function check_from_old(){
+
+	while IFS= read -r line
+	do
+		firstchar=`echo $line |cut -c1`
+			if [ "$firstchar" != "#" ]; then
+				centerid=`echo $line |awk -F\; ' {print $1;}'`
+				line2=`cat f2.txt|grep -o "^$centerid;.*"`
+			 	missing_line $line $line2 Y
+			fi
+
+
+	done < "f1.txt"
+}
 check_files
 check_from_new
+check_from_old
 
 cat "f2.txt" |grep " no data center "
 echo "##################################"
