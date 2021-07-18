@@ -113,7 +113,7 @@ public class AlertScreen implements Screen, ApplicationListener {
                 , skin);
 
         lblIntroExplanations3 = new Label(
-                "Une notification vous indiquera d'une disponibilité.", skin);
+                "Une notification vous signalera une disponibilité.", skin);
         lblIntroExplanations4 = new Label(
                 "(vérification toutes les 15 minutes environ si accès internet)\n", skin);
 
@@ -259,7 +259,7 @@ public class AlertScreen implements Screen, ApplicationListener {
             app.getOptions().saveOptions();
             if (app.getOptions().getCenterId() != Options.UNDEFINED && app.getOptions().getVaccineId() != Options.UNDEFINED
                     && app.getMachine() != null && app.getMachine().getSalt() != null) {
-                app.initAlert(app.getOptions().getCenterId(), app.getOptions().getVaccineId(), app.getMachine().getSalt(), app.getOptions().getCenterName());
+                app.initAlert(app.getOptions().getCenterId(), app.getOptions().getVaccineId(), app.getMachine().getSalt(), app.getOptions().getCenterName(), app.getOptions().getDepartment());
                 cbAlertDeactivation.setChecked(false);
             } else {
                 lblStats.setText("Alertes impossibles\n Recommencez toutes les étapes éventuellement?");
@@ -336,6 +336,9 @@ public class AlertScreen implements Screen, ApplicationListener {
             cbAlertDeactivation.setChecked(false);
             lblStats.setText(parseStats(app.infoAlert()));
         } else {
+            cbAlertActivation.setChecked(false);
+            cbAlertDeactivation.setChecked(true);
+
             lblStats.setText("");
         }
 

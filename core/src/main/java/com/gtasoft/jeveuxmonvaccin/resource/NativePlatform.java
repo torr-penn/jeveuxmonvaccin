@@ -8,7 +8,7 @@ public interface NativePlatform {
 
     boolean isAndroid();
 
-    public void initAlert(int centerid, int vaccineid, String salt, String centerName);
+    public void initAlert(int centerid, int vaccineid, String salt, String centerName, int dept);
 
     public void stopAlert();
 

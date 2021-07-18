@@ -1,4 +1,5 @@
 #!/bin/bash
+cd /work/jeveuxmonvaccin/scripts/
 echo -n "" > f1.txt
 echo "### Cotes d armor " >>f1.txt
 cat extra_22.txt |grep doctolib >>f1.txt
@@ -8,6 +9,16 @@ echo "####ILLE ET VILAINE - sauf 901 saint MALO" >>f1.txt
 cat extra_35.txt |grep doctolib >> f1.txt
 echo "####MORBIHAN" >> f1.txt
 cat extra_56.txt |grep doctolib >> f1.txt
+echo "####LOIRE ATLANTIQUE" >> f1.txt
+cat extra_44.txt |grep doctolib >> f1.txt
+echo "####MAINE ET LOIRE" >> f1.txt
+cat extra_49.txt |grep doctolib >> f1.txt
+echo "####MAYENNE" >> f1.txt
+cat extra_53.txt |grep doctolib >> f1.txt
+echo "####SARTHE" >> f1.txt
+cat extra_72.txt |grep doctolib >> f1.txt
+echo "####VENDEE" >> f1.txt
+cat extra_85.txt |grep doctolib >> f1.txt
 
 MYDIR=`pwd`
 echo " now run DoctolibParser" 
@@ -99,7 +110,9 @@ function check_from_old(){
 	done < "f1.txt"
 }
 check_files
+echo "################################## check from new:"
 check_from_new
+echo "################################## check from old:"
 check_from_old
 
 cat "f2.txt" |grep " no data center "

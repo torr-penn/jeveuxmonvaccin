@@ -9,6 +9,10 @@ LAND=600599c2e4e80549d8cb9eaa
 
 # 1275
 LESN=600686103b987b202a404143
+
+#1515
+SABLE=5fc8a456310f92465037b285
+
 #600686103b987b202a404143
 cid=$LAND
 
@@ -65,3 +69,4 @@ done < "maiiatmp.json"
 search_maiia $LAND Landerneau 929
 search_maiia $LESN Lesneven 1275
 search_maiia $RETI Retier 1737
+search_maiia $SABLE Sable 1515

@@ -21,7 +21,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class CenterAlerter extends Worker {
-    private static String CHECK_CENTER = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/centerCheck.php";
+    private static String CHECK_CENTER = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/_checkCenter.php";
     private static String COUNTERFILENAME = "alertcounter.dat";
     WorkerParameters workerParams;
     private Context mycontext;
@@ -106,18 +106,21 @@ public class CenterAlerter extends Worker {
         System.out.println("**************JEVEUXMONVACCIN--- Remote control");
         int centerID = 0;
         int vaccineID = 0;
+        int dept = 0;
         String salt = null;
         String centerName = null;
 
 
         if (workerParams != null) {
-            centerID = Integer.parseInt(workerParams.getInputData().getString("centerID"));
-            vaccineID = Integer.parseInt(workerParams.getInputData().getString("vaccineID"));
+            centerID = workerParams.getInputData().getInt("centerID", 0);
+            vaccineID = workerParams.getInputData().getInt("vaccineID", 2);
+            dept = workerParams.getInputData().getInt("dept", 0);
+
             salt = workerParams.getInputData().getString("salt");
             centerName = workerParams.getInputData().getString("centerName");
-            if (centerID != Options.UNDEFINED && vaccineID != Options.UNDEFINED && salt != null) {
+            if (centerID != Options.UNDEFINED && vaccineID != Options.UNDEFINED && salt != null && dept != 0) {
 
-                if (controlCenter(centerID, vaccineID, salt)) {
+                if (controlCenter(centerID, vaccineID, salt, dept)) {
                     Intent intent = new Intent(mycontext, AndroidLauncher.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     PendingIntent pendingIntent = PendingIntent.getActivity(mycontext, 0, intent, 0);
@@ -148,9 +151,13 @@ public class CenterAlerter extends Worker {
         this.mycontext = mycontext;
     }
 
-    public boolean controlCenter(int centerid, int vaccineid, String salt) {
+    public boolean controlCenter(int centerid, int vaccineid, String salt, int dept) {
         if (salt == null) {
             System.out.println("houston pb no salt");
+            return false;
+        }
+        if (dept == 0) {
+            System.out.println("houston pb no dept");
             return false;
         }
         if (centerid == Options.UNDEFINED || vaccineid == Options.UNDEFINED) {
@@ -161,7 +168,7 @@ public class CenterAlerter extends Worker {
         try {
             String urlParameters;
             urlParameters = "phonesalt=" + URLEncoder.encode(salt, "UTF-8") +
-                    "&cid=" + centerid + "&vid=" + vaccineid;
+                    "&cid=" + centerid + "&vid=" + vaccineid + "&dept=" + dept;
 
             System.out.println(" calling  center : " + CHECK_CENTER + "?" + urlParameters);
             String res = executePost(CHECK_CENTER, urlParameters);

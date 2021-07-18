@@ -29,6 +29,8 @@ public class HelpScreen implements Screen, ApplicationListener {
     Texture imgWebsite;
     Texture imgVideo;
 
+    Texture imgPresentation;
+
     Stage stage;
     Skin skin;
 
@@ -106,6 +108,9 @@ public class HelpScreen implements Screen, ApplicationListener {
         ImageButton.ImageButtonStyle btnStylew = new ImageButton.ImageButtonStyle();
         btnStylew.up = this.skin.getDrawable("imgWebsite");
         this.btnWebsite = new ImageButton(btnStylew);
+
+        this.imgPresentation = new Texture(Gdx.files.internal("img/presentation.png"));
+
 
         this.imgVideo = new Texture(Gdx.files.internal("img/help/go_video.png"));
         this.skin.add("imgVideo", this.imgVideo);
@@ -188,7 +193,7 @@ public class HelpScreen implements Screen, ApplicationListener {
             }
         });
 
-        btnSante.setPosition(w / 2, h / 2 - 250, Align.center);
+        btnSante.setPosition(w / 2, h / 2 - 205, Align.center);
         lblTitle.setPosition(50, h - 150);
         lblMesgTop.setPosition(40, h - 250);
         lblMesgBottom.setPosition(40, h / 2 - 100);
@@ -294,6 +299,9 @@ public class HelpScreen implements Screen, ApplicationListener {
 
         sb.begin();
         sb.draw(app.getGraphicTools().getImgBackground(), 0, 0, w, h, 0, 20, 12, 0);
+        if (page == 0) {
+            sb.draw(imgPresentation, 5, 5);
+        }
         sb.draw(app.getGraphicTools().getImgNext(), w - 100, 4);
         sb.end();
         stage.act(delta);

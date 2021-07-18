@@ -31,6 +31,11 @@ public class VaccineScreen implements Screen, ApplicationListener {
     CheckBox cb22;
     CheckBox cb35;
     CheckBox cb56;
+    CheckBox cb44;
+    CheckBox cb49;
+    CheckBox cb53;
+    CheckBox cb72;
+    CheckBox cb85;
     Label choixDepartement;
     Label lblInfo;
     Label lbl_continue;
@@ -82,7 +87,7 @@ public class VaccineScreen implements Screen, ApplicationListener {
         choixDepartement = new Label("Département", skin);
         lbl_continue = new Label("Poursuivre", skin);
 
-        lblInfo = new Label("Cette application accompagne le grand public breton\n " +
+        lblInfo = new Label("Cette application accompagne le grand public\n " +
                 "uniquement pour un vaccin de type ARN-messager", skin);
 
 
@@ -140,6 +145,20 @@ public class VaccineScreen implements Screen, ApplicationListener {
         cb29 = new CheckBox("  Finistère", skin, "vaccine");
         cb35 = new CheckBox("  Ille-et-Vilaine", skin, "vaccine");
         cb56 = new CheckBox("  Morbihan", skin, "vaccine");
+
+        cb44 = new CheckBox("  Loire-Atlantique", skin, "vaccine");
+        cb49 = new CheckBox("  Maine et Loire", skin, "vaccine");
+        cb53 = new CheckBox("  Mayenne", skin, "vaccine");
+        cb72 = new CheckBox("  Sarthe", skin, "vaccine");
+        cb85 = new CheckBox("  Vendée", skin, "vaccine");
+
+        cb44.setChecked(false);
+        cb49.setChecked(false);
+        cb53.setChecked(false);
+        cb72.setChecked(false);
+        cb85.setChecked(false);
+
+
         cb22.setChecked(false);
         cb29.setChecked(false);
         cb35.setChecked(false);
@@ -147,10 +166,7 @@ public class VaccineScreen implements Screen, ApplicationListener {
         cb22.addListener(new InputListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (cb22.isChecked()) {
-                    cb29.setChecked(false);
-                    cb35.setChecked(false);
-                    cb56.setChecked(false);
-
+                    cleanCbExcept(22);
                 }
 
                 checkChecked();
@@ -164,9 +180,7 @@ public class VaccineScreen implements Screen, ApplicationListener {
         cb29.addListener(new InputListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (cb29.isChecked()) {
-                    cb22.setChecked(false);
-                    cb35.setChecked(false);
-                    cb56.setChecked(false);
+                    cleanCbExcept(29);
 
                 }
                 checkChecked();
@@ -180,10 +194,7 @@ public class VaccineScreen implements Screen, ApplicationListener {
         cb35.addListener(new InputListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (cb35.isChecked()) {
-                    cb22.setChecked(false);
-                    cb29.setChecked(false);
-                    cb56.setChecked(false);
-
+                    cleanCbExcept(35);
                 }
                 checkChecked();
             }
@@ -196,9 +207,7 @@ public class VaccineScreen implements Screen, ApplicationListener {
         cb56.addListener(new InputListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (cb56.isChecked()) {
-                    cb22.setChecked(false);
-                    cb29.setChecked(false);
-                    cb35.setChecked(false);
+                    cleanCbExcept(56);
                 }
                 checkChecked();
             }
@@ -206,15 +215,67 @@ public class VaccineScreen implements Screen, ApplicationListener {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return true;
             }
-
         });
+        cb44.addListener(new InputListener() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (cb44.isChecked()) {
+                    cleanCbExcept(44);
+                }
+                checkChecked();
+            }
 
-//        this.imgWebsite = new Texture(Gdx.files.internal("img/selection/go_website_vaccine_choice.png"));
-//        this.skin.add("imgWebsiteVaccine", this.imgWebsite);
-//
-//        ImageButton.ImageButtonStyle btnStylewww = new ImageButton.ImageButtonStyle();
-//        btnStylewww.up = this.skin.getDrawable("imgWebsiteVaccine");
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+        cb49.addListener(new InputListener() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (cb49.isChecked()) {
+                    cleanCbExcept(49);
+                }
+                checkChecked();
+            }
 
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+        cb53.addListener(new InputListener() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (cb53.isChecked()) {
+                    cleanCbExcept(53);
+                }
+                checkChecked();
+            }
+
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+        cb72.addListener(new InputListener() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (cb72.isChecked()) {
+                    cleanCbExcept(72);
+                }
+                checkChecked();
+            }
+
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+        cb85.addListener(new InputListener() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (cb85.isChecked()) {
+                    cleanCbExcept(85);
+                }
+                checkChecked();
+            }
+
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
 
         btnBackMenu.setSize(64, 64);
         btnBackMenu.setPosition(w - 24 - 64, h - 24 - 64);
@@ -278,11 +339,20 @@ public class VaccineScreen implements Screen, ApplicationListener {
         lbl_continue.setPosition(w / 2 - lbl_continue.getWidth() / 2, hmiddle - 480);
 
         choixDepartement.setPosition(w / 2, 4 * h / 7, Align.center);
-        cb22.setPosition(w / 8, 3 * h / 7);
-        cb29.setPosition(0.55f * w, 3 * h / 7);
-        cb35.setPosition(w / 8, 2 * h / 7);
-        cb56.setPosition(0.55f * w, 2 * h / 7);
+        cb22.setPosition(w / 8, 7 * h / 14);
+        cb29.setPosition(0.55f * w, 7 * h / 14);
+        cb35.setPosition(w / 8, 6 * h / 14);
+        cb56.setPosition(0.55f * w, 6 * h / 14);
+
+        cb44.setPosition(w / 8, 5 * h / 14);
+        cb49.setPosition(0.55f * w, 5 * h / 14);
+        cb53.setPosition(w / 8, 4 * h / 14);
+        cb72.setPosition(0.55f * w, 4 * h / 14);
+        cb85.setPosition(w / 8, 3 * h / 14);
+
+
         if (app.getOptions() != null) {
+
             int d = app.getOptions().getDepartment();
             if (d != Options.UNDEFINED) {
                 if (d == 22) {
@@ -293,6 +363,16 @@ public class VaccineScreen implements Screen, ApplicationListener {
                     cb35.setChecked(true);
                 } else if (d == 56) {
                     cb56.setChecked(true);
+                } else if (d == 44) {
+                    cb44.setChecked(true);
+                } else if (d == 49) {
+                    cb49.setChecked(true);
+                } else if (d == 53) {
+                    cb53.setChecked(true);
+                } else if (d == 72) {
+                    cb72.setChecked(true);
+                } else if (d == 85) {
+                    cb85.setChecked(true);
                 }
             }
         }
@@ -307,6 +387,11 @@ public class VaccineScreen implements Screen, ApplicationListener {
         stage.addActor(cb29);
         stage.addActor(cb35);
         stage.addActor(cb56);
+        stage.addActor(cb44);
+        stage.addActor(cb49);
+        stage.addActor(cb53);
+        stage.addActor(cb72);
+        stage.addActor(cb85);
 
         stage.addActor(lblTitle);
 
@@ -317,6 +402,38 @@ public class VaccineScreen implements Screen, ApplicationListener {
         // TODO Auto-generated method stub
 
     }
+
+    private void cleanCbExcept(int d) {
+        if (d != 22) {
+            cb22.setChecked(false);
+        }
+        if (d != 29) {
+            cb29.setChecked(false);
+        }
+        if (d != 35) {
+            cb35.setChecked(false);
+        }
+        if (d != 56) {
+            cb56.setChecked(false);
+        }
+        if (d != 44) {
+            cb44.setChecked(false);
+        }
+        if (d != 49) {
+            cb49.setChecked(false);
+        }
+        if (d != 53) {
+            cb53.setChecked(false);
+        }
+        if (d != 72) {
+            cb72.setChecked(false);
+        }
+        if (d != 85) {
+            cb85.setChecked(false);
+        }
+
+    }
+
 
     @Override
     public void render(float delta) {
@@ -342,7 +459,8 @@ public class VaccineScreen implements Screen, ApplicationListener {
 
     public void displayElements() {
         if (cbVaccinePfizer != null) {
-            if (cbVaccinePfizer.isChecked() && (cb22.isChecked() || cb29.isChecked() || cb35.isChecked() || cb56.isChecked())) {
+            if (cbVaccinePfizer.isChecked() && (cb22.isChecked() || cb29.isChecked() || cb35.isChecked() || cb56.isChecked()
+                    || cb44.isChecked() || cb49.isChecked() || cb53.isChecked() || cb72.isChecked() || cb85.isChecked())) {
 
                 if (!stage.getActors().contains(btnNext, true)) {
                     stage.addActor(btnNext);
@@ -366,6 +484,8 @@ public class VaccineScreen implements Screen, ApplicationListener {
             app.getOptions().setVaccineId(Options.UNDEFINED);
         }
         if (cb22.isChecked()) {
+
+
             app.getOptions().setDepartment(22);
         } else if (cb29.isChecked()) {
             app.getOptions().setDepartment(29);
@@ -373,6 +493,16 @@ public class VaccineScreen implements Screen, ApplicationListener {
             app.getOptions().setDepartment(35);
         } else if (cb56.isChecked()) {
             app.getOptions().setDepartment(56);
+        } else if (cb44.isChecked()) {
+            app.getOptions().setDepartment(44);
+        } else if (cb49.isChecked()) {
+            app.getOptions().setDepartment(49);
+        } else if (cb53.isChecked()) {
+            app.getOptions().setDepartment(53);
+        } else if (cb72.isChecked()) {
+            app.getOptions().setDepartment(72);
+        } else if (cb85.isChecked()) {
+            app.getOptions().setDepartment(85);
         } else {
             app.getOptions().setDepartment(Options.UNDEFINED);
         }
@@ -381,9 +511,10 @@ public class VaccineScreen implements Screen, ApplicationListener {
         app.getOptions().setCenterId(Options.UNDEFINED);
         app.getOptions().setSubscriptionPageSeen(false);
         app.getOptions().setControlPageSeen(false);
+        app.stopAlert();
+        app.getOptions().setAlert(false);
         app.getOptions().saveOptions();
         app.centerScreen.setReloadCenter(true);
-
         //app.centerScreen.emptyCenterBox();
 
 

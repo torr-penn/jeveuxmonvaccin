@@ -1,6 +1,6 @@
 ### Cotes d armor 
 887;gh-rance-emeraude-vaccination-covid
-####FINISTERE Manual 920 crozon - 2393 chateaulin
+####FINISTERE 
 920;centre-de-vaccination-covid-19-chateaulin-crozon
 930;centre-de-vaccination-covid-19-de-quimperle
 1009;centre-de-vaccination-covid-19-brest-arena
@@ -10,7 +10,7 @@
 1997;centre-de-vaccination-covid-19-carhaix-espace-glenmor
 2393;centre-de-vaccination-covid-19-chateaulin-crozon
 2426;centre-de-vaccination-hia-brest
-####ILLE ET VILAINE - sauf 901 saint MALO
+####ILLE ET VILAINE 
 411;ch-de-vitre-centre-de-vaccination-covid-19
 412;vaccination-covid-19-ch-redon
 422;centre-de-vaccination-de-fougeres
@@ -36,3 +36,69 @@
 2119;gh-broceliande-atlantique-ghba-centre-de-vaccination-covid-sarzeau-sarzeau
 2120;gh-broceliande-atlantique-ghba-centre-de-vaccination-covid-quiberon
 2223;centre-de-vaccination-covid-19-vannes-kercado
+###LOIRE ATLANTIQUE
+425;centre-de-vaccination-covid-sud-loire-vignoble-site-de-vallet
+444;centre-de-vaccination-covid-19-ville-de-st-nazaire
+500;centre-de-vaccination-de-la-salle-des-fetes-de-blain
+811;centre-de-vaccination-covid-chateaubriant
+906;centre-de-vaccination-ville-de-pornic
+1007;centre-de-vaccination-covid-ancenis-chel
+1477;cap-atlantique-la-baule-escoublac
+1597;centre-de-vaccination-covid-19-spgl-salle-des-marais
+1598;centre-de-vaccination-de-saint-herblain-complexe-sportif-du-vigneau
+2052;centre-de-vaccination-covid-19-msp-pole-sante-loire-et-sevre
+2063;centre-de-vaccination-covid-19-mairie-de-vertou
+2064;centre-de-vaccination-covid-19-ville-de-st-nazaire
+2065;centre-de-vaccination-covid-machecoul-st-meme
+2066;centre-de-vaccination-covid-19-savenay
+2214;centre-de-vaccination-covid-19-centre-d-exposition-de-la-beaujoire
+2416;centre-de-vaccination-covid-19-nort-sur-erdre
+2496;vaccination-covid-19-treillieres-sdis-44
+2620;centre-de-vaccination-covid-19-de-st-brevin
+2631;centre-de-vaccination-covid-19-sstrn-nantes
+2659;centre-de-vaccination-covid-19-pont-chateau
+###MAINE ET LOIRE
+727;centre-de-vaccination-covid-19-ville-de-cholet
+729;centre-de-vaccination-covid-19-ville-de-saumur
+735;centre-vaccination-covid-19des-mauges-49
+738;centre-de-vaccination-bauge-en-anjou
+744;centre-de-vaccination-covid-19-segre-en-anjou-bleu
+2218;centre-de-vaccination-covid-19-angers-parc-des-expositions
+2317;centre-de-vaccination-covid-19-brissac
+2318;centre-de-vaccination-covid-de-seiches-sur-le-loir
+###MAYENNE
+440;pole-de-sante-de-mayenne-centre-de-vaccination
+446;chateaugontier-centre-de-vaccination
+711;pole-de-sante-de-mayenne-centre-de-vaccination
+1241;pole-de-sante-de-mayenne-centre-de-vaccination
+1242;pole-de-sante-de-mayenne-centre-de-vaccination
+1243;pole-de-sante-de-mayenne-centre-de-vaccination
+1244;pole-de-sante-de-mayenne-centre-de-vaccination
+1245;pole-de-sante-de-mayenne-centre-de-vaccination
+2215;centre-de-vaccination-la-rotonde-du-centre-des-exposition-du-mans
+###SARTHE
+86;centre-de-vaccination-uc-irsa
+721;centres-de-vaccination-covid-departement-orne-saonois
+1132;centre-de-vaccination-covid-du-pays-de-sille
+1182;centre-de-vaccination-covid-msp-la-fleche
+1246;ch-le-mans-centre-de-vaccination
+1260;centre-de-vaccination-covid-19-de-saint-calais
+1951;centre-de-vaccination-covid-19-la-ferte-bernard
+2333;centre-de-vaccination-covid-19-de-montval-sur-loir
+2391;centre-de-vaccination-covid-19-de-coulaines
+2392;centre-de-vaccination-covid-19-du-sud-est-manceau
+2437;centre-de-vaccination-covid-19-montbizot
+2442;centre-de-vaccination-covid-19-centre-de-la-suze-sur-sarthe
+2451;centre-de-vaccination-covid-19-saint-mars-la-briere
+2452;centre-de-vaccination-covid-19-belinois
+###VENDEE
+762;centre-de-vaccination-de-la-la-roche-sur-yon
+793;centre-de-vaccination-covid-des-sables-d-olonne
+817;centre-vaccination-fontenay-le-comte
+820;cpts-lvo-centre-vaccination
+841;centre-de-vaccination-communaute-des-communes-du-pays-des-herbiers
+842;centre-de-vaccination-terres-de-montaigu
+843;centre-de-vaccination-de-noirmoutier
+844;centre-de-vaccination-covid-hopital-local-ile-d-yeu
+846;centre-de-vaccination-de-lucon
+2396;centre-de-vaccination-covid-saint-hilaire-de-riez

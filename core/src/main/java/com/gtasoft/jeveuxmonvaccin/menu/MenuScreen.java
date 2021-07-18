@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.gtasoft.jeveuxmonvaccin.JeVeuxMonVaccin;
+import com.gtasoft.jeveuxmonvaccin.center.CenterTools;
 import com.gtasoft.jeveuxmonvaccin.setup.Options;
 
 public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
@@ -248,7 +249,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         });
 
 
-        lbl_preparation = new Label("3 Préparation", skin);
+        lbl_preparation = new Label("3 Informations/préparation", skin);
         lbl_preparation.setAlignment(Align.left);
         lbl_preparation.setPosition((w / 4 + btnPreparation.getWidth() + 10), hmiddle - 100 + btnPreparation.getHeight() / 2);
         lbl_preparation.setStyle(lblStyleMenu);
@@ -474,6 +475,11 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         if (!initialized) {
             checkOptions();
         }
+
+        if (app.getCenterTools().getCenterStatus() == CenterTools.LOADED) {
+            app.centerScreen.setCurrdept(app.getOptions().getDepartment());
+            app.getCenterTools().setCenterStatus(CenterTools.NO_LOAD);
+        }
     }
 
     private void checkOptions() {
@@ -564,6 +570,22 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
                 if (app.getOptions().getDepartment() == 56) {
                     lbl_vaccineInfo.setText("[ARN-m] 56");
                 }
+                if (app.getOptions().getDepartment() == 44) {
+                    lbl_vaccineInfo.setText("[ARN-m] 44");
+                }
+                if (app.getOptions().getDepartment() == 49) {
+                    lbl_vaccineInfo.setText("[ARN-m] 49");
+                }
+                if (app.getOptions().getDepartment() == 53) {
+                    lbl_vaccineInfo.setText("[ARN-m] 53");
+                }
+                if (app.getOptions().getDepartment() == 72) {
+                    lbl_vaccineInfo.setText("[ARN-m] 72");
+                }
+                if (app.getOptions().getDepartment() == 85) {
+                    lbl_vaccineInfo.setText("[ARN-m] 85");
+                }
+
             }
 
         }
@@ -814,7 +836,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
 
     public void loadCenterList() {
         if (app.centerScreen != null && app.getOptions().getDepartment() != Options.UNDEFINED) {
-            app.centerScreen.loadCenter(app.getOptions().getDepartment());
+            app.centerScreen.initResources();
 
             //app.centerScreen.initCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
         }

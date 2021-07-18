@@ -6,9 +6,10 @@ DATED=`date '+%Y%m%d'`
 
 cp vacci-tot.csv archives/vaccination-tot-${DATED}.csv
 
-echo $DATED
+#echo $DATED
 
 curl -L $URL1 > vaccipage.html 
-URL2=`cat vaccipage.html |grep "ellipsis\">vacsi-tot-a-dep" -A 50 |grep Télécharger|awk -F\" '{print $2;}'`
+URL2=`cat vaccipage.html |grep "vacsi-tot-a-dep" |grep "<dd>"  |awk -F\" '{print $2;}'`
 curl -L $URL2 > vacci-tot.csv
+#echo "u2:$URL2"
 

@@ -53,9 +53,9 @@ public class JeVeuxMonVaccin extends Game implements ApplicationListener {
         return null;
     }
 
-    public void initAlert(int centerid, int vaccineID, String salt, String centerName) {
+    public void initAlert(int centerid, int vaccineID, String salt, String centerName, int dept) {
         if (np != null) {
-            np.initAlert(centerid, vaccineID, salt, centerName);
+            np.initAlert(centerid, vaccineID, salt, centerName, dept);
         }
 
     }

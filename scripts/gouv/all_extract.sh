@@ -1,4 +1,5 @@
 #!/bin/bash
+cd /work/jeveuxmonvaccin/scripts/gouv/
 ./getVacci.sh
 if [ "$1" != "" ]; then
   FILE1="$1"

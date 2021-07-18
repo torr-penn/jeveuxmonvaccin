@@ -1,4 +1,5 @@
 #!/bin/bash 
+cd /work/jeveuxmonvaccin/scripts/
 echo -n "" > k1.txt
 echo "### Cotes d armor " >>k1.txt
 cat extra_22.txt |grep keldoc >>k1.txt
@@ -78,8 +79,24 @@ function check_from_new(){
 
 	done < "k2.txt"
 }
+function check_from_old(){
+
+	while IFS= read -r line
+	do
+		firstchar=`echo $line |cut -c1`
+			if [ "$firstchar" != "#" ]; then
+				centerid=`echo $line |awk -F\; ' {print $1;}'`
+				line2=`cat k2.txt|grep -o "^$centerid;.*"`
+			 	missing_line $line $line2
+			fi
+
+
+	done < "k1.txt"
+}
 check_files
 check_from_new
+echo "..........."
+check_from_old
 
 
 

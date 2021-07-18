@@ -6,8 +6,10 @@ else
 fi
 
 OUTFILE=$FILE1.bretagne.csv
+OUTFILEPDL=$FILE1.paysdeloire.csv
 
 echo -n > $OUTFILE
+echo -n > $OUTFILEPDL
 
 function process_all(){
 
@@ -16,6 +18,9 @@ function process_all(){
 				REG=`echo $line |awk -F\, ' {print $2;}'`
 			if [ "$REG" == "BRE"  ]; then
 				echo $line >> $OUTFILE 	
+			fi
+			if [ "$REG" == "PDL"  ]; then
+				echo $line >> $OUTFILEPDL
 			fi
 
 

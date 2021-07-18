@@ -420,6 +420,7 @@ public class ControlScreen implements Screen, ApplicationListener {
             if (app.getOptions() != null) {
                 if (app.getOptions().getCenterSelected() == null || app.getOptions().getCenterSelected().getLink() == null) {
                     centerTools.loadCenter(app.getOptions().getDepartment());
+                    app.centerScreen.setCurrdept(app.getOptions().getDepartment());
                 }
             }
         } else {

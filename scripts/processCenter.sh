@@ -76,22 +76,25 @@ function output_to_file(){
 					if [ "$EXTRANB" = "0" ]; then
 						return;
 					fi
+					nom2=`echo $nom |sed -e "s/Centre de Vaccination -//"|sed -e "s/Centre de vaccination -//"|sed -e "s/Centre de vaccination COVID -//"|sed -e "s/CENTRE DE VACCINATION//"|sed -e "s/Centre de vaccination COVID -//"|sed -e "s/Centre de Vaccination COVID -//"|sed -e "s/^ *//g"`
+
+					monad2=`echo $monadresse |sed -e "s/Centre de Vaccination -//"|sed -e "s/Centre de vaccination -//"|sed -e "s/Centre de vaccination COVID -//"|sed -e "s/CENTRE DE VACCINATION//"|sed -e "s/Centre de vaccination COVID -//"|sed -e "s/Centre de Vaccination COVID -//" |sed -e "s/^ *//g"`
 					if [ "$EXTRANB" = "1" ]; then
 
-		      				echo -e "$nom;$monadresse;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA1"   >> c$DEPARTEMENT.csv
+		      				echo -e "$nom2;$monad2;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA1"   >> c$DEPARTEMENT.csv
 						echo -e "$EXTRA1;$rdv_site_web" >> load_center_sql.csv
 						echo -e "$GID;$nom;$com_cp;$lat_coor1;$long_coor1" >> positions.csv 
 				        else
 				               if [ "$EXTRANB" = "2" ]; then
-		      			 		echo -e "$nom;$monadresse;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA1"   >> c$DEPARTEMENT.csv
-		      					echo -e "$nom;$monadresse;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA2"   >> c$DEPARTEMENT.csv
+		      			 		echo -e "$nom2;$monad2;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA1"   >> c$DEPARTEMENT.csv
+		      					echo -e "$nom2;$monad2;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA2"   >> c$DEPARTEMENT.csv
 						echo -e "$EXTRA1;$rdv_site_web" >> load_center_sql.csv
 						echo -e "$EXTRA2;$rdv_site_web" >> load_center_sql.csv
 
 						else
-		      					echo -e "$nom;$monadresse;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA1"   >> c$DEPARTEMENT.csv
-		      					echo -e "$nom;$monadresse;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA2"   >> c$DEPARTEMENT.csv
-		      					echo -e "$nom;$monadresse;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA3"   >> c$DEPARTEMENT.csv
+		      					echo -e "$nom2;$monad2;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA1"   >> c$DEPARTEMENT.csv
+		      					echo -e "$nom2;$monad2;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA2"   >> c$DEPARTEMENT.csv
+		      					echo -e "$nom2;$monad2;$com_nom;$com_cp;$date_ouverture;$date_fermeture;$rdv_site_web;$EXTRA3"   >> c$DEPARTEMENT.csv
 						echo -e "$EXTRA1;$rdv_site_web" >> load_center_sql.csv
 						echo -e "$EXTRA2;$rdv_site_web" >> load_center_sql.csv
 						echo -e "$EXTRA3;$rdv_site_web" >> load_center_sql.csv
@@ -100,7 +103,7 @@ function output_to_file(){
 
 }
 
-MODALEXCEPTION="2426 2217 2223"
+MODALEXCEPTION="2426 2217 2223 2214 2215 2218 2318"
 function checkModSpecial() {
 	rdv_mod=$2
 	PASS_MOD=""
@@ -114,12 +117,12 @@ function checkModSpecial() {
 	fi
 	fi
 }
-OPENDATEEXCEPTION="411"
+OPENDATEEXCEPTION="411 2318"
 function checkOpenDateSpecial() {
 	date_mod=$2
 	PASS_DATE=""
 	if [ "$date_mod" = "" ]; then
-		if [[ "$1" =~ $OPENDATEEXCEPTION ]];then
+		if [[ $OPENDATEEXCEPTION  =~ "$1" ]];then
 			PASS_DATE="Y"
 			date_ouverture="2021-04-15"
 		else
@@ -186,7 +189,7 @@ do
 				RESBUFFER="$gid;$RESBUFFER;FILTERED;noopendate"
 		fi
 
-		echo  "$RESBUFFER"
+		echo  "$gid;$RESBUFFER"
 	fi
 	structure_voie="VOIE"
 	structure_num="NUM"
@@ -202,9 +205,15 @@ process_department 22
 process_department 35
 process_department 56
 
+process_department 44
+process_department 49
+process_department 53
+process_department 72
+process_department 85
+
 
 cd $WDIR
-cat c22.csv c29.csv c35.csv c56.csv > tmp.csv
+cat c22.csv c29.csv c35.csv c56.csv c44.csv c49.csv c53.csv c72.csv c85.csv > tmp.csv
 cat tmp.csv |awk -F\; '{print $1";"$2";"$3";"$4";"$5";"$6";"$8";"$10";"$11;}' >bretagne.csv
 rm tmp.csv
 cp bretagne.csv /tmp
@@ -213,6 +222,12 @@ cp c22.csv  $PUBLIDIR
 cp c29.csv  $PUBLIDIR
 cp c35.csv  $PUBLIDIR
 cp c56.csv  $PUBLIDIR
+
+cp c44.csv  $PUBLIDIR
+cp c49.csv  $PUBLIDIR
+cp c53.csv  $PUBLIDIR
+cp c72.csv  $PUBLIDIR
+cp c85.csv  $PUBLIDIR
 
 
 echo "kdiff3 load_center_sql.csv  prev_sql.csv"

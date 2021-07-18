@@ -528,6 +528,10 @@ public class PrepareScreen implements Screen, ApplicationListener {
         }
 
         Gdx.input.setInputProcessor(stage);
+
+        if (app.getOptions().getCenterId() != Options.UNDEFINED) {
+            app.getCenterTools().selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
+        }
         if (app.getOptions().getCenterSelected() != null) {
 
             if (app.getOptions().getCenterSelected().getProviderId() == VaccinationCenter.MAIIA_ID) {
@@ -553,12 +557,15 @@ public class PrepareScreen implements Screen, ApplicationListener {
                 lblSubscribeHelp.setText("Pour vous inscrire, choisissez : \n\"Mon Compte- Connexion\" -> S'inscrire.");
 
             } else {
+
                 hideit(btnWebsiteK);
                 hideit(btnWebsiteM);
                 hideit(btnWebsiteD);
                 lblSubscribeHelp.setText("");
 
             }
+        } else {
+            System.out.println("no cent sel");
         }
         app.getCenterTools().setInfoMsg("");
         app.getCenterTools().setInfoClosing("");
@@ -572,10 +579,7 @@ public class PrepareScreen implements Screen, ApplicationListener {
                 lblCenterName.setText(app.getOptions().getCenterName());
             }
         }
-        if (app.getOptions().getCenterId() != Options.UNDEFINED) {
 
-            app.getCenterTools().selectCenter(app.getOptions().getCenterId(), app.getOptions().getVaccineId());
-        }
         infoCenter();
 
 

@@ -13,18 +13,18 @@ import java.net.URLEncoder;
 import java.util.*;
 
 public class CenterTools {
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
     public static int NO_LOAD = 0;
     public static int LOADING = 1;
     public static int LOADED = 2;
     public static int ERROR_LOADING = 3;
-    private static String URL_DEPARTMENT = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/department_list.csv";
+
     private static String CENTER_LIST = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/";
-    private static String FULL_CENTER_LIST = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/dataCenter.php";
-    private static String CHECK_CENTER = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/centerCheck.php";
+    private static String FULL_CENTER_LIST = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/dataCenter";
+    private static String CHECK_CENTER = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/_checkCenter.php";
     private static String REGISTER_CENTER = "http://www.torr-penn.com/jeveuxmonvaccin/changeCenter";
-    private static String INFO_CENTER = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/centerInfo.php";
-    ArrayList<Department> listDepartment;
+    private static String INFO_CENTER = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/_infoCenter.php";
+
     ArrayList<VaccinationCenter> listCenter;
     Machine machine;
     private ArrayList<VaccinationCenterFull> fullList;
@@ -60,11 +60,11 @@ public class CenterTools {
         this.app = app;
         setCenterStatus(NO_LOAD);
         setRegisterStatus(NO_LOAD);
-        listDepartment = new ArrayList<>();
+
 
         listCenter = null;
         this.machine = machine;
-        loadDepartment();
+
     }
 
     public static void main(String[] args) {
@@ -77,30 +77,6 @@ public class CenterTools {
         }
     }
 
-    public void process_dept(String s) {
-        listDepartment = new ArrayList<>();
-        Department ddebut = new Department(0, " -- Choix du département -- ");
-        listDepartment.add(ddebut);
-        if (s == null) {
-            return;
-        }
-        Scanner scanner = new Scanner(s);
-        scanner.useDelimiter("\n|\r\n|\\s+");
-
-        while (scanner.hasNextLine()) {
-
-            String line = scanner.nextLine();
-            String[] values = line.split(";");
-            if (values != null && values.length == 2) {
-                int did = Integer.parseInt(values[0]);
-                String dname = values[1];
-                Department d = new Department(did, dname);
-                // System.out.println(" ---------- Department " + did + " ////// " + dname + "//////// ADDED");
-                listDepartment.add(d);
-            }
-        }
-        scanner.close();
-    }
 
     public int getIdFromProvider(String prov) {
         if ("keldoc".equals(prov)) {
@@ -123,8 +99,10 @@ public class CenterTools {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] values = line.split(";");
-
-            if (values != null && (values.length == 12 || values.length == 10)) {
+            if (values != null && values.length <= 10) {
+                System.out.println(" load : " + values[0] + " length :" + values.length);
+            }
+            if (values != null && (values.length == 12 || values.length == 10 || values.length == 11)) {
                 String cname = values[0];
                 int gid = Integer.parseInt(values[7]);
                 VaccinationCenter vc = new VaccinationCenter(gid, cname);
@@ -165,52 +143,6 @@ public class CenterTools {
 
     }
 
-    public Department getDepartment(String sid) {
-        if (sid != null) {
-            try {
-                int id = Integer.parseInt(sid);
-                if (id != 0 && listDepartment != null) {
-
-
-                    Iterator it = listDepartment.iterator();
-                    while (it.hasNext()) {
-                        Department dep = (Department) it.next();
-                        if (dep.getId() == id) {
-                            return dep;
-                        }
-                    }
-                }
-            } catch (NumberFormatException nfe) {
-                System.out.println(" bad dept choice");
-                nfe.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    public void loadDepartment() {
-
-        Timer validTimer = new Timer();
-
-        validTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    String urlParameters;
-                    urlParameters = "" + URLEncoder.encode(machine.getSalt(), "UTF-8");
-                    String res = executePost(URL_DEPARTMENT, urlParameters);
-                    //System.out.println("calling " + URL_DEPARTMENT + "?"                            + urlParameters);
-                    //System.out.println(" result is " + res + " must be 1 to be connected");
-                    process_dept(res);
-
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, 5);
-
-    }
 
     public void controlCenter() {
         if (app.getMachine() == null) {
@@ -231,11 +163,11 @@ public class CenterTools {
                         try {
                             String urlParameters;
                             urlParameters = "phonesalt=" + URLEncoder.encode(app.getMachine().getSalt(), "UTF-8") +
-                                    "&cid=" + app.getOptions().getCenterId() + "&vid=" + app.getOptions().getVaccineId() + "&source=3";
+                                    "&cid=" + app.getOptions().getCenterId() + "&vid=" + app.getOptions().getVaccineId() + "&source=3&dept=" + app.getOptions().getDepartment();
 
-//                        System.out.println(" center check : " + CHECK_CENTER + "?" + urlParameters);
+                            print(" center check : " + CHECK_CENTER + "?" + urlParameters);
                             String res = executePost(CHECK_CENTER, urlParameters);
-                            //System.out.println("*** check center  Result : " + res);
+                            print("*** check center  Result : " + res);
                             processCheck(res);
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
@@ -462,11 +394,6 @@ public class CenterTools {
 
     }
 
-    public void loadCenter(Department d) {
-        if (d != null && d.getId() != Options.UNDEFINED) {
-            loadCenter(d.getId());
-        }
-    }
 
     public void selectCenter(int centerId, int vaccineId) {
         //System.out.println(" slect center called " + centerId + " / " + vaccineId);
@@ -486,7 +413,7 @@ public class CenterTools {
     }
 
     public void loadCenter(int depId) {
-        //System.out.println(" load center from :" + depId);
+        //    System.out.println(" load center from :" + depId + " status is :" + getCenterStatus());
         if (getCenterStatus() != LOADING && getCenterStatus() != LOADED) {
             setCenterStatus(LOADING);
 
@@ -500,7 +427,7 @@ public class CenterTools {
                             String urlParameters;
                             urlParameters = "" + URLEncoder.encode(machine.getSalt(), "UTF-8");
                             String res = executePost(CENTER_LIST + "c" + depId + ".csv", urlParameters);
-                            //print("load center  : " + CENTER_LIST + "c" + depId + ".csv?" + urlParameters);
+                            print("load center  : " + CENTER_LIST + "c" + depId + ".csv?" + urlParameters);
                             process_center(res);
                             // print("load center result is " + res);
                             setCenterStatus(LOADED);
@@ -581,11 +508,11 @@ public class CenterTools {
                         try {
                             String urlParameters;
                             urlParameters = "phonesalt=" + URLEncoder.encode(app.getMachine().getSalt(), "UTF-8") +
-                                    "&cid=" + app.getOptions().getCenterId() + "&vid=" + app.getOptions().getVaccineId();
+                                    "&cid=" + app.getOptions().getCenterId() + "&vid=" + app.getOptions().getVaccineId() + "&dept=" + app.getOptions().getDepartment();
 
-//                        print("info  center : " + INFO_CENTER + "?" + urlParameters);
+                            //  print("info  center : " + INFO_CENTER + "?" + urlParameters);
                             String res = executePost(INFO_CENTER, urlParameters);
-                            //                      print("*** info center  Result : " + res);
+                            //print("*** info center  Result : " + res);
                             if (res == null) {
                                 processInfo(null);
                                 setInfoStatus(ERROR_LOADING);
@@ -752,27 +679,6 @@ public class CenterTools {
         return found;
     }
 
-//    private String partTwo(String str) {
-//        String strx = null;
-//        int idxSemicolon = str.indexOf(";");
-//        if (idxSemicolon != -1) {
-//            strx = str.substring(idxSemicolon + 1, str.length() - 2);
-//            idxSemicolon = strx.indexOf(";");
-//            if (idxSemicolon != -1) {
-//                strx = strx.substring(0, idxSemicolon);
-//                return strx;
-//            } else {
-//                return strx;
-//            }
-//        } else {
-//            return null;
-//        }
-//
-//    }
-
-
-    // resp.getWriter().print(
-// "{-1;nouveau centre;" + vc.getTotal() + ";" + vc.getNbsuccess() + ";[--:--:--];" + vc.getClose_date() + "}");
     public void processInfo(String res) {
 
         if (res != null) {
@@ -809,10 +715,6 @@ public class CenterTools {
 
     }
 
-
-    public ArrayList<Department> getListDepartment() {
-        return listDepartment;
-    }
 
     public ArrayList<VaccinationCenter> getListCenter() {
         return listCenter;
@@ -977,8 +879,8 @@ public class CenterTools {
                         try {
                             String urlParameters;
                             urlParameters = "phonesalt=" + URLEncoder.encode(machine.getSalt(), "UTF-8") + "&source=3";
-                            String res = executePost(FULL_CENTER_LIST, urlParameters);
-                            //   print("load center  : " + FULL_CENTER_LIST + "?" + urlParameters);
+                            String res = executePost(FULL_CENTER_LIST + depId + ".php", urlParameters);
+                            print("load center  : " + FULL_CENTER_LIST + depId + ".php" + "?" + urlParameters);
                             process_full_center(res);
                             // print("load center result is " + res);
                             if (res != null) {

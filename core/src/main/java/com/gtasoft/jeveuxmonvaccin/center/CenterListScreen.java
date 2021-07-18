@@ -240,6 +240,21 @@ public class CenterListScreen implements Screen, ApplicationListener {
             if (app.getOptions().getDepartment() == 56) {
                 lblTitle.setText("Je Veux Mon Vaccin!\nMorbihan");
             }
+            if (app.getOptions().getDepartment() == 44) {
+                lblTitle.setText("Je Veux Mon Vaccin!\nLoire-Atlantique");
+            }
+            if (app.getOptions().getDepartment() == 49) {
+                lblTitle.setText("Je Veux Mon Vaccin!\nMaine-et-Loire");
+            }
+            if (app.getOptions().getDepartment() == 53) {
+                lblTitle.setText("Je Veux Mon Vaccin!\nMayenne");
+            }
+            if (app.getOptions().getDepartment() == 72) {
+                lblTitle.setText("Je Veux Mon Vaccin!\nSarthe");
+            }
+            if (app.getOptions().getDepartment() == 85) {
+                lblTitle.setText("Je Veux Mon Vaccin!\nVendée");
+            }
             if (stage.getActors().contains(lblNoInternet, true)) {
                 lblNoInternet.remove();
             }

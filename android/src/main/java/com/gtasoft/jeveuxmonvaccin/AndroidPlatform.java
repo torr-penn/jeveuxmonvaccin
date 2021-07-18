@@ -189,7 +189,7 @@ public class AndroidPlatform implements NativePlatform {
 
 
     @Override
-    public void initAlert(int centerid, int vaccineid, String salt, String centerName) {
+    public void initAlert(int centerid, int vaccineid, String salt, String centerName, int dept) {
         PeriodicWorkRequest myWorkRequest;
         if (context == null) {
             System.out.println("alert setup ABORTED lack of context");
@@ -218,9 +218,10 @@ public class AndroidPlatform implements NativePlatform {
                                 TimeUnit.MILLISECONDS)
                         .setInputData(
                                 new Data.Builder()
-                                        .putString("centerID", centerid + "")
-                                        .putString("vaccineID", vaccineid + "")
+                                        .putInt("centerID", centerid)
+                                        .putInt("vaccineID", vaccineid)
                                         .putString("salt", salt)
+                                        .putInt("dept", dept)
                                         .putString("centerName", centerName)
                                         .build()
                         )

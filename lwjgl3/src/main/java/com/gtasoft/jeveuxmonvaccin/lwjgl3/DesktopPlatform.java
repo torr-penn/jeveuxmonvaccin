@@ -86,8 +86,8 @@ public class DesktopPlatform implements NativePlatform {
 
 
     @Override
-    public void initAlert(int centerid, int vaccineid, String salt, String centerName) {
-        System.out.println(" I initialize alerts " + centerid + "/" + vaccineid + "/" + salt + "/");
+    public void initAlert(int centerid, int vaccineid, String salt, String centerName, int dept) {
+        System.out.println(" I initialize alerts " + centerid + "/" + vaccineid + "/" + salt + "/" + dept);
         System.out.println("       -> " + centerName);
     }
 
