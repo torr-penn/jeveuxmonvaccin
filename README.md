@@ -9,6 +9,10 @@ cd jeveuxmonvaccin/lwjgl3 ; gradle run
 
 Ces commandes auront besoin de java, gradle et git.
 
+application publiée en juin sur :https://play.google.com/store/apps/details?id=com.gtasoft.jeveuxmonvaccin&hl=fr
+
+en juillet, ajout des Pays de la Loire.
+
 # Origine
 
 Début février 2021, il était compliqué en Bretagne d'obtenir un rendez-vous pour se faire vacciner. Il fallait regarder régulièrement sur 3 sites différents en espérant qu'un créneau se libère.
