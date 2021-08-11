@@ -1,7 +1,5 @@
 # JeVeuxMonVaccin
 
-Un projet [libGDX](https://libgdx.com/) généré par [gdx-liftoff](https://github.com/tommyettinger/gdx-liftoff).
-
 # sur PC Linux :
 
 git clone https://github.com/torr-penn/jeveuxmonvaccin.git
@@ -73,4 +71,7 @@ Hormis cette introduction, les messsages de l'application et la classe principal
 
 Les données utilisées des sites doctolib, keldoc, maiia ou data.gouv.fr appartiennent à leur producteur respectif qui peuvent autoriser ou pas leur usage par cette application ou demander à tout moment d'arrêter de les mentionner.
 (ceci peut être fait sans redéployer une nouvelle version de l'application en retirant les centres concernés des choix possibles du côté server.)
+
+
+
 

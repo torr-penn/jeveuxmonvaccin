@@ -37,6 +37,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
     Label lbl_help;
     Label lblTitle;
 
+
     Skin skin;
     int step = 0;
     int w;
@@ -52,13 +53,16 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
     private ImageButton btnPreparation;
     private ImageButton btnAlert;
     private ImageButton btnAvailability;
-
+    private Texture imgWarning;
+    private Label lbl_warning;
     private Texture imgBretagne;
     private OrthographicCamera camera;
     private FitViewport viewport;
     private SpriteBatch sb;
     private ShapeRenderer sr;
     private boolean initialized;
+    private boolean msgloaded;
+    private String locMsg = "0";
 
     // constructor to keep a reference to the main App class
     public MenuScreen(JeVeuxMonVaccin app) {
@@ -67,6 +71,8 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         camera = new OrthographicCamera();
         viewport = new FitViewport(768, 1280, camera);
         initialized = false;
+        msgloaded = false;
+
     }
 
 
@@ -88,7 +94,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         skin = app.getGraphicTools().getSkin();
         int wmiddle = (int) w / 2;
         int hmiddle = (int) h / 2;
-
+        imgWarning = new Texture(Gdx.files.internal("img/menu/warning.png"));
         imgBretagne = new Texture(Gdx.files.internal("img/menu/bretagne.png"));
         Label.LabelStyle lblStyleVersion = new Label.LabelStyle();
         lblStyleVersion.fontColor = Color.DARK_GRAY;
@@ -130,6 +136,10 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         btnAvailability = new ImageButton(ibtnStyleAvailability);
 
 
+        Label.LabelStyle lblStyleWarn = new Label.LabelStyle();
+        lblStyleWarn.font = skin.getFont("list");
+
+
         Label.LabelStyle lblStyleMenu = new Label.LabelStyle();
         lblStyleMenu.font = skin.getFont("menu");
 
@@ -144,6 +154,10 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         lbl_version.setPosition(20, 20);
         lbl_version.setStyle(lblStyleVersion);
 
+        lbl_warning = new Label(locMsg, skin);
+        lbl_warning.setStyle(lblStyleWarn);
+        lbl_warning.setColor(Color.BLACK);
+        lbl_warning.setPosition(80, h - 70);
         stage = new Stage();
         // --------------------
         //  1- VACCIN
@@ -426,6 +440,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
 
 
         stage.addActor(lbl_version);
+        stage.addActor(lbl_warning);
 
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(this); // Your screen
@@ -462,18 +477,36 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
 
         sb.begin();
         sb.draw(app.getGraphicTools().getImgBackground(), 0, 0, w, h, 0, 20, 12, 0);
-
+        if (!"0".equals(locMsg)) {
+            sb.draw(imgWarning, (int) (10), h - 70);
+        }
         sb.draw(imgBretagne, (int) (w - imgBretagne.getWidth()), h - imgBretagne.getHeight() - 185);
-
         sb.end();
         stage.act(delta);
         stage.draw();
         if (step > 0) {
             strikeThrough(sr);
         }
-
         if (!initialized) {
             checkOptions();
+        }
+
+        if (!msgloaded) {
+            lbl_warning.setText("");
+            locMsg = "0";
+            checkWarning();
+        }
+
+        if ("0".equals(app.getCenterTools().getWarningMsg())) {
+            if (!"0".equals(locMsg)) {
+                locMsg = "0";
+                lbl_warning.setText("");
+            }
+        } else {
+            if (app.getCenterTools().getWarningMsg() != null && !app.getCenterTools().getWarningMsg().equals(locMsg)) {
+                locMsg = app.getCenterTools().getWarningMsg();
+                lbl_warning.setText(locMsg);
+            }
         }
 
         if (app.getCenterTools().getCenterStatus() == CenterTools.LOADED) {
@@ -489,6 +522,13 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
             checkStep();
             adaptMenu();
             initialized = true;
+        }
+    }
+
+    private void checkWarning() {
+        if (app.getCenterTools() != null) {
+            msgloaded = true;
+            app.getCenterTools().loadMessage();
         }
     }
 
@@ -537,7 +577,7 @@ public class MenuScreen implements Screen, ApplicationListener, InputProcessor {
         }
         checkStep();
         adaptMenu();
-
+        msgloaded = false;
 
     }
 

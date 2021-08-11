@@ -24,6 +24,7 @@ public class CenterTools {
     private static String CHECK_CENTER = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/_checkCenter.php";
     private static String REGISTER_CENTER = "http://www.torr-penn.com/jeveuxmonvaccin/changeCenter";
     private static String INFO_CENTER = "http://www.torr-penn.bzh/jeveuxmonvaccin/center/_infoCenter.php";
+    private static String WARNING_CENTER = "http://www.torr-penn.bzh/jeveuxmonvaccin/messages/mobile_message.txt";
 
     ArrayList<VaccinationCenter> listCenter;
     Machine machine;
@@ -34,6 +35,7 @@ public class CenterTools {
     private int centerStatus;
     private int checkStatus;
     private int lastCheckCode = -1;
+    private String warningMsg = "0";
     private String checkMsg;
     private String timeMsg;
     private String nextRdv;
@@ -445,6 +447,37 @@ public class CenterTools {
             }, 5);
         }
     }
+
+    public void loadMessage() {
+        //    System.out.println(" load center from :" + depId + " status is :" + getCenterStatus());
+        Timer validTimer = new Timer();
+
+        validTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    try {
+                        String urlParameters;
+                        urlParameters = "" + URLEncoder.encode(machine.getSalt(), "UTF-8");
+                        String res = executePost(WARNING_CENTER, urlParameters);
+                        print("load msg  : " + WARNING_CENTER + "?" + urlParameters);
+
+                        print("load msg result is " + res);
+                        if (res != null) {
+                            res = res.replace("0\n", "0");
+                            setWarningMsg(res);
+                        }
+
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }, 5);
+    }
+
 
     public String executePost(String targetURL, String urlParameters) {
         HttpURLConnection connection = null;
@@ -904,4 +937,11 @@ public class CenterTools {
     }
 
 
+    public String getWarningMsg() {
+        return warningMsg;
+    }
+
+    public void setWarningMsg(String warningMsg) {
+        this.warningMsg = warningMsg;
+    }
 }
